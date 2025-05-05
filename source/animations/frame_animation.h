@@ -1,0 +1,76 @@
+#ifndef FRAME_ANIMATION_H
+#define FRAME_ANIMATION_H
+
+#include "MicroBit.h"
+
+class FrameAnimation {
+protected:
+    MicroBit& uBit;
+    MicroBitImage* frames = nullptr;
+    int frameCount = 0;
+    int frameDelayMs = 200;
+    bool isLooped = false;
+
+public:
+    FrameAnimation(MicroBit& _uBit, int _frameCount, int _frameDelayMs = 200, bool _isLooped = false)
+        : uBit(_uBit), frameCount(_frameCount), frameDelayMs(_frameDelayMs), isLooped(_isLooped) {}
+
+    virtual ~FrameAnimation() {
+        delete[] frames;
+    }
+
+    void startAsync() {
+        reset();
+
+        create_fiber(runAdapter, this);
+        uBit.sleep(3000);
+
+        // uBit.display.print(frames[0]);
+        // uBit.sleep(3000);
+    }
+
+    void stop() {
+        cancelled = true;
+    }
+
+    bool isCancelled() const {
+        return cancelled;
+    }
+
+private:
+    volatile bool cancelled = false;
+
+    void reset() {
+        cancelled = false;
+    }
+
+protected:
+    static void runAdapter(void* param) {
+        static_cast<FrameAnimation*>(param)->run();
+    }
+
+    virtual void run() {
+        do {
+            for (int i = 0; i < frameCount && !cancelled; i++) {
+                uBit.display.print(frames[i]);
+                uBit.sleep(frameDelayMs);
+            }
+        } while (isLooped && !cancelled);
+
+        
+        uBit.display.clear();
+    }
+
+    MicroBitImage makeImageFromArray(const int pixels[5][5]) {
+        MicroBitImage img(5, 5);
+        for (int y = 0; y < 5; ++y) {
+            for (int x = 0; x < 5; ++x) {
+                int brightness = pixels[y][x] * pixels[y][x] * 3; // 0–9 → 0–243
+                img.setPixelValue(x, y, brightness);
+            }
+        }
+        return img;
+    }
+};
+
+#endif // FRAME_ANIMATION_H
