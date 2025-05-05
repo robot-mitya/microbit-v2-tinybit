@@ -32,10 +32,9 @@ public:
         return cancelled;
     }
 
-private:
+protected:
     volatile bool cancelled = false;
 
-protected:
     static void runAdapter(void* param) {
         static_cast<FrameAnimation*>(param)->run();
     }
