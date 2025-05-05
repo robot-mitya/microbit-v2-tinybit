@@ -11,7 +11,7 @@
 #include "animations/angry_face_animation.h"
 
 MicroBit uBit;
-AngryFaceAnimation animation(uBit);
+SmileFaceAnimation animation(uBit);
 
 static void onButtonAClick(MicroBitEvent e)
 {
