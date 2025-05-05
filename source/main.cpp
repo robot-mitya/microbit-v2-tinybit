@@ -1,29 +1,37 @@
 #include "MicroBit.h"
 // #include "samples/Tests.h"
 #include "animations/spinner_animation.h"
+#include "animations/yes_animation.h"
+#include "animations/no_animation.h"
+#include "animations/heart_animation.h"
+#include "animations/smile_animation.h"
 
 MicroBit uBit;
-SpinnerAnimation spinner(uBit);
+SmileAnimation animation(uBit);
+
+static void onButtonAClick(MicroBitEvent e)
+{
+    if (animation.isCancelled())
+        animation.startAsync();
+    else
+        animation.stop();
+}
 
 int main()
 {
     uBit.init();
 
-    uBit.display.print("A");
-    // uBit.display.scroll("Hello, world!");
-    uBit.sleep(3000);
+    uBit.display.print("3");
+    uBit.sleep(500);
+    uBit.display.print("2");
+    uBit.sleep(500);
+    uBit.display.print("1");
+    uBit.sleep(500);
 
-    // static SpinnerAnimation spinner(uBit);
-    spinner.startAsync();
+    uBit.messageBus.listen(DEVICE_ID_BUTTON_A, DEVICE_BUTTON_EVT_CLICK, onButtonAClick);
 
-    uBit.display.print("C");
-    uBit.sleep(3000);
+    animation.startAsync();
 
     release_fiber();
-
-    // out_of_box_experience();
-    // uBit.audio.soundExpressions.play("010230849100001000000100000000012800000100240000000000000000000000000000");
-
-    // microbit_panic( 999 );
 }
 

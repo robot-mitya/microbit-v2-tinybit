@@ -12,21 +12,16 @@ protected:
     bool isLooped = false;
 
 public:
-    FrameAnimation(MicroBit& _uBit, int _frameCount, int _frameDelayMs = 200, bool _isLooped = false)
-        : uBit(_uBit), frameCount(_frameCount), frameDelayMs(_frameDelayMs), isLooped(_isLooped) {}
+    FrameAnimation(MicroBit& uBit, int frameCount, int frameDelayMs, bool isLooped)
+        : uBit(uBit), frameCount(frameCount), frameDelayMs(frameDelayMs), isLooped(isLooped) {}
 
     virtual ~FrameAnimation() {
         delete[] frames;
     }
 
     void startAsync() {
-        reset();
-
+        cancelled = false;
         create_fiber(runAdapter, this);
-        uBit.sleep(3000);
-
-        // uBit.display.print(frames[0]);
-        // uBit.sleep(3000);
     }
 
     void stop() {
@@ -40,10 +35,6 @@ public:
 private:
     volatile bool cancelled = false;
 
-    void reset() {
-        cancelled = false;
-    }
-
 protected:
     static void runAdapter(void* param) {
         static_cast<FrameAnimation*>(param)->run();
@@ -53,7 +44,7 @@ protected:
         do {
             for (int i = 0; i < frameCount && !cancelled; i++) {
                 uBit.display.print(frames[i]);
-                uBit.sleep(frameDelayMs);
+                fiber_sleep(frameDelayMs);
             }
         } while (isLooped && !cancelled);
 
