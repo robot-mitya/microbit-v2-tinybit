@@ -8,9 +8,8 @@ public:
     FrameAnimation(MicroBit& uBit, int frameCount, int frameDelayMs, bool isLooped)
         : uBit(uBit), frameCount(frameCount), frameDelayMs(frameDelayMs), isLooped(isLooped) {}
 
-    // virtual ~FrameAnimation() = default;
-    virtual ~FrameAnimation() {
-        uBit.serial.printf("~FrameAnimation 1\r\n");
+    virtual ~FrameAnimation() = default;
+        // uBit.serial.printf("~FrameAnimation 1\r\n");
     //     // if (frames != nullptr)
     //     // {
     //     //     uBit.serial.printf("~FrameAnimation 2\r\n");
@@ -20,7 +19,7 @@ public:
     //     //     uBit.serial.printf("~FrameAnimation 4\r\n");
     //     // }
     //     // uBit.serial.printf("~FrameAnimation 5\r\n");
-    }
+    // }
 
     void startAsync() {
         if (running) return;
@@ -66,7 +65,7 @@ protected:
         do {
             for (int i = 0; i < frameCount && !cancelled; i++) {
                 uBit.display.print(frames[i]);
-                fiber_sleep(frameDelayMs);
+                uBit.sleep(frameDelayMs);
             }
         } while (isLooped && !cancelled);
         

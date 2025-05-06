@@ -49,10 +49,9 @@ public:
         this->animationType = animationType;
         
         stop();
-        while (frameAnimation->isRunning()) fiber_sleep(10);
-        uBit.serial.printf("++++ [1] isRunning: %d, isCanceled: %d\r\n", frameAnimation->isRunning(), frameAnimation->isCancelled());
+        while (frameAnimation->isRunning()) uBit.sleep(10);
+        uBit.sleep(10);
         delete frameAnimation;
-        uBit.serial.printf("++++ [2] isRunning: %d, isCanceled: %d\r\n", frameAnimation->isRunning(), frameAnimation->isCancelled());
 
         switch (animationType)
         {
@@ -94,15 +93,8 @@ public:
 
     void stop()
     {
-        FrameAnimation* fa = frameAnimation;
-        if (fa == nullptr) return;
-        // uBit.serial.printf("++++ [1] isRunning: %d, isCanceled: %d\r\n", fa->isRunning(), fa->isCancelled());
-        fa->stop();
-        // uBit.serial.printf("++++ [2] isRunning: %d, isCanceled: %d\r\n", fa->isRunning(), fa->isCancelled());
-        // while (fa->isRunning()) fiber_sleep(10);
-        // uBit.serial.printf("++++ [3] isRunning: %d, isCanceled: %d\r\n", fa->isRunning(), fa->isCancelled());
-        // delete fa;
-        // uBit.serial.printf("++++ [4] isRunning: %d, isCanceled: %d\r\n", fa->isRunning(), fa->isCancelled());
+        if (frameAnimation == nullptr) return;
+        frameAnimation->stop();
     }
 };
 
