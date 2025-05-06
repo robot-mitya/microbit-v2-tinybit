@@ -35,7 +35,7 @@ public:
     }
 
 protected:
-    void run() override {
+    void update() override {
         int openedEyesDelayIterations = 32;
         int frameIndex = 0;
         do {

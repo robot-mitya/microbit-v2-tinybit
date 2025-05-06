@@ -35,13 +35,15 @@ public:
     }
 
 protected:
-    void run() override {
-        int openedEyesDelayMs = frameDelayMs * 32;
-        int closedEyesDelayMs = frameDelayMs;
+    void update() override {
+        int openedEyesDelayIterations = 32;
         int frameIndex = 0;
         do {
             uBit.display.print(frames[frameIndex]);
-            fiber_sleep(frameIndex == 0 ? openedEyesDelayMs : closedEyesDelayMs);
+            int delayIterations = (frameIndex == 0) ? openedEyesDelayIterations : 1;
+            for (int i = 0; i < delayIterations && !cancelled; i++) {
+                fiber_sleep(frameDelayMs);
+            }
             frameIndex = (frameIndex + 1) % FRAME_COUNT;
         } while (isLooped && !cancelled);
         

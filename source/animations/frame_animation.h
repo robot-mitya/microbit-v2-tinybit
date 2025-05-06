@@ -4,23 +4,28 @@
 #include "MicroBit.h"
 
 class FrameAnimation {
-protected:
-    MicroBit& uBit;
-    MicroBitImage* frames = nullptr;
-    int frameCount = 0;
-    int frameDelayMs = 200;
-    bool isLooped = false;
-
 public:
     FrameAnimation(MicroBit& uBit, int frameCount, int frameDelayMs, bool isLooped)
         : uBit(uBit), frameCount(frameCount), frameDelayMs(frameDelayMs), isLooped(isLooped) {}
 
+    // virtual ~FrameAnimation() = default;
     virtual ~FrameAnimation() {
-        delete[] frames;
+        uBit.serial.printf("~FrameAnimation 1\r\n");
+    //     // if (frames != nullptr)
+    //     // {
+    //     //     uBit.serial.printf("~FrameAnimation 2\r\n");
+    //     //     delete[] frames;
+    //     //     uBit.serial.printf("~FrameAnimation 3\r\n");
+    //     //     frames = nullptr;
+    //     //     uBit.serial.printf("~FrameAnimation 4\r\n");
+    //     // }
+    //     // uBit.serial.printf("~FrameAnimation 5\r\n");
     }
 
     void startAsync() {
+        if (running) return;
         cancelled = false;
+        running = true;
         create_fiber(runAdapter, this);
     }
 
@@ -32,21 +37,38 @@ public:
         return cancelled;
     }
 
-protected:
-    volatile bool cancelled = false;
+    bool isRunning() const {
+        return running;
+    }
 
+private:
     static void runAdapter(void* param) {
         static_cast<FrameAnimation*>(param)->run();
     }
 
-    virtual void run() {
+    void run() {
+        running = true;
+        update();
+        running = false;
+    }
+
+protected:
+    MicroBit& uBit;
+    MicroBitImage* frames = nullptr;
+    int frameCount = 0;
+    int frameDelayMs = 200;
+    bool isLooped = false;
+
+    volatile bool cancelled = false;
+    volatile bool running = false;
+
+    virtual void update() {
         do {
             for (int i = 0; i < frameCount && !cancelled; i++) {
                 uBit.display.print(frames[i]);
                 fiber_sleep(frameDelayMs);
             }
         } while (isLooped && !cancelled);
-
         
         uBit.display.clear();
     }
