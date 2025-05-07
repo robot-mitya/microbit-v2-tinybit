@@ -1,5 +1,5 @@
-#ifndef ANIMATION_DRIVER_H
-#define ANIMATION_DRIVER_H
+#ifndef ANIMATION_CONTROLLER_H
+#define ANIMATION_CONTROLLER_H
 
 #include "frame_animation.h"
 #include "yes_animation.h"
@@ -26,16 +26,16 @@ typedef enum
     TALK_FACE,
 } AnimationType;
 
-class AnimationDriver
+class AnimationController
 {
 private:
     MicroBit& uBit;
     FrameAnimation* frameAnimation = nullptr;
     AnimationType animationType = UNDEFINED;
 public:
-    AnimationDriver(MicroBit& uBit) : uBit(uBit) {}
+    AnimationController(MicroBit& uBit) : uBit(uBit) {}
 
-    ~AnimationDriver()
+    ~AnimationController()
     {
         if (frameAnimation != nullptr)
             delete frameAnimation;
@@ -98,4 +98,4 @@ public:
     }
 };
 
-#endif // ANIMATION_DRIVER_H
+#endif // ANIMATION_CONTROLLER_H
