@@ -26,7 +26,7 @@ static void onButtonAClickHandler(MicroBitEvent e)
 static void onButtonBDownHandler(MicroBitEvent e)
 {
     // uBit.serial.printf("Drive\r\n");
-    driveController.setPwmMotor(DriveController::SPIN_LEFT, 25, 255);
+    driveController.run(30, -30);
 }
 
 static void onButtonBUpHandler(MicroBitEvent e)
