@@ -1,9 +1,11 @@
 #include "MicroBit.h"
+#include "language/interpreter.h"
 #include "animations/animation_controller.h"
 #include "motors/drive_controller.h"
 #include "headlights/headlights_controller.h"
 
 MicroBit uBit;
+Interpreter interpreter(uBit);
 AnimationController animationController(uBit);
 AnimationType animationType = UNDEFINED;
 DriveController driveController(uBit);
@@ -64,6 +66,8 @@ int main()
 
     uBit.messageBus.listen(DEVICE_ID_BUTTON_B, DEVICE_BUTTON_EVT_DOWN, onButtonBDownHandler);
     uBit.messageBus.listen(DEVICE_ID_BUTTON_B, DEVICE_BUTTON_EVT_UP, onButtonBUpHandler);
+
+    interpreter.start();
 
     release_fiber();
 }
