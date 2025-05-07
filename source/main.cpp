@@ -1,11 +1,16 @@
 #include "MicroBit.h"
 #include "animations/animation_controller.h"
 #include "motors/drive_controller.h"
+#include "headlights/headlights_controller.h"
 
 MicroBit uBit;
 AnimationController animationController(uBit);
 AnimationType animationType = UNDEFINED;
 DriveController driveController(uBit);
+HeadlightsController headlightsController(uBit);
+
+const uint8_t headlightsColors[8][3] = {{0,0,0}, {255,0,0}, {0,255,0}, {0,0,255}, {255,255,0}, {0,255,255}, {255,0,255}, {255,255,255}};
+int headlightsColorIndex = 0;
 
 static void onLogoTouchHandler(MicroBitEvent e)
 {
@@ -21,6 +26,10 @@ static void onLogoTouchHandler(MicroBitEvent e)
 
 static void onButtonAClickHandler(MicroBitEvent e)
 {
+    const uint8_t* color = headlightsColors[headlightsColorIndex];
+    int colorsCount = sizeof(headlightsColors) / sizeof(headlightsColors[0]);
+    headlightsColorIndex = (headlightsColorIndex + 1) % colorsCount;
+    headlightsController.turnOn(color[0], color[1], color[2]);
 }
 
 static void onButtonBDownHandler(MicroBitEvent e)
