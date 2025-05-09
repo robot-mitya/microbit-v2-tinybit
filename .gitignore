@@ -14,3 +14,8 @@ Makefile
 pxtapp
 buildcache.json
 *.pyc
+
+# CLion
+.idea/*
+!.idea/runConfigurations/
+!.idea/runConfigurations/**
