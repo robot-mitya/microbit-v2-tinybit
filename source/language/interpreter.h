@@ -4,31 +4,22 @@
 #include "MicroBit.h"
 
 class Interpreter {
-private:
     MicroBit& uBit;
+    volatile bool running = false;
 
-    void onSerialLine(MicroBitEvent) {
-        ManagedString line = uBit.serial.readUntil(ManagedString("\n"));
-        processLine(line);
-    }
+    static Interpreter* instance;
 
-    void processLine(const ManagedString& line) {
-        uBit.serial.printf("%s\r\n", line.toCharArray());
-    }
+    ManagedString readLine();
+
+    void processLine(const ManagedString &line);
+
+    static void fiberRunner();
 
 public:
-    Interpreter(MicroBit& uBit) : uBit(uBit) {}
+    explicit Interpreter(MicroBit &uBit) : uBit(uBit) {}
 
-    void start() {
-        uBit.serial.setRxBufferSize(64);
-        uBit.serial.eventOn(ManagedString("\n"));
-        uBit.messageBus.listen(MICROBIT_ID_SERIAL, MICROBIT_SERIAL_EVT_DELIM_MATCH, this, &Interpreter::onSerialLine);
-        uBit.serial.printf("Interpreter started\r\n");
-    }
-
-    void stop() {
-        uBit.messageBus.ignore(MICROBIT_ID_SERIAL, MICROBIT_SERIAL_EVT_DELIM_MATCH, this, &Interpreter::onSerialLine);
-    }
+    void start();
+    void stop();
 };
 
 #endif // INTERPRETER_H

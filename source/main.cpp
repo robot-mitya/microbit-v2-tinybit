@@ -1,4 +1,5 @@
 #include "MicroBit.h"
+#include "MicroBitEvent.h"
 #include "language/interpreter.h"
 #include "animations/animation_controller.h"
 #include "motors/drive_controller.h"
