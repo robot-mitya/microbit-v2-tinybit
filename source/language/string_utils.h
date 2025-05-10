@@ -26,11 +26,34 @@ inline unsigned int extractWord(
         pos++;
     }
 
+    if (pos >= bufferLength) {
+        word[0] = '\0';
+        return bufferLength;
+    }
+
     // Collect word characters
     int wordLength = 0;
-    while (pos < bufferLength && !std::isspace(static_cast<unsigned char>(buffer[pos])))
+    if (buffer[pos] == '"') // Words in quotes
     {
-        word[wordLength++] = buffer[pos++];
+        pos++; // Skip opening quotation mark
+        while (pos < bufferLength) {
+            if (buffer[pos] == '\\' && pos + 1 < bufferLength && buffer[pos + 1] == '"') {
+                word[wordLength++] = '"';
+                pos += 2;
+            } else if (buffer[pos] == '"') {
+                pos++; // Closing quotation mark
+                break;
+            } else {
+                word[wordLength++] = buffer[pos++];
+            }
+        }
+    }
+    else // Regular word
+    {
+        while (pos < bufferLength && !std::isspace(static_cast<unsigned char>(buffer[pos])))
+        {
+            word[wordLength++] = buffer[pos++];
+        }
     }
 
     // Null-terminate output
