@@ -1,47 +1,45 @@
 #include "interpreter.h"
 
-#include "ManagedString.h"
+Interpreter *Interpreter::instance = nullptr;
 
-#define RX_BUFFER_SIZE 80
-#define MAX_LINE_LENGTH 80
-#define MAX_ARGS 10
-
-Interpreter* Interpreter::instance = nullptr;
-
-ManagedString Interpreter::readLine()
+const char *Interpreter::readLine()
 {
-    ManagedString buffer = "";
+    int pos = 0;
     while (true)
     {
         while (!uBit.serial.isReadable())
-            uBit.sleep(1);
+            fiber_sleep(1);
 
         char c = uBit.serial.getc();
+        if (c == '\r' || c == '\n') break;
 
-        if (c == '\r' || c == '\n')
-            break;
-
-        buffer = buffer + c;
-
-        if (buffer.length() >= MAX_LINE_LENGTH)
+        lineBuffer[pos++] = c;
+        if (pos >= MaxLineLength)
         {
             //TODO DZZ: Generate error message!
             break;
         }
     }
-    return buffer;
+
+    lineBuffer[pos] = '\0'; // null-terminate
+    return lineBuffer;
 }
 
-void Interpreter::processLine(const ManagedString & line) {
-    uBit.serial.printf(("ECHO: " + line + "\r\n").toCharArray());
+void Interpreter::processLine(const char *line)
+{
+    uBit.serial.printf("Echo: %s\r\n", line);
 }
 
-void Interpreter::fiberRunner() {
-    if (!instance) return;
-    while (instance->running) {
-        if (instance->uBit.serial.isReadable()) {
-            ManagedString line = instance->readLine();
-            if (line.length() > 0)
+void Interpreter::fiberRunner()
+{
+    if (!instance)
+        return;
+    while (instance->running)
+    {
+        if (instance->uBit.serial.isReadable())
+        {
+            const char *line = instance->readLine();
+            if (strlen(line) > 0)
                 instance->processLine(line);
         }
         fiber_sleep(1);
@@ -53,7 +51,7 @@ void Interpreter::start()
     if (running)
         return;
     instance = this;
-    uBit.serial.setRxBufferSize(RX_BUFFER_SIZE);
+    uBit.serial.setRxBufferSize(RxBufferSize);
     uBit.serial.printf("Interpreter started\r\n");
     running = true;
     create_fiber(fiberRunner);

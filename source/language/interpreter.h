@@ -9,9 +9,11 @@ class Interpreter {
 
     static Interpreter* instance;
 
-    ManagedString readLine();
-
-    void processLine(const ManagedString &line);
+    static constexpr int RxBufferSize = 80;
+    static constexpr int MaxLineLength = 80;
+    char lineBuffer[MaxLineLength + 1] = {0};
+    const char* readLine();
+    void processLine(const char* line);
 
     static void fiberRunner();
 
