@@ -2,15 +2,16 @@
 #define MOTORS_CONTROLLER_H
 
 #include "MicroBit.h"
+#include "imotors_controller.h"
 
-class MotorsController {
+class MotorsController : public IMotorsController {
     static constexpr uint8_t PWM_ADDRESS = 0x01;
     static constexpr uint8_t MOTORS = 0x02;
 public:
     explicit MotorsController(MicroBit& uBit)
         : uBit(uBit), i2c(uBit.i2c) {}
 
-    void run(int speedLeft, int speedRight)
+    void run(int speedLeft, int speedRight) override
     {
         Mode mode;
         if (speedLeft >= 0 && speedRight >= 0)
@@ -28,7 +29,7 @@ public:
         setPwmMotor(mode, (uint8_t)speedLeft, (uint8_t)speedRight);
     }
 
-    void stop() {
+    void stop() override {
         setPwmMotor(FORWARD, 0, 0);
     }
 
