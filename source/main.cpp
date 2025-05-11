@@ -1,30 +1,26 @@
 #include "MicroBit.h"
-#include "MicroBitEvent.h"
+#include "core.h"
 #include "language/interpreter.h"
-#include "animations/animation_controller.h"
-#include "controllers//motors_controller.h"
-#include "controllers/headlights_controller.h"
 
-MicroBit uBit;
+Core core;
+MicroBit& uBit = core.getMicroBit();
 Interpreter interpreter(uBit);
-AnimationController animationController(uBit);
 AnimationType animationType = UNDEFINED;
-MotorsController motorsController(uBit);
-HeadlightsController headlightsController(uBit);
 
 const uint8_t headlightsColors[8][3] = {{0,0,0}, {255,0,0}, {0,255,0}, {0,0,255}, {255,255,0}, {0,255,255}, {255,0,255}, {255,255,255}};
 int headlightsColorIndex = 0;
 
 static void onLogoTouchHandler(MicroBitEvent e)
 {
-    animationController.stop();
+    IDisplayController& displayController = core.getDisplayController();
+    displayController.stopAnimation();
 
     int animationFirstIndex = UNDEFINED;
     int animationLastIndex = TALK_FACE;
-    int animationsCount = TALK_FACE - UNDEFINED + 1;
+    int animationsCount = animationLastIndex - UNDEFINED + 1;
     animationType = (AnimationType)((animationType - animationFirstIndex + 1) % animationsCount);
     
-    animationController.startAsync(animationType);
+    displayController.startAnimationAsync(animationType);
 }
 
 static void onButtonAClickHandler(MicroBitEvent e)
@@ -32,24 +28,25 @@ static void onButtonAClickHandler(MicroBitEvent e)
     const uint8_t* color = headlightsColors[headlightsColorIndex];
     int colorsCount = sizeof(headlightsColors) / sizeof(headlightsColors[0]);
     headlightsColorIndex = (headlightsColorIndex + 1) % colorsCount;
-    headlightsController.turnOn(color[0], color[1], color[2]);
+    core.getHeadlightsController().turnOn(color[0], color[1], color[2]);
 }
 
 static void onButtonBDownHandler(MicroBitEvent e)
 {
     // uBit.serial.printf("Drive\r\n");
-    motorsController.run(30, -30);
+    core.getMotorsController().run(30, -30);
 }
 
 static void onButtonBUpHandler(MicroBitEvent e)
 {
     // uBit.serial.printf("Stop\r\n");
-    motorsController.stop();
+    core.getMotorsController().stop();
 }
 
 int main()
 {
-    uBit.init();
+    core.init();
+
     uBit.serial.send("Started\r\n");
 
     uBit.display.print("3");
@@ -58,7 +55,7 @@ int main()
     uBit.sleep(500);
     uBit.display.print("1");
     uBit.sleep(500);
-    animationController.startAsync(SPINNER);
+    core.getDisplayController().startAnimationAsync(SPINNER);
     // uBit.display.print("<");
 
     uBit.messageBus.listen(MICROBIT_ID_LOGO, MICROBIT_BUTTON_EVT_CLICK, onLogoTouchHandler);

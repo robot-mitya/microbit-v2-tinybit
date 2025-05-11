@@ -1,55 +1,42 @@
-#ifndef ANIMATION_CONTROLLER_H
-#define ANIMATION_CONTROLLER_H
+#ifndef DISPLAY_CONTROLLER_H
+#define DISPLAY_CONTROLLER_H
 
-#include "frame_animation.h"
-#include "yes_animation.h"
-#include "no_animation.h"
-#include "heart_animation.h"
-#include "spinner_animation.h"
-#include "normal_face_animation.h"
-#include "smile_face_animation.h"
-#include "sad_face_animation.h"
-#include "angry_face_animation.h"
-#include "talk_face_animation.h"
+#include "idisplay_controller.h"
+#include "../animations/yes_animation.h"
+#include "../animations/no_animation.h"
+#include "../animations/heart_animation.h"
+#include "../animations/spinner_animation.h"
+#include "../animations/normal_face_animation.h"
+#include "../animations/smile_face_animation.h"
+#include "../animations/sad_face_animation.h"
+#include "../animations/angry_face_animation.h"
+#include "../animations/talk_face_animation.h"
 
-typedef enum
+class ICore;
+
+class DisplayController : public IDisplayController
 {
-    UNDEFINED = 0,
-    YES,
-    NO,
-    HEART,
-    SPINNER,
-    NORMAL_FACE,
-    SMILE_FACE,
-    SAD_FACE,
-    ANGRY_FACE,
-    TALK_FACE,
-} AnimationType;
-
-class AnimationController
-{
-private:
     MicroBit& uBit;
+    ICore& core;
     FrameAnimation* frameAnimation = nullptr;
     AnimationType animationType = UNDEFINED;
 public:
-    AnimationController(MicroBit& uBit) : uBit(uBit) {}
+    explicit DisplayController(MicroBit& uBit, ICore& core) : uBit(uBit), core(core) {}
 
-    ~AnimationController()
+    ~DisplayController() override
     {
-        if (frameAnimation != nullptr)
-            delete frameAnimation;
+        delete frameAnimation;
     }
 
-    FrameAnimation* startAsync(AnimationType animationType)
+    FrameAnimation *startAnimationAsync(AnimationType animationType) override
     {
         if (animationType == this->animationType && frameAnimation != nullptr && frameAnimation->isRunning())
             return frameAnimation;
 
         this->animationType = animationType;
         
-        stop();
-        while (frameAnimation->isRunning()) uBit.sleep(10);
+        stopAnimation();
+        while (frameAnimation != nullptr && frameAnimation->isRunning()) uBit.sleep(10);
         uBit.sleep(10);
         delete frameAnimation;
 
@@ -91,11 +78,11 @@ public:
         return frameAnimation;
     }
 
-    void stop()
+    void stopAnimation() override
     {
         if (frameAnimation == nullptr) return;
         frameAnimation->stop();
     }
 };
 
-#endif // ANIMATION_CONTROLLER_H
+#endif // DISPLAY_CONTROLLER_H

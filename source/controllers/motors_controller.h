@@ -4,12 +4,18 @@
 #include "MicroBit.h"
 #include "imotors_controller.h"
 
+class ICore;
+
 class MotorsController : public IMotorsController {
     static constexpr uint8_t PWM_ADDRESS = 0x01;
     static constexpr uint8_t MOTORS = 0x02;
+
+    MicroBit& uBit;
+    MicroBitI2C& i2c;
+    ICore& core;
 public:
-    explicit MotorsController(MicroBit& uBit)
-        : uBit(uBit), i2c(uBit.i2c) {}
+    explicit MotorsController(MicroBit& uBit, ICore& core)
+        : uBit(uBit), i2c(uBit.i2c), core(core) {}
 
     void run(int speedLeft, int speedRight) override
     {
@@ -34,9 +40,6 @@ public:
     }
 
 private:
-    MicroBit& uBit;
-    MicroBitI2C& i2c;
-
     int leftMotorDirection = 0;  // 0： stopped, 1： forward, -1: backward
     int rightMotorDirection = 0;
     int previousLeftMotorDirection = 0;

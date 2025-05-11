@@ -1,6 +1,8 @@
 #ifndef IMOTORS_CONTROLLER_H
 #define IMOTORS_CONTROLLER_H
 
+class ICore;
+
 class IMotorsController
 {
 public:

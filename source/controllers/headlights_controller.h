@@ -4,19 +4,22 @@
 #include "MicroBit.h"
 #include "iheadlights_controller.h"
 
+class ICore;
+
 class HeadlightsController : public IHeadlightsController {
     static constexpr uint8_t PWM_ADDRESS = 0x01;
     static constexpr uint8_t RGBs = 0x01;
 
     MicroBit& uBit;
     MicroBitI2C& i2c;
+    ICore& core;
 
     uint8_t red = 0;
     uint8_t green = 0;
     uint8_t blue = 0;
 public:
-    explicit HeadlightsController(MicroBit& uBit)
-        : uBit(uBit), i2c(uBit.i2c) {}
+    explicit HeadlightsController(MicroBit& uBit, ICore& core)
+        : uBit(uBit), i2c(uBit.i2c),  core(core) {}
 
     void turnOn(uint8_t red, uint8_t green, uint8_t blue) override
     {
