@@ -1,15 +1,13 @@
-#ifndef DRIVE_CONTROLLER_H
-#define DRIVE_CONTROLLER_H
+#ifndef MOTORS_CONTROLLER_H
+#define MOTORS_CONTROLLER_H
 
 #include "MicroBit.h"
 
-class DriveController {
-private:
-    static const uint8_t PWM_ADDRESS = 0x01;
-    static const uint8_t MOTORS = 0x02;
-    // static const uint8_t RGBs = 0x01;
+class MotorsController {
+    static constexpr uint8_t PWM_ADDRESS = 0x01;
+    static constexpr uint8_t MOTORS = 0x02;
 public:
-    DriveController(MicroBit& uBit)
+    explicit MotorsController(MicroBit& uBit)
         : uBit(uBit), i2c(uBit.i2c) {}
 
     void run(int speedLeft, int speedRight)
@@ -51,8 +49,6 @@ private:
     };
 
     void setPwmMotor(Mode mode, uint8_t speedLeft, uint8_t speedRight) {
-        if (mode > SPIN_RIGHT) return;
-        
         // Формируем I2C-пакет управления
         uint8_t buf[5] = { MOTORS, 0, 0, 0, 0 };
         
@@ -90,13 +86,13 @@ private:
         if (leftDirectionDelta == 2 || rightDirectionDelta == 2)
         {
             uint8_t stopBuf[5] = { MOTORS, 0, 0, 0, 0 };
-            i2c.write(PWM_ADDRESS << 1, (uint8_t*)stopBuf, 5);
+            i2c.write(PWM_ADDRESS << 1, stopBuf, 5);
             uBit.sleep(100); // безопасная пауза
         }
         previousLeftMotorDirection = leftMotorDirection;
         previousRightMotorDirection = rightMotorDirection;
 
-        i2c.write(PWM_ADDRESS << 1, (uint8_t*)buf, 5);
+        i2c.write(PWM_ADDRESS << 1, buf, 5);
         // uBit.serial.printf("  buf: %d, %d, %d, %d, %d\r\n", buf[0], buf[1], buf[2], buf[3], buf[4]);
     }
 };

@@ -2,14 +2,14 @@
 #include "MicroBitEvent.h"
 #include "language/interpreter.h"
 #include "animations/animation_controller.h"
-#include "motors/drive_controller.h"
-#include "headlights/headlights_controller.h"
+#include "controllers//motors_controller.h"
+#include "controllers/headlights_controller.h"
 
 MicroBit uBit;
 Interpreter interpreter(uBit);
 AnimationController animationController(uBit);
 AnimationType animationType = UNDEFINED;
-DriveController driveController(uBit);
+MotorsController motorsController(uBit);
 HeadlightsController headlightsController(uBit);
 
 const uint8_t headlightsColors[8][3] = {{0,0,0}, {255,0,0}, {0,255,0}, {0,0,255}, {255,255,0}, {0,255,255}, {255,0,255}, {255,255,255}};
@@ -38,13 +38,13 @@ static void onButtonAClickHandler(MicroBitEvent e)
 static void onButtonBDownHandler(MicroBitEvent e)
 {
     // uBit.serial.printf("Drive\r\n");
-    driveController.run(30, -30);
+    motorsController.run(30, -30);
 }
 
 static void onButtonBUpHandler(MicroBitEvent e)
 {
     // uBit.serial.printf("Stop\r\n");
-    driveController.stop();
+    motorsController.stop();
 }
 
 int main()
