@@ -4,7 +4,7 @@ project(string_utils_tests)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_executable(tests test_string_utils.cpp)
+add_executable(tests main.cpp)
 
 target_include_directories(tests PRIVATE ../)
 
