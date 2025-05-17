@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
-project(string_utils_tests)
+project(mimi_tests)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(tests main.cpp)
 
-target_include_directories(tests PRIVATE ../)
+target_include_directories(tests PRIVATE ../source)
 
 # Enable color output
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")

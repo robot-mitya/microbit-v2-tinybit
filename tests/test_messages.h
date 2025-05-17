@@ -8,8 +8,8 @@
 #include <iostream>
 #include <cstring>
 #include "../source/language/string_utils.h"
-#include "../source/language/messages.h"
 #include "tests.h"
+#include "message_mocks.h"
 
 #include <string>
 
@@ -20,7 +20,7 @@ inline int test_hl_message_positive() {
 
     unsigned int pos = extractWord(0, len, input, word);
     ASSERT_EQ(std::string("HL"), std::string(word), "Extract HL mnemonic");
-    HeadlightsMessage message;
+    HeadlightsMockMessage message;
     int status = message.parse(input, pos);
     ASSERT_EQ(MESSAGE_PARSE_STATUS_OK, status, "Parse status");
     ASSERT_EQ(10, (int)message.red, "Red");
@@ -37,7 +37,7 @@ inline int test_hl_message_missing_args_1() {
 
     unsigned int pos = extractWord(0, len, input, word);
     ASSERT_EQ(std::string("HL"), std::string(word), "Extract HL mnemonic");
-    HeadlightsMessage message;
+    HeadlightsMockMessage message;
     int status = message.parse(input, pos);
     ASSERT_EQ(MESSAGE_PARSE_STATUS_MISSING_ARGUMENT, status, "Parse status");
 
@@ -51,7 +51,7 @@ inline int test_hl_message_missing_args_2() {
 
     unsigned int pos = extractWord(0, len, input, word);
     ASSERT_EQ(std::string("HL"), std::string(word), "Extract HL mnemonic");
-    HeadlightsMessage message;
+    HeadlightsMockMessage message;
     int status = message.parse(input, pos);
     ASSERT_EQ(MESSAGE_PARSE_STATUS_MISSING_ARGUMENT, status, "Parse status");
 
@@ -65,7 +65,7 @@ inline int test_hl_message_too_many_args() {
 
     unsigned int pos = extractWord(0, len, input, word);
     ASSERT_EQ(std::string("HL"), std::string(word), "Extract HL mnemonic");
-    HeadlightsMessage message;
+    HeadlightsMockMessage message;
     int status = message.parse(input, pos);
     ASSERT_EQ(MESSAGE_PARSE_STATUS_TOO_MANY_ARGUMENTS, status, "Parse status");
 
@@ -79,7 +79,7 @@ inline int test_hl_message_wrong_arg_1() {
 
     unsigned int pos = extractWord(0, len, input, word);
     ASSERT_EQ(std::string("HL"), std::string(word), "Extract HL mnemonic");
-    HeadlightsMessage message;
+    HeadlightsMockMessage message;
     int status = message.parse(input, pos);
     ASSERT_EQ(MESSAGE_PARSE_STATUS_WRONG_ARGUMENT, status, "Parse status");
 
@@ -93,7 +93,7 @@ inline int test_hl_message_wrong_arg_2() {
 
     unsigned int pos = extractWord(0, len, input, word);
     ASSERT_EQ(std::string("HL"), std::string(word), "Extract HL mnemonic");
-    HeadlightsMessage message;
+    HeadlightsMockMessage message;
     int status = message.parse(input, pos);
     ASSERT_EQ(MESSAGE_PARSE_STATUS_WRONG_ARGUMENT, status, "Parse status");
 
@@ -107,7 +107,7 @@ inline int test_hl_message_wrong_arg_3() {
 
     unsigned int pos = extractWord(0, len, input, word);
     ASSERT_EQ(std::string("HL"), std::string(word), "Extract HL mnemonic");
-    HeadlightsMessage message;
+    HeadlightsMockMessage message;
     int status = message.parse(input, pos);
     ASSERT_EQ(MESSAGE_PARSE_STATUS_WRONG_ARGUMENT, status, "Parse status");
 

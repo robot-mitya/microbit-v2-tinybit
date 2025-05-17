@@ -69,8 +69,6 @@ public:
 
         return 0;
     }
-
-    void execute() const override {}
 };
 
 #endif //MESSAGES_H
