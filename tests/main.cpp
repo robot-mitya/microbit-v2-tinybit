@@ -13,6 +13,7 @@ int main() {
     result |= test_quoted_argument();
     result |= test_broken_quoted_argument();
     result |= test_escaped_quote_inside_string();
+    result |= test_one_escaped_quote_inside_string();
 
     result |= test_hl_message_positive();
     result |= test_hl_message_missing_args_1();

@@ -114,4 +114,21 @@ inline int test_escaped_quote_inside_string() {
     return 0;
 }
 
+inline int test_one_escaped_quote_inside_string() {
+    const char* input = R"(MSG "She said: \"yes")";
+    const unsigned int len = std::strlen(input);
+    char lexeme[64];
+    bool isString;
+
+    unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
+    ASSERT_EQ(std::string("MSG"), std::string(lexeme), "mnemonic MSG");
+
+    pos = extractLexeme(pos, len, input, lexeme, isString);
+    ASSERT_EQ(std::string("She said: \"yes"), std::string(lexeme), "escaped quote inside string");
+    ASSERT_EQ(true, isString, "string is a string");
+    ASSERT_EQ(len, pos, "Position at the end");
+
+    return 0;
+}
+
 #endif // TEST_STRING_UTILS_H
