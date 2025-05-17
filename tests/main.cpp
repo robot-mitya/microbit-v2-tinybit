@@ -6,6 +6,8 @@
 #include "test_messages.h"
 #include "test_message_queue.h"
 
+using namespace mimi;
+
 int main() {
     int result = 0;
     result |= test_basic_extraction();

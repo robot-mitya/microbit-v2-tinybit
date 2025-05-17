@@ -3,13 +3,18 @@
 
 #include "messages.h"
 
-class HeadlightsTinybitMessage final : public HeadlightsMessage
+namespace mimi
 {
-public:
-    void execute() const override
+
+    class HeadlightsTinybitMessage final : public HeadlightsMessage
     {
-        //...
-    }
-};
+    public:
+        void execute() const override
+        {
+            //...
+        }
+    };
+
+} // namespace mimi
 
 #endif //TINYBIT_MESSAGES_H

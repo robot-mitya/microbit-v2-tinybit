@@ -12,77 +12,82 @@
 #include "../animations/angry_face_animation.h"
 #include "../animations/talk_face_animation.h"
 
-class ICore;
-
-class DisplayController : public IDisplayController
+namespace mimi
 {
-    MicroBit& uBit;
-    ICore& core;
-    FrameAnimation* frameAnimation = nullptr;
-    AnimationType animationType = UNDEFINED;
-public:
-    explicit DisplayController(MicroBit& uBit, ICore& core) : uBit(uBit), core(core) {}
 
-    ~DisplayController() override
+    class ICore;
+
+    class DisplayController final : public IDisplayController
     {
-        delete frameAnimation;
-    }
+        MicroBit& uBit;
+        ICore& core;
+        FrameAnimation* frameAnimation = nullptr;
+        AnimationType animationType = UNDEFINED;
+    public:
+        explicit DisplayController(MicroBit& uBit, ICore& core) : uBit(uBit), core(core) {}
 
-    FrameAnimation *startAnimationAsync(AnimationType animationType) override
-    {
-        if (animationType == this->animationType && frameAnimation != nullptr && frameAnimation->isRunning())
-            return frameAnimation;
-
-        this->animationType = animationType;
-        
-        stopAnimation();
-        while (frameAnimation != nullptr && frameAnimation->isRunning()) uBit.sleep(10);
-        uBit.sleep(10);
-        delete frameAnimation;
-
-        switch (animationType)
+        ~DisplayController() override
         {
-        case YES:
-            frameAnimation = new YesAnimation(uBit);
-            break;
-        case NO:
-            frameAnimation = new NoAnimation(uBit);
-            break;
-        case HEART:
-            frameAnimation = new HeartAnimation(uBit);
-            break;
-        case SPINNER:
-            frameAnimation = new SpinnerAnimation(uBit);
-            break;
-        case NORMAL_FACE:
-            frameAnimation = new NormalFaceAnimation(uBit);
-            break;
-        case SMILE_FACE:
-            frameAnimation = new SmileFaceAnimation(uBit);
-            break;
-        case SAD_FACE:
-            frameAnimation = new SadFaceAnimation(uBit);
-            break;
-        case ANGRY_FACE:
-            frameAnimation = new AngryFaceAnimation(uBit);
-            break;
-        case TALK_FACE:
-            frameAnimation = new TalkFaceAnimation(uBit);
-            break;
-        default:
-            frameAnimation = nullptr;
-            break;
+            delete frameAnimation;
         }
-        if (frameAnimation != nullptr)
-            frameAnimation->startAsync();
-        return frameAnimation;
-    }
 
-    void stopAnimation() override
-    {
-        if (frameAnimation == nullptr) return;
-        frameAnimation->stop();
-    }
-};
+        FrameAnimation *startAnimationAsync(const AnimationType animationType) override
+        {
+            if (animationType == this->animationType && frameAnimation != nullptr && frameAnimation->isRunning())
+                return frameAnimation;
+
+            this->animationType = animationType;
+
+            stopAnimation();
+            while (frameAnimation != nullptr && frameAnimation->isRunning()) uBit.sleep(10);
+            uBit.sleep(10);
+            delete frameAnimation;
+
+            switch (animationType)
+            {
+            case YES:
+                frameAnimation = new YesAnimation(uBit);
+                break;
+            case NO:
+                frameAnimation = new NoAnimation(uBit);
+                break;
+            case HEART:
+                frameAnimation = new HeartAnimation(uBit);
+                break;
+            case SPINNER:
+                frameAnimation = new SpinnerAnimation(uBit);
+                break;
+            case NORMAL_FACE:
+                frameAnimation = new NormalFaceAnimation(uBit);
+                break;
+            case SMILE_FACE:
+                frameAnimation = new SmileFaceAnimation(uBit);
+                break;
+            case SAD_FACE:
+                frameAnimation = new SadFaceAnimation(uBit);
+                break;
+            case ANGRY_FACE:
+                frameAnimation = new AngryFaceAnimation(uBit);
+                break;
+            case TALK_FACE:
+                frameAnimation = new TalkFaceAnimation(uBit);
+                break;
+            default:
+                frameAnimation = nullptr;
+                break;
+            }
+            if (frameAnimation != nullptr)
+                frameAnimation->startAsync();
+            return frameAnimation;
+        }
+
+        void stopAnimation() override
+        {
+            if (frameAnimation == nullptr) return;
+            frameAnimation->stop();
+        }
+    };
+
+} // namespace mimi
 
 #endif // DISPLAY_CONTROLLER_H

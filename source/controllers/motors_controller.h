@@ -4,11 +4,14 @@
 #include "MicroBit.h"
 #include "imotors_controller.h"
 
+namespace mimi
+{
+
 class ICore;
 
-class MotorsController : public IMotorsController {
-    static constexpr uint8_t PWM_ADDRESS = 0x01;
-    static constexpr uint8_t MOTORS = 0x02;
+class MotorsController final : public IMotorsController {
+    static constexpr uint8_t PWM_ADDRESS = 0x01; // NOLINT(*-dynamic-static-initializers)
+    static constexpr uint8_t MOTORS = 0x02; // NOLINT(*-dynamic-static-initializers)
 
     MicroBit& uBit;
     MicroBitI2C& i2c;
@@ -32,7 +35,7 @@ public:
         speedLeft = min(255, abs(speedLeft));
         speedRight = min(255, abs(speedRight));
 
-        setPwmMotor(mode, (uint8_t)speedLeft, (uint8_t)speedRight);
+        setPwmMotor(mode, static_cast<uint8_t>(speedLeft), static_cast<uint8_t>(speedRight));
     }
 
     void stop() override {
@@ -52,7 +55,7 @@ private:
         SPIN_RIGHT = 3 // Вращение на месте вправо (левый вперёд, правый назад)
     };
 
-    void setPwmMotor(Mode mode, uint8_t speedLeft, uint8_t speedRight) {
+    void setPwmMotor(const Mode mode, const uint8_t speedLeft, const uint8_t speedRight) {
         // Формируем I2C-пакет управления
         uint8_t buf[5] = { MOTORS, 0, 0, 0, 0 };
         
@@ -85,8 +88,8 @@ private:
         }
         
         // Если направление изменилось — сначала остановка (защита от резкого реверса)
-        int leftDirectionDelta = abs(leftMotorDirection - previousLeftMotorDirection);
-        int rightDirectionDelta = abs(rightMotorDirection - previousRightMotorDirection);
+        const int leftDirectionDelta = abs(leftMotorDirection - previousLeftMotorDirection);
+        const int rightDirectionDelta = abs(rightMotorDirection - previousRightMotorDirection);
         if (leftDirectionDelta == 2 || rightDirectionDelta == 2)
         {
             uint8_t stopBuf[5] = { MOTORS, 0, 0, 0, 0 };
@@ -100,5 +103,7 @@ private:
         // uBit.serial.printf("  buf: %d, %d, %d, %d, %d\r\n", buf[0], buf[1], buf[2], buf[3], buf[4]);
     }
 };
+
+} // namespace mimi
 
 #endif

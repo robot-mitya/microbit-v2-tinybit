@@ -3,18 +3,23 @@
 
 #include <cstdint>
 
-class IHeadlightsController
+namespace mimi
 {
-public:
-    virtual ~IHeadlightsController() = default;
 
-    virtual void turnOn(uint8_t red, uint8_t green, uint8_t blue) = 0;
-    virtual void turnOff() = 0;
+    class IHeadlightsController
+    {
+    public:
+        virtual ~IHeadlightsController() = default;
 
-    virtual bool isTurnedOn() = 0;
-    virtual uint8_t getRed() = 0;
-    virtual uint8_t getGreen() = 0;
-    virtual uint8_t getBlue() = 0;
-};
+        virtual void turnOn(uint8_t red, uint8_t green, uint8_t blue) = 0;
+        virtual void turnOff() = 0;
+
+        virtual bool isTurnedOn() = 0;
+        virtual uint8_t getRed() = 0;
+        virtual uint8_t getGreen() = 0;
+        virtual uint8_t getBlue() = 0;
+    };
+
+} // namespace mimi
 
 #endif //IHEADLIGHTS_CONTROLLER_H

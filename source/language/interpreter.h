@@ -3,25 +3,30 @@
 
 #include "MicroBit.h"
 
-class Interpreter {
-    MicroBit& uBit;
-    volatile bool running = false;
+namespace mimi
+{
 
-    static Interpreter* instance;
+    class Interpreter {
+        MicroBit& uBit;
+        volatile bool running = false;
 
-    static constexpr int RxBufferSize = 80;
-    static constexpr int MaxLineLength = 80;
-    char lineBuffer[MaxLineLength + 1] = {0};
-    const char* readLine();
-    void processLine(const char* line);
+        static Interpreter* instance; // NOLINT(*-dynamic-static-initializers)
 
-    static void fiberRunner();
+        static constexpr int RxBufferSize = 80;
+        static constexpr int MaxLineLength = 80;
+        char lineBuffer[MaxLineLength + 1] = {};
+        const char* readLine();
+        void processLine(const char* line) const;
 
-public:
-    explicit Interpreter(MicroBit &uBit) : uBit(uBit) {}
+        static void fiberRunner();
 
-    void start();
-    void stop();
-};
+    public:
+        explicit Interpreter(MicroBit &uBit) : uBit(uBit) {}
+
+        void start();
+        void stop();
+    };
+
+} // namespace mimi
 
 #endif // INTERPRETER_H

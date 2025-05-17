@@ -7,10 +7,15 @@
 
 #include "../source/language/messages.h"
 
-class HeadlightsMockMessage final : public HeadlightsMessage
+namespace mimi
 {
-public:
-    void execute() const override {}
-};
+
+    class HeadlightsMockMessage final : public HeadlightsMessage
+    {
+    public:
+        void execute() const override {}
+    };
+
+} // namespace mimi
 
 #endif //MESSAGE_MOCKS_H

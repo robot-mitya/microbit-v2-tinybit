@@ -1,5 +1,7 @@
 #include "interpreter.h"
 
+using namespace mimi;
+
 Interpreter *Interpreter::instance = nullptr;
 
 const char *Interpreter::readLine()
@@ -10,7 +12,7 @@ const char *Interpreter::readLine()
         while (!uBit.serial.isReadable())
             fiber_sleep(1);
 
-        char c = uBit.serial.getc();
+        const char c = uBit.serial.getc();
         if (c == '\r' || c == '\n') break;
 
         lineBuffer[pos++] = c;
@@ -25,7 +27,7 @@ const char *Interpreter::readLine()
     return lineBuffer;
 }
 
-void Interpreter::processLine(const char *line)
+void Interpreter::processLine(const char *line) const
 {
     uBit.serial.printf("Echo: %s\r\n", line);
 }

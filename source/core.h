@@ -6,52 +6,57 @@
 #include "icore.h"
 #include "motors_controller.h"
 
-class Core final : public ICore
+namespace mimi
 {
-    MicroBit uBit;
-    HeadlightsController headlightsController;
-    MotorsController motorsController;
-    DisplayController displayController;
-public:
-    Core() :
-        headlightsController(uBit, *this),
-        motorsController(uBit, *this),
-        displayController(uBit, *this)
-    {}
 
-    MicroBit& getMicroBit() override
+    class Core final : public ICore
     {
-        return uBit;
-    }
+        MicroBit uBit;
+        HeadlightsController headlightsController;
+        MotorsController motorsController;
+        DisplayController displayController;
+    public:
+        Core() : // NOLINT(*-pro-type-member-init, *-use-equals-default)
+            headlightsController(uBit, *this),
+            motorsController(uBit, *this),
+            displayController(uBit, *this)
+        {}
 
-    IHeadlightsController& getHeadlightsController() override
-    {
-        return headlightsController;
-    }
+        MicroBit& getMicroBit() override
+        {
+            return uBit;
+        }
 
-    IMotorsController& getMotorsController() override
-    {
-        return motorsController;
-    }
+        IHeadlightsController& getHeadlightsController() override
+        {
+            return headlightsController;
+        }
 
-    IDisplayController& getDisplayController() override
-    {
-        return displayController;
-    }
+        IMotorsController& getMotorsController() override
+        {
+            return motorsController;
+        }
 
-    void init() override
-    {
-        uBit.init();
-    }
+        IDisplayController& getDisplayController() override
+        {
+            return displayController;
+        }
 
-    void start() override
-    {
-    }
+        void init() override
+        {
+            uBit.init();
+        }
 
-    void stop() override
-    {
-    }
+        void start() override
+        {
+        }
 
-};
+        void stop() override
+        {
+        }
+
+    };
+
+} // namespace mimi
 
 #endif //CORE_H
