@@ -65,16 +65,16 @@ inline int test_quoted_argument() {
     bool isString;
 
     unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
-    ASSERT_EQ(std::string("SAY"), std::string(lexeme), "mnemonic SAY");
-    ASSERT_EQ(false, isString, "mnemonic is not string");
+    ASSERT_EQ(std::string("SAY"), std::string(lexeme), "Mnemonic SAY");
+    ASSERT_EQ(false, isString, "Mnemonic is not string");
 
     pos = extractLexeme(pos, len, input, lexeme, isString);
-    ASSERT_EQ(std::string("Hello World"), std::string(lexeme), "quoted string");
-    ASSERT_EQ(true, isString, "quoted string is string");
+    ASSERT_EQ(std::string("Hello World"), std::string(lexeme), "Quoted string");
+    ASSERT_EQ(true, isString, "Quoted string is string");
 
     pos = extractLexeme(pos, len, input, lexeme, isString);
-    ASSERT_EQ(std::string("123"), std::string(lexeme), "numeric arg");
-    ASSERT_EQ(false, isString, "numeric arg is not string");
+    ASSERT_EQ(std::string("123"), std::string(lexeme), "Numeric arg");
+    ASSERT_EQ(false, isString, "Numeric arg is not string");
     ASSERT_EQ(len, pos, "Position at the end");
 
     return 0;
@@ -87,11 +87,11 @@ inline int test_broken_quoted_argument() {
     bool isString;
 
     unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
-    ASSERT_EQ(std::string("SAY"), std::string(lexeme), "mnemonic SAY");
+    ASSERT_EQ(std::string("SAY"), std::string(lexeme), "Mnemonic SAY");
 
     pos = extractLexeme(pos, len, input, lexeme, isString);
-    ASSERT_EQ(std::string("Hello World 123"), std::string(lexeme), "broken quoted string");
-    ASSERT_EQ(false, isString, "broken quoted string is not string");
+    ASSERT_EQ(std::string("Hello World 123"), std::string(lexeme), "Broken quoted string");
+    ASSERT_EQ(false, isString, "Broken quoted string is not string");
     ASSERT_EQ(len, pos, "Position at the end");
 
     return 0;
@@ -104,11 +104,11 @@ inline int test_escaped_quote_inside_string() {
     bool isString;
 
     unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
-    ASSERT_EQ(std::string("MSG"), std::string(lexeme), "mnemonic MSG");
+    ASSERT_EQ(std::string("MSG"), std::string(lexeme), "Mnemonic MSG");
 
     pos = extractLexeme(pos, len, input, lexeme, isString);
-    ASSERT_EQ(std::string("She said: \"yes\""), std::string(lexeme), "escaped quote inside string");
-    ASSERT_EQ(true, isString, "string is a string");
+    ASSERT_EQ(std::string("She said: \"yes\""), std::string(lexeme), "Escaped quote inside string");
+    ASSERT_EQ(true, isString, "String is a string");
     ASSERT_EQ(len, pos, "Position at the end");
 
     return 0;
@@ -121,11 +121,11 @@ inline int test_one_escaped_quote_inside_string() {
     bool isString;
 
     unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
-    ASSERT_EQ(std::string("MSG"), std::string(lexeme), "mnemonic MSG");
+    ASSERT_EQ(std::string("MSG"), std::string(lexeme), "Mnemonic MSG");
 
     pos = extractLexeme(pos, len, input, lexeme, isString);
-    ASSERT_EQ(std::string("She said: \"yes"), std::string(lexeme), "escaped quote inside string");
-    ASSERT_EQ(true, isString, "string is a string");
+    ASSERT_EQ(std::string("She said: \"yes"), std::string(lexeme), "Escaped quote inside string");
+    ASSERT_EQ(true, isString, "String is a string");
     ASSERT_EQ(len, pos, "Position at the end");
 
     return 0;

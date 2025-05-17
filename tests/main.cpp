@@ -4,6 +4,7 @@
 
 #include "test_string_utils.h"
 #include "test_messages.h"
+#include "test_message_queue.h"
 
 int main() {
     int result = 0;
@@ -22,6 +23,10 @@ int main() {
     result |= test_hl_message_wrong_arg_1();
     result |= test_hl_message_wrong_arg_2();
     result |= test_hl_message_wrong_arg_3();
+
+    result |= test_message_queue_basic_positive();
+    result |= test_message_queue_enqueue_scenarios();
+    result |= test_message_queue_dequeue_scenarios();
 
     if (result == 0) {
         std::cout << COLOR_GREEN << "\nAll tests passed!\n" << COLOR_RESET << std::endl;
