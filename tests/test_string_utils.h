@@ -1,3 +1,4 @@
+// ReSharper disable CppUseAuto
 #ifndef TEST_STRING_UTILS_H
 #define TEST_STRING_UTILS_H
 
@@ -9,19 +10,21 @@
 inline int test_basic_extraction() {
     const char* input = "MOVE 10 20";
     const unsigned int len = std::strlen(input);
-    char word[32];
+    char lexeme[32];
+    bool isString;
 
-    unsigned int pos = extractWord(0, len, input, word);
-    ASSERT_EQ(std::string("MOVE"), std::string(word), "Extract mnemonic");
+    unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
+    ASSERT_EQ(std::string("MOVE"), std::string(lexeme), "Extract mnemonic");
 
-    pos = extractWord(pos, len, input, word);
-    ASSERT_EQ(std::string("10"), std::string(word), "Extract arg1");
+    pos = extractLexeme(pos, len, input, lexeme, isString);
+    ASSERT_EQ(std::string("10"), std::string(lexeme), "Extract arg1");
 
-    pos = extractWord(pos, len, input, word);
-    ASSERT_EQ(std::string("20"), std::string(word), "Extract arg2");
+    pos = extractLexeme(pos, len, input, lexeme, isString);
+    ASSERT_EQ(std::string("20"), std::string(lexeme), "Extract arg2");
 
-    pos = extractWord(pos, len, input, word);
-    ASSERT_EQ(std::string(""), std::string(word), "No more words");
+    pos = extractLexeme(pos, len, input, lexeme, isString);
+    ASSERT_EQ(std::string(""), std::string(lexeme), "No more lexemes");
+    ASSERT_EQ(len, pos, "Position at the end");
 
     return 0;
 }
@@ -29,13 +32,15 @@ inline int test_basic_extraction() {
 inline int test_leading_spaces() {
     const char* input = "  \t\t  TEMP  \t\t  36.6";
     const unsigned int len = std::strlen(input);
-    char word[32];
+    char lexeme[32];
+    bool isString;
 
-    unsigned int pos = extractWord(0, len, input, word);
-    ASSERT_EQ(std::string("TEMP"), std::string(word), "Skip leading spaces and tabs");
+    unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
+    ASSERT_EQ(std::string("TEMP"), std::string(lexeme), "Skip leading spaces and tabs");
 
-    pos = extractWord(pos, len, input, word);
-    ASSERT_EQ(std::string("36.6"), std::string(word), "Extract second word with leading spaces and tabs");
+    pos = extractLexeme(pos, len, input, lexeme, isString);
+    ASSERT_EQ(std::string("36.6"), std::string(lexeme), "Extract second lexeme with leading spaces and tabs");
+    ASSERT_EQ(len, pos, "Position at the end");
 
     return 0;
 }
@@ -43,11 +48,12 @@ inline int test_leading_spaces() {
 inline int test_only_spaces() {
     const char* input = "    \t \t ";
     const unsigned int len = std::strlen(input);
-    char word[32];
+    char lexeme[32];
+    bool isString;
 
-    unsigned int pos = extractWord(0, len, input, word);
-    ASSERT_EQ(std::string(""), std::string(word), "No words found");
-    ASSERT_EQ(len, pos, "Position at end");
+    const unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
+    ASSERT_EQ(std::string(""), std::string(lexeme), "No lexemes found");
+    ASSERT_EQ(len, pos, "Position at the end");
 
     return 0;
 }
@@ -55,16 +61,21 @@ inline int test_only_spaces() {
 inline int test_quoted_argument() {
     const char* input = "SAY \"Hello World\" 123";
     const unsigned int len = std::strlen(input);
-    char word[64];
+    char lexeme[64];
+    bool isString;
 
-    unsigned int pos = extractWord(0, len, input, word);
-    ASSERT_EQ(std::string("SAY"), std::string(word), "mnemonic SAY");
+    unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
+    ASSERT_EQ(std::string("SAY"), std::string(lexeme), "mnemonic SAY");
+    ASSERT_EQ(false, isString, "mnemonic is not string");
 
-    pos = extractWord(pos, len, input, word);
-    ASSERT_EQ(std::string("Hello World"), std::string(word), "quoted string");
+    pos = extractLexeme(pos, len, input, lexeme, isString);
+    ASSERT_EQ(std::string("Hello World"), std::string(lexeme), "quoted string");
+    ASSERT_EQ(true, isString, "quoted string is string");
 
-    pos = extractWord(pos, len, input, word);
-    ASSERT_EQ(std::string("123"), std::string(word), "numeric arg");
+    pos = extractLexeme(pos, len, input, lexeme, isString);
+    ASSERT_EQ(std::string("123"), std::string(lexeme), "numeric arg");
+    ASSERT_EQ(false, isString, "numeric arg is not string");
+    ASSERT_EQ(len, pos, "Position at the end");
 
     return 0;
 }
@@ -72,27 +83,33 @@ inline int test_quoted_argument() {
 inline int test_broken_quoted_argument() {
     const char* input = "SAY \"Hello World 123";
     const unsigned int len = std::strlen(input);
-    char word[64];
+    char lexeme[64];
+    bool isString;
 
-    unsigned int pos = extractWord(0, len, input, word);
-    ASSERT_EQ(std::string("SAY"), std::string(word), "mnemonic SAY");
+    unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
+    ASSERT_EQ(std::string("SAY"), std::string(lexeme), "mnemonic SAY");
 
-    pos = extractWord(pos, len, input, word);
-    ASSERT_EQ(std::string("Hello World 123"), std::string(word), "broken quoted string");
+    pos = extractLexeme(pos, len, input, lexeme, isString);
+    ASSERT_EQ(std::string("Hello World 123"), std::string(lexeme), "broken quoted string");
+    ASSERT_EQ(false, isString, "broken quoted string is not string");
+    ASSERT_EQ(len, pos, "Position at the end");
 
     return 0;
 }
 
 inline int test_escaped_quote_inside_string() {
-    const char* input = R"(MSG "He said: \"yes\"")";
+    const char* input = R"(MSG "She said: \"yes\"")";
     const unsigned int len = std::strlen(input);
-    char word[64];
+    char lexeme[64];
+    bool isString;
 
-    unsigned int pos = extractWord(0, len, input, word);
-    ASSERT_EQ(std::string("MSG"), std::string(word), "mnemonic MSG");
+    unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
+    ASSERT_EQ(std::string("MSG"), std::string(lexeme), "mnemonic MSG");
 
-    pos = extractWord(pos, len, input, word);
-    ASSERT_EQ(std::string("He said: \"yes\""), std::string(word), "escaped quote inside string");
+    pos = extractLexeme(pos, len, input, lexeme, isString);
+    ASSERT_EQ(std::string("She said: \"yes\""), std::string(lexeme), "escaped quote inside string");
+    ASSERT_EQ(true, isString, "string is a string");
+    ASSERT_EQ(len, pos, "Position at the end");
 
     return 0;
 }

@@ -11,12 +11,15 @@
  * @param startPos      Index to start scanning from.
  * @param bufferLength  Total length of the input buffer.
  * @param buffer        The input string buffer.
- * @param word          Output buffer to store the extracted word (must be pre-allocated).
+ * @param lexeme        Output buffer to store the extracted lexeme: mnemonic or argument (must be pre-allocated).
+ * @param isString      The lexeme is inside the quotation marks in the input buffer.
  * @return              Index of the next character after the extracted word, or bufferLength if
  * done.
  */
-inline unsigned int extractWord(
-    const unsigned int startPos, const unsigned int bufferLength, const char* buffer, char* word)
+inline unsigned int extractLexeme(
+    const unsigned int startPos,
+    const unsigned int bufferLength, const char* buffer,
+    char* lexeme, bool& isString)
 {
     unsigned int pos = startPos;
 
@@ -27,24 +30,28 @@ inline unsigned int extractWord(
     }
 
     if (pos >= bufferLength) {
-        word[0] = '\0';
+        lexeme[0] = '\0';
         return bufferLength;
     }
 
-    // Collect word characters
-    int wordLength = 0;
+    // Collect lexeme characters
+    bool hasLeadingQuotationMark = false;
+    bool hasEndingQuotationMark = false;
+    int lexemeLength = 0;
     if (buffer[pos] == '"') // Words in quotes
     {
+        hasLeadingQuotationMark = true;
         pos++; // Skip opening quotation mark
         while (pos < bufferLength) {
             if (buffer[pos] == '\\' && pos + 1 < bufferLength && buffer[pos + 1] == '"') {
-                word[wordLength++] = '"';
+                lexeme[lexemeLength++] = '"';
                 pos += 2;
             } else if (buffer[pos] == '"') {
+                hasEndingQuotationMark = true;
                 pos++; // Closing quotation mark
                 break;
             } else {
-                word[wordLength++] = buffer[pos++];
+                lexeme[lexemeLength++] = buffer[pos++];
             }
         }
     }
@@ -52,12 +59,14 @@ inline unsigned int extractWord(
     {
         while (pos < bufferLength && !std::isspace(static_cast<unsigned char>(buffer[pos])))
         {
-            word[wordLength++] = buffer[pos++];
+            lexeme[lexemeLength++] = buffer[pos++];
         }
     }
 
     // Null-terminate output
-    word[wordLength] = '\0';
+    lexeme[lexemeLength] = '\0';
+
+    isString = hasLeadingQuotationMark && hasEndingQuotationMark;
 
     return pos;
 }

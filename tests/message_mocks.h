@@ -7,10 +7,10 @@
 
 #include "../source/language/messages.h"
 
-class HeadlightsMockMessage : public HeadlightsMessage
+class HeadlightsMockMessage final : public HeadlightsMessage
 {
 public:
-    void execute() const override {};
+    void execute() const override {}
 };
 
 #endif //MESSAGE_MOCKS_H

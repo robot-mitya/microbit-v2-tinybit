@@ -2,11 +2,9 @@
 #define MESSAGES_H
 
 #include <cstdint>
-#include "string_utils.h"
-
-#include <cstdlib>
 #include <cstring>
 #include <cerrno>
+#include "string_utils.h"
 
 constexpr int MESSAGE_PARSE_STATUS_OK = 0;
 constexpr int MESSAGE_PARSE_STATUS_MISSING_ARGUMENT = -1;
@@ -17,8 +15,18 @@ class Message
 {
 protected:
 // public:
-    static uint8_t textToUint8(const char* text, int& status)
+    static uint8_t textToUint8(const char* text, const bool isString, int& status)
     {
+        if (text[0] == '\0')
+        {
+            status = MESSAGE_PARSE_STATUS_MISSING_ARGUMENT;
+            return 0;
+        }
+        if (isString)
+        {
+            status = MESSAGE_PARSE_STATUS_WRONG_ARGUMENT;
+            return 0;
+        }
         char *end = nullptr;
         errno = 0;
         const unsigned long value = strtoul(text, &end, 10);
@@ -47,24 +55,22 @@ public:
     {
         const unsigned int lineLen = strlen(line);
         char argument[80];
+        bool isString;
         int status;
 
-        argsStartPos = extractWord(argsStartPos, lineLen, line, argument);
-        if (argument[0] == '\0') return MESSAGE_PARSE_STATUS_MISSING_ARGUMENT;
-        red = textToUint8(argument, status);
+        argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
+        red = textToUint8(argument, isString, status);
         if (status < 0) return status;
 
-        argsStartPos = extractWord(argsStartPos, lineLen, line, argument);
-        if (argument[0] == '\0') return MESSAGE_PARSE_STATUS_MISSING_ARGUMENT;
-        green = textToUint8(argument, status);
+        argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
+        green = textToUint8(argument, isString, status);
         if (status < 0) return status;
 
-        argsStartPos = extractWord(argsStartPos, lineLen, line, argument);
-        if (argument[0] == '\0') return MESSAGE_PARSE_STATUS_MISSING_ARGUMENT;
-        blue = textToUint8(argument, status);
+        argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
+        blue = textToUint8(argument, isString, status);
         if (status < 0) return status;
 
-        extractWord(argsStartPos, lineLen, line, argument);
+        extractLexeme(argsStartPos, lineLen, line, argument, isString);
         if (argument[0] != '\0') return MESSAGE_PARSE_STATUS_TOO_MANY_ARGUMENTS;
 
         return 0;
