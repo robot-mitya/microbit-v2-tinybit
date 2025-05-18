@@ -6,7 +6,7 @@
 #include "../source/language/message_queue.h"
 #include "tests.h"
 
-namespace mimi
+namespace mimi::tests::message_queue
 {
 
     class DummyLock final : public ILock {

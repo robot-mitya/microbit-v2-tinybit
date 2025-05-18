@@ -7,7 +7,7 @@
 #include "../source/language/string_utils.h"
 #include "tests.h"
 
-namespace mimi
+namespace mimi::tests::string_utils
 {
 
     inline int test_basic_extraction() {

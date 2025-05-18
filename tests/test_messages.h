@@ -14,7 +14,7 @@
 
 #include <string>
 
-namespace mimi
+namespace mimi::tests::messages
 {
 
     inline int test_hl_message_positive() {

@@ -5,30 +5,35 @@
 #include "test_string_utils.h"
 #include "test_messages.h"
 #include "test_message_queue.h"
+#include "test_command_processor.h"
 
-using namespace mimi;
+using namespace mimi::tests;
 
 int main() {
     int result = 0;
-    result |= test_basic_extraction();
-    result |= test_leading_spaces();
-    result |= test_only_spaces();
-    result |= test_quoted_argument();
-    result |= test_broken_quoted_argument();
-    result |= test_escaped_quote_inside_string();
-    result |= test_one_escaped_quote_inside_string();
+    result |= string_utils::test_basic_extraction();
+    result |= string_utils::test_leading_spaces();
+    result |= string_utils::test_only_spaces();
+    result |= string_utils::test_quoted_argument();
+    result |= string_utils::test_broken_quoted_argument();
+    result |= string_utils::test_escaped_quote_inside_string();
+    result |= string_utils::test_one_escaped_quote_inside_string();
 
-    result |= test_hl_message_positive();
-    result |= test_hl_message_missing_args_1();
-    result |= test_hl_message_missing_args_2();
-    result |= test_hl_message_too_many_args();
-    result |= test_hl_message_wrong_arg_1();
-    result |= test_hl_message_wrong_arg_2();
-    result |= test_hl_message_wrong_arg_3();
+    result |= messages::test_hl_message_positive();
+    result |= messages::test_hl_message_missing_args_1();
+    result |= messages::test_hl_message_missing_args_2();
+    result |= messages::test_hl_message_too_many_args();
+    result |= messages::test_hl_message_wrong_arg_1();
+    result |= messages::test_hl_message_wrong_arg_2();
+    result |= messages::test_hl_message_wrong_arg_3();
 
-    result |= test_message_queue_basic_positive();
-    result |= test_message_queue_enqueue_scenarios();
-    result |= test_message_queue_dequeue_scenarios();
+    result |= message_queue::test_message_queue_basic_positive();
+    result |= message_queue::test_message_queue_enqueue_scenarios();
+    result |= message_queue::test_message_queue_dequeue_scenarios();
+
+    result |= command_processor::test_uninitialized_command_processor();
+    result |= command_processor::test_command_processor_on_nonexisting_mnemonic();
+    result |= command_processor::test_command_processor_positive_scenarios();
 
     if (result == 0) {
         std::cout << COLOR_GREEN << "\nAll tests passed!\n" << COLOR_RESET << std::endl;
