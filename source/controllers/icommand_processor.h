@@ -5,6 +5,7 @@
 #include <cstring>
 // ReSharper disable once CppUnusedIncludeDirective
 #include <cstdlib>
+#include <functional>
 
 namespace mimi
 {
@@ -13,7 +14,8 @@ class Message;
 
 struct CommandEntry {
     const char* mnemonic;
-    Message* (*createFunc)();
+    // Message* (*createFunc)();
+    std::function<Message *()> createFunc;
 };
 
 class ICommandProcessor {

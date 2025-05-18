@@ -8,6 +8,7 @@
 
 namespace mimi
 {
+    class ICore;
 
     constexpr int MESSAGE_PARSE_STATUS_OK = 0;
     constexpr int MESSAGE_PARSE_STATUS_MISSING_ARGUMENT = -1;
@@ -17,7 +18,8 @@ namespace mimi
     class Message
     {
     protected:
-    // public:
+        ICore& core;
+
         static uint8_t textToUint8(const char* text, const bool isString, int& status)
         {
             if (text[0] == '\0')
@@ -42,6 +44,7 @@ namespace mimi
             return 0;
         }
     public:
+        explicit Message(ICore& core) : core(core) {}
         virtual ~Message() = default;
         virtual int parse(const char* line, unsigned int argsStartPos) = 0;
         virtual void execute() const = 0;
@@ -53,6 +56,8 @@ namespace mimi
         uint8_t red = 0;
         uint8_t green = 0;
         uint8_t blue = 0;
+
+        explicit HeadlightsMessage(ICore &core) : Message(core) {}
 
         int parse(const char *line, unsigned int argsStartPos) override
         {

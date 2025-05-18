@@ -26,6 +26,7 @@ namespace mimi::microbit::tinybit
         Core() : // NOLINT(*-pro-type-member-init, *-use-equals-default)
             // ReSharper disable once CppRedundantMemberInitializer
             lock(),
+            commandProcessor(*this),
             queueController(*this, lock),
             headlightsController(uBit, *this),
             motorsController(uBit, *this),
@@ -64,6 +65,7 @@ namespace mimi::microbit::tinybit
         void init() override
         {
             uBit.init();
+            commandProcessor.init();
         }
 
         void start() override
