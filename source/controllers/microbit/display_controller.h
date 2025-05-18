@@ -2,6 +2,7 @@
 #define DISPLAY_CONTROLLER_H
 
 #include "icore.h"
+#include "MicroBit.h"
 #include "../idisplay_controller.h"
 #include "animations/yes_animation.h"
 #include "animations/no_animation.h"

@@ -1,6 +1,7 @@
 #ifndef CORE_H
 #define CORE_H
 
+#include "MicroBit.h"
 #include "fiber_lock.h"
 #include "../display_controller.h"
 #include "headlights_controller.h"
@@ -29,7 +30,7 @@ namespace mimi::microbit::tinybit
             motorsController(uBit, *this),
             displayController(uBit, *this) {}
 
-        MicroBit& getMicroBit() override
+        MicroBit& getMicroBit()
         {
             return uBit;
         }
