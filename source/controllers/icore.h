@@ -2,7 +2,7 @@
 #define ICORE_H
 
 #include "MicroBit.h"
-#include "icommand_processor.h"
+// #include "icommand_processor.h"
 #include "iheadlights_controller.h"
 #include "imotors_controller.h"
 #include "idisplay_controller.h"

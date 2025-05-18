@@ -4,8 +4,6 @@
 namespace mimi
 {
 
-class ICore;
-
 class IMotorsController
 {
 public:

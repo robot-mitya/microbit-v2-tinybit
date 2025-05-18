@@ -3,7 +3,7 @@
 
 #include "frame_animation.h"
 
-namespace mimi
+namespace mimi::microbit
 {
 
     class TalkFaceAnimation final : public FrameAnimation {

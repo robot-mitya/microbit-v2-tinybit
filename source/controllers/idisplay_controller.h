@@ -1,7 +1,7 @@
 #ifndef IDISPLAY_CONTROLLER_H
 #define IDISPLAY_CONTROLLER_H
 
-#include "../animations/frame_animation.h"
+#include "iframe_animation.h"
 
 namespace mimi
 {
@@ -24,7 +24,7 @@ namespace mimi
     {
     public:
         virtual ~IDisplayController() = default;
-        virtual FrameAnimation* startAnimationAsync(AnimationType animationType) = 0;
+        virtual IFrameAnimation* startAnimationAsync(AnimationType animationType) = 0;
         virtual void stopAnimation() = 0;
     };
 

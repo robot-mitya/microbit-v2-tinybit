@@ -1,16 +1,16 @@
-#ifndef YES_ANIMATION_H
-#define YES_ANIMATION_H
+#ifndef NO_ANIMATION_H
+#define NO_ANIMATION_H
 
 #include "frame_animation.h"
 
-namespace mimi
+namespace mimi::microbit
 {
 
-    class YesAnimation final : public FrameAnimation {
+    class NoAnimation final : public FrameAnimation {
         static constexpr int FRAME_COUNT = 8;
         MicroBitImage frameStorage[FRAME_COUNT];
     public:
-        explicit YesAnimation(MicroBit& uBit) : FrameAnimation(uBit, FRAME_COUNT, 80, true) { // NOLINT(*-pro-type-member-init)
+        explicit NoAnimation(MicroBit& uBit) : FrameAnimation(uBit, FRAME_COUNT, 80, true) { // NOLINT(*-pro-type-member-init)
             constexpr int a = 1;
             constexpr int b = 3;
             constexpr int c = 5;
@@ -18,39 +18,39 @@ namespace mimi
             constexpr int e = 9;
             constexpr int frameData[FRAME_COUNT][5][5] = {
                 {
-                    {0,0,0,0,0},
-                    {0,0,0,0,a},
-                    {0,0,0,a,0},
-                    {a,0,a,0,0},
-                    {0,a,0,0,0}
-                },
-            {
-                    {0,0,0,0,0},
-                    {0,0,0,0,b},
-                    {0,0,0,b,0},
-                    {b,0,b,0,0},
-                    {0,b,0,0,0}
+                    {a,0,0,0,a},
+                    {0,a,0,a,0},
+                    {0,0,a,0,0},
+                    {0,a,0,a,0},
+                    {a,0,0,0,a},
                 },
                 {
-                    {0,0,0,0,0},
-                    {0,0,0,0,c},
-                    {0,0,0,c,0},
-                    {c,0,c,0,0},
-                    {0,c,0,0,0}
+                    {b,0,0,0,b},
+                    {0,b,0,b,0},
+                    {0,0,b,0,0},
+                    {0,b,0,b,0},
+                    {b,0,0,0,b},
                 },
                 {
-                    {0,0,0,0,0},
-                    {0,0,0,0,d},
-                    {0,0,0,d,0},
-                    {d,0,d,0,0},
-                    {0,d,0,0,0}
+                    {c,0,0,0,c},
+                    {0,c,0,c,0},
+                    {0,0,c,0,0},
+                    {0,c,0,c,0},
+                    {c,0,0,0,c},
                 },
                 {
-                    {0,0,0,0,0},
-                    {0,0,0,0,e},
-                    {0,0,0,e,0},
-                    {e,0,e,0,0},
-                    {0,e,0,0,0}
+                    {d,0,0,0,d},
+                    {0,d,0,d,0},
+                    {0,0,d,0,0},
+                    {0,d,0,d,0},
+                    {d,0,0,0,d},
+                },
+                {
+                    {e,0,0,0,e},
+                    {0,e,0,e,0},
+                    {0,0,e,0,0},
+                    {0,e,0,e,0},
+                    {e,0,0,0,e},
                 }
             };
 
@@ -69,4 +69,4 @@ namespace mimi
 
 } // namespace mimi
 
-#endif // YES_ANIMATION_H
+#endif // NO_ANIMATION_H

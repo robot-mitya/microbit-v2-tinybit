@@ -4,7 +4,7 @@
 #include "CodalFiber.h"
 #include "../message_queue.h"
 
-namespace mimi
+namespace mimi::microbit
 {
 
 class FiberLock final : public ILock {

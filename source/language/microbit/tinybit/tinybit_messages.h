@@ -3,7 +3,7 @@
 
 #include "../../messages.h"
 
-namespace mimi
+namespace mimi::microbit::tinybit
 {
 
     class HeadlightsTinybitMessage final : public HeadlightsMessage

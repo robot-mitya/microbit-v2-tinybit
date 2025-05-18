@@ -1,16 +1,16 @@
-#ifndef SMILE_FACE_ANIMATION_H
-#define SMILE_FACE_ANIMATION_H
+#ifndef NORMAL_FACE_ANIMATION_H
+#define NORMAL_FACE_ANIMATION_H
 
 #include "frame_animation.h"
 
-namespace mimi
+namespace mimi::microbit
 {
 
-    class SmileFaceAnimation final : public FrameAnimation {
+    class NormalFaceAnimation final : public FrameAnimation {
         static constexpr int FRAME_COUNT = 2;
         MicroBitImage frameStorage[FRAME_COUNT];
     public:
-        explicit SmileFaceAnimation(MicroBit& uBit) : FrameAnimation(uBit, FRAME_COUNT, 100, true) { // NOLINT(*-pro-type-member-init)
+        explicit NormalFaceAnimation(MicroBit& uBit) : FrameAnimation(uBit, FRAME_COUNT, 100, true) { // NOLINT(*-pro-type-member-init)
             constexpr int a = 7;
             constexpr int UNIQUE_FRAMES = 2;
             constexpr int frameData[UNIQUE_FRAMES][5][5] = {
@@ -18,14 +18,14 @@ namespace mimi
                     {a,a,0,a,a},
                     {a,a,0,a,a},
                     {0,0,0,0,0},
-                    {a,0,0,0,a},
+                    {0,0,0,0,0},
                     {0,a,a,a,0}
                 },
                 {
                     {0,0,0,0,0},
                     {a,a,0,a,a},
                     {0,0,0,0,0},
-                    {a,0,0,0,a},
+                    {0,0,0,0,0},
                     {0,a,a,a,0}
                 }
             };
@@ -55,4 +55,4 @@ namespace mimi
 
 } // namespace mimi
 
-#endif // SMILE_FACE_ANIMATION_H
+#endif // NORMAL_FACE_ANIMATION_H

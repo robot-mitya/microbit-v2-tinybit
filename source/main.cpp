@@ -4,7 +4,7 @@
 
 using namespace mimi;
 
-Core core;
+microbit::tinybit::Core core;
 MicroBit& uBit = core.getMicroBit();
 Interpreter interpreter(uBit);
 AnimationType animationType = UNDEFINED;
@@ -58,10 +58,9 @@ int main()
     uBit.display.print("1");
     uBit.sleep(500);
     core.getDisplayController().startAnimationAsync(SPINNER);
-    // uBit.display.print("<");
 
     uBit.messageBus.listen(MICROBIT_ID_LOGO, MICROBIT_BUTTON_EVT_CLICK, onLogoTouchHandler);
-    
+
     uBit.messageBus.listen(DEVICE_ID_BUTTON_A, DEVICE_BUTTON_EVT_CLICK, onButtonAClickHandler);
 
     uBit.messageBus.listen(DEVICE_ID_BUTTON_B, DEVICE_BUTTON_EVT_DOWN, onButtonBDownHandler);

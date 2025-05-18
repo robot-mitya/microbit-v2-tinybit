@@ -1,32 +1,32 @@
-#ifndef SAD_FACE_ANIMATION_H
-#define SAD_FACE_ANIMATION_H
+#ifndef ANGRY_FACE_ANIMATION_H
+#define ANGRY_FACE_ANIMATION_H
 
 #include "frame_animation.h"
 
-namespace mimi
+namespace mimi::microbit
 {
 
-    class SadFaceAnimation final : public FrameAnimation {
+    class AngryFaceAnimation final : public FrameAnimation {
         static constexpr int FRAME_COUNT = 2;
         MicroBitImage frameStorage[FRAME_COUNT];
     public:
-        explicit SadFaceAnimation(MicroBit& uBit) : FrameAnimation(uBit, FRAME_COUNT, 100, true) { // NOLINT(*-pro-type-member-init)
+        explicit AngryFaceAnimation(MicroBit& uBit) : FrameAnimation(uBit, FRAME_COUNT, 100, true) { // NOLINT(*-pro-type-member-init)
             constexpr int a = 7;
             constexpr int UNIQUE_FRAMES = 2;
-            constexpr int frameData[UNIQUE_FRAMES][5][5] = {
+            const int frameData[UNIQUE_FRAMES][5][5] = {
                 {
+                    {a,0,0,0,a},
                     {0,a,0,a,0},
-                    {a,a,0,a,a},
                     {0,0,0,0,0},
-                    {0,a,a,a,0},
-                    {a,0,0,0,a}
+                    {a,a,a,a,a},
+                    {0,a,0,a,0}
                 },
                 {
-                    {0,0,0,0,0},
-                    {a,a,0,a,a},
-                    {0,0,0,0,0},
-                    {0,a,a,a,0},
-                    {a,0,0,0,a}
+                        {0,0,0,0,0},
+                        {a,a,0,a,a},
+                        {0,0,0,0,0},
+                        {a,a,a,a,a},
+                        {0,a,0,a,0}
                 }
             };
 
@@ -55,4 +55,4 @@ namespace mimi
 
 } // namespace mimi
 
-#endif // SAD_FACE_ANIMATION_H
+#endif // ANGRY_FACE_ANIMATION_H

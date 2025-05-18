@@ -1,13 +1,12 @@
 #ifndef MOTORS_CONTROLLER_H
 #define MOTORS_CONTROLLER_H
 
+#include "icore.h"
 #include "MicroBit.h"
 #include "../../imotors_controller.h"
 
-namespace mimi
+namespace mimi::microbit::tinybit
 {
-
-class ICore;
 
 class MotorsController final : public IMotorsController {
     static constexpr uint8_t PWM_ADDRESS = 0x01; // NOLINT(*-dynamic-static-initializers)

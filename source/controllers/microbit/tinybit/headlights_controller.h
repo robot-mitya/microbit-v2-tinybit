@@ -1,13 +1,12 @@
 #ifndef HEADLIGHTS_CONTROLLER_H
 #define HEADLIGHTS_CONTROLLER_H
 
+#include "icore.h"
 #include "MicroBit.h"
 #include "../../iheadlights_controller.h"
 
-namespace mimi
+namespace mimi::microbit::tinybit
 {
-
-    class ICore;
 
     class HeadlightsController final : public IHeadlightsController {
         static constexpr uint8_t PWM_ADDRESS = 0x01;

@@ -8,7 +8,7 @@
 #include "motors_controller.h"
 #include "../../queue_controller.h"
 
-namespace mimi
+namespace mimi::microbit::tinybit
 {
 
     class Core final : public ICore
@@ -27,8 +27,7 @@ namespace mimi
             queueController(*this, lock),
             headlightsController(uBit, *this),
             motorsController(uBit, *this),
-            displayController(uBit, *this)
-        {}
+            displayController(uBit, *this) {}
 
         MicroBit& getMicroBit() override
         {

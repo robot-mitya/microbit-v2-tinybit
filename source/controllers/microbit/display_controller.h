@@ -1,27 +1,26 @@
 #ifndef DISPLAY_CONTROLLER_H
 #define DISPLAY_CONTROLLER_H
 
+#include "icore.h"
 #include "../idisplay_controller.h"
-#include "../../animations/yes_animation.h"
-#include "../../animations/no_animation.h"
-#include "../../animations/heart_animation.h"
-#include "../../animations/spinner_animation.h"
-#include "../../animations/normal_face_animation.h"
-#include "../../animations/smile_face_animation.h"
-#include "../../animations/sad_face_animation.h"
-#include "../../animations/angry_face_animation.h"
-#include "../../animations/talk_face_animation.h"
+#include "animations/yes_animation.h"
+#include "animations/no_animation.h"
+#include "animations/heart_animation.h"
+#include "animations/spinner_animation.h"
+#include "animations/normal_face_animation.h"
+#include "animations/smile_face_animation.h"
+#include "animations/sad_face_animation.h"
+#include "animations/angry_face_animation.h"
+#include "animations/talk_face_animation.h"
 
-namespace mimi
+namespace mimi::microbit
 {
-
-    class ICore;
 
     class DisplayController final : public IDisplayController
     {
         MicroBit& uBit;
         ICore& core;
-        FrameAnimation* frameAnimation = nullptr;
+        IFrameAnimation* frameAnimation = nullptr;
         AnimationType animationType = UNDEFINED;
     public:
         explicit DisplayController(MicroBit& uBit, ICore& core) : uBit(uBit), core(core) {}
@@ -31,7 +30,7 @@ namespace mimi
             delete frameAnimation;
         }
 
-        FrameAnimation *startAnimationAsync(const AnimationType animationType) override
+        IFrameAnimation *startAnimationAsync(const AnimationType animationType) override
         {
             if (animationType == this->animationType && frameAnimation != nullptr && frameAnimation->isRunning())
                 return frameAnimation;
@@ -46,31 +45,31 @@ namespace mimi
             switch (animationType)
             {
             case YES:
-                frameAnimation = new YesAnimation(uBit);
+                frameAnimation = reinterpret_cast<IFrameAnimation *>(new YesAnimation(uBit));
                 break;
             case NO:
-                frameAnimation = new NoAnimation(uBit);
+                frameAnimation = reinterpret_cast<IFrameAnimation *>(new NoAnimation(uBit));
                 break;
             case HEART:
-                frameAnimation = new HeartAnimation(uBit);
+                frameAnimation = reinterpret_cast<IFrameAnimation *>(new HeartAnimation(uBit));
                 break;
             case SPINNER:
-                frameAnimation = new SpinnerAnimation(uBit);
+                frameAnimation = reinterpret_cast<IFrameAnimation *>(new SpinnerAnimation(uBit));
                 break;
             case NORMAL_FACE:
-                frameAnimation = new NormalFaceAnimation(uBit);
+                frameAnimation = reinterpret_cast<IFrameAnimation *>(new NormalFaceAnimation(uBit));
                 break;
             case SMILE_FACE:
-                frameAnimation = new SmileFaceAnimation(uBit);
+                frameAnimation = reinterpret_cast<IFrameAnimation *>(new SmileFaceAnimation(uBit));
                 break;
             case SAD_FACE:
-                frameAnimation = new SadFaceAnimation(uBit);
+                frameAnimation = reinterpret_cast<IFrameAnimation *>(new SadFaceAnimation(uBit));
                 break;
             case ANGRY_FACE:
-                frameAnimation = new AngryFaceAnimation(uBit);
+                frameAnimation = reinterpret_cast<IFrameAnimation *>(new AngryFaceAnimation(uBit));
                 break;
             case TALK_FACE:
-                frameAnimation = new TalkFaceAnimation(uBit);
+                frameAnimation = reinterpret_cast<IFrameAnimation *>(new TalkFaceAnimation(uBit));
                 break;
             default:
                 frameAnimation = nullptr;
