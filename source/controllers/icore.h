@@ -5,6 +5,7 @@
 #include "iheadlights_controller.h"
 #include "imotors_controller.h"
 #include "idisplay_controller.h"
+#include "iqueue_controller.h"
 
 namespace mimi
 {
@@ -19,6 +20,7 @@ namespace mimi
 
         virtual MicroBit& getMicroBit() = 0;
 
+        virtual IQueueController& getQueueController() = 0;
         virtual IHeadlightsController& getHeadlightsController() = 0;
         virtual IMotorsController& getMotorsController() = 0;
         virtual IDisplayController& getDisplayController() = 0;

@@ -1,5 +1,5 @@
 #include "MicroBit.h"
-#include "core.h"
+#include "controllers/microbit/core.h"
 #include "language/interpreter.h"
 
 using namespace mimi;

@@ -1,16 +1,16 @@
 #ifndef DISPLAY_CONTROLLER_H
 #define DISPLAY_CONTROLLER_H
 
-#include "idisplay_controller.h"
-#include "../animations/yes_animation.h"
-#include "../animations/no_animation.h"
-#include "../animations/heart_animation.h"
-#include "../animations/spinner_animation.h"
-#include "../animations/normal_face_animation.h"
-#include "../animations/smile_face_animation.h"
-#include "../animations/sad_face_animation.h"
-#include "../animations/angry_face_animation.h"
-#include "../animations/talk_face_animation.h"
+#include "../idisplay_controller.h"
+#include "../../animations/yes_animation.h"
+#include "../../animations/no_animation.h"
+#include "../../animations/heart_animation.h"
+#include "../../animations/spinner_animation.h"
+#include "../../animations/normal_face_animation.h"
+#include "../../animations/smile_face_animation.h"
+#include "../../animations/sad_face_animation.h"
+#include "../../animations/angry_face_animation.h"
+#include "../../animations/talk_face_animation.h"
 
 namespace mimi
 {

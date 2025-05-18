@@ -2,7 +2,7 @@
 #define HEADLIGHTS_CONTROLLER_H
 
 #include "MicroBit.h"
-#include "iheadlights_controller.h"
+#include "../../iheadlights_controller.h"
 
 namespace mimi
 {

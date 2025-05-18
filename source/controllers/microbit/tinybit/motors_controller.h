@@ -2,7 +2,7 @@
 #define MOTORS_CONTROLLER_H
 
 #include "MicroBit.h"
-#include "imotors_controller.h"
+#include "../../imotors_controller.h"
 
 namespace mimi
 {
