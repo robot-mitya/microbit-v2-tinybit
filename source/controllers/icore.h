@@ -1,7 +1,7 @@
 #ifndef ICORE_H
 #define ICORE_H
 
-// #include "icommand_processor.h"
+#include "icommand_processor.h"
 #include "iheadlights_controller.h"
 #include "imotors_controller.h"
 #include "idisplay_controller.h"
@@ -18,7 +18,7 @@ namespace mimi
         virtual void start() = 0;
         virtual void stop() = 0;
 
-        // virtual ICommandProcessor& getCommandProcessor() = 0;
+        virtual ICommandProcessor& getCommandProcessor() = 0;
         virtual IQueueController& getQueueController() = 0;
         virtual IHeadlightsController& getHeadlightsController() = 0;
         virtual IMotorsController& getMotorsController() = 0;

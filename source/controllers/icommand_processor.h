@@ -3,6 +3,8 @@
 #define ICOMMAND_PROCESSOR_H
 
 #include <cstring>
+// ReSharper disable once CppUnusedIncludeDirective
+#include <cstdlib>
 
 namespace mimi
 {

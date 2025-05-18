@@ -1,13 +1,14 @@
 #ifndef CORE_H
 #define CORE_H
 
+#include "../../icore.h"
 #include "MicroBit.h"
 #include "fiber_lock.h"
-#include "../display_controller.h"
-#include "headlights_controller.h"
-#include "../../icore.h"
-#include "motors_controller.h"
+#include "command_processor.h"
 #include "../../queue_controller.h"
+#include "headlights_controller.h"
+#include "motors_controller.h"
+#include "../display_controller.h"
 
 namespace mimi::microbit::tinybit
 {
@@ -16,7 +17,7 @@ namespace mimi::microbit::tinybit
     {
         MicroBit uBit;
         FiberLock lock;
-        // CommandProcessor commandProcessor;
+        CommandProcessor commandProcessor;
         QueueController queueController;
         HeadlightsController headlightsController;
         MotorsController motorsController;
@@ -35,10 +36,10 @@ namespace mimi::microbit::tinybit
             return uBit;
         }
 
-        // ICommandProcessor& getCommandProcessor() override
-        // {
-        //
-        // }
+        ICommandProcessor& getCommandProcessor() override
+        {
+            return commandProcessor;
+        }
 
         IQueueController& getQueueController() override
         {

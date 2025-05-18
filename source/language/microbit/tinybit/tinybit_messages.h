@@ -6,7 +6,7 @@
 namespace mimi::microbit::tinybit
 {
 
-    class HeadlightsTinybitMessage final : public HeadlightsMessage
+    class HeadlightsMessage final : public mimi::HeadlightsMessage
     {
     public:
         void execute() const override
