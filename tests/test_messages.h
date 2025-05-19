@@ -16,7 +16,6 @@
 
 namespace mimi::tests::messages
 {
-
     inline int test_hl_message_positive() {
         const char* input = "HL 10 20 30";
         const unsigned int len = std::strlen(input);
@@ -25,7 +24,8 @@ namespace mimi::tests::messages
 
         const unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
         ASSERT_EQ(std::string("HL"), std::string(lexeme), "Extract HL mnemonic");
-        HeadlightsMockMessage message;
+        DummyCore dummyCore;
+        HeadlightsMockMessage message(dummyCore);
         const int status = message.parse(input, pos);
         ASSERT_EQ(MESSAGE_PARSE_STATUS_OK, status, "Parse status");
         ASSERT_EQ(10, (int)message.red, "Red");
@@ -43,7 +43,8 @@ namespace mimi::tests::messages
 
         const unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
         ASSERT_EQ(std::string("HL"), std::string(lexeme), "Extract HL mnemonic");
-        HeadlightsMockMessage message;
+        DummyCore dummyCore;
+        HeadlightsMockMessage message(dummyCore);
         const int status = message.parse(input, pos);
         ASSERT_EQ(MESSAGE_PARSE_STATUS_MISSING_ARGUMENT, status, "Parse status");
 
@@ -58,7 +59,8 @@ namespace mimi::tests::messages
 
         const unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
         ASSERT_EQ(std::string("HL"), std::string(lexeme), "Extract HL mnemonic");
-        HeadlightsMockMessage message;
+        DummyCore dummyCore;
+        HeadlightsMockMessage message(dummyCore);
         const int status = message.parse(input, pos);
         ASSERT_EQ(MESSAGE_PARSE_STATUS_MISSING_ARGUMENT, status, "Parse status");
 
@@ -73,7 +75,8 @@ namespace mimi::tests::messages
 
         const unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
         ASSERT_EQ(std::string("HL"), std::string(lexeme), "Extract HL mnemonic");
-        HeadlightsMockMessage message;
+        DummyCore dummyCore;
+        HeadlightsMockMessage message(dummyCore);
         const int status = message.parse(input, pos);
         ASSERT_EQ(MESSAGE_PARSE_STATUS_TOO_MANY_ARGUMENTS, status, "Parse status");
 
@@ -88,7 +91,8 @@ namespace mimi::tests::messages
 
         const unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
         ASSERT_EQ(std::string("HL"), std::string(lexeme), "Extract HL mnemonic");
-        HeadlightsMockMessage message;
+        DummyCore dummyCore;
+        HeadlightsMockMessage message(dummyCore);
         const int status = message.parse(input, pos);
         ASSERT_EQ(MESSAGE_PARSE_STATUS_WRONG_ARGUMENT, status, "Parse status");
 
@@ -103,7 +107,8 @@ namespace mimi::tests::messages
 
         const unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
         ASSERT_EQ(std::string("HL"), std::string(lexeme), "Extract HL mnemonic");
-        HeadlightsMockMessage message;
+        DummyCore dummyCore;
+        HeadlightsMockMessage message(dummyCore);
         const int status = message.parse(input, pos);
         ASSERT_EQ(MESSAGE_PARSE_STATUS_WRONG_ARGUMENT, status, "Parse status");
 
@@ -118,7 +123,8 @@ namespace mimi::tests::messages
 
         const unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
         ASSERT_EQ(std::string("HL"), std::string(lexeme), "Extract HL mnemonic");
-        HeadlightsMockMessage message;
+        DummyCore dummyCore;
+        HeadlightsMockMessage message(dummyCore);
         const int status = message.parse(input, pos);
         ASSERT_EQ(MESSAGE_PARSE_STATUS_WRONG_ARGUMENT, status, "Parse status");
 

@@ -2,14 +2,15 @@
 #define IHEADLIGHTS_CONTROLLER_H
 
 #include <cstdint>
+#include "icontroller.h"
 
 namespace mimi
 {
 
-    class IHeadlightsController
+    class IHeadlightsController : public IController
     {
     public:
-        virtual ~IHeadlightsController() = default;
+        // virtual ~IHeadlightsController() = default;
 
         virtual void turnOn(uint8_t red, uint8_t green, uint8_t blue) = 0;
         virtual void turnOff() = 0;

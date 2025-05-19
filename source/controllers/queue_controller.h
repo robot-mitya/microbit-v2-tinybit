@@ -19,6 +19,11 @@ namespace mimi
         explicit QueueController(ICore& core, ILock& lock)
             : core(core), lock(lock), inputQueue(lock), outputQueue(lock) {}
 
+        void init() override
+        {
+
+        }
+
         void start() override
         {
 

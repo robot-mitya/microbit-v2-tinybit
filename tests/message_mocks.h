@@ -13,6 +13,7 @@ namespace mimi
     class HeadlightsMockMessage final : public HeadlightsMessage
     {
     public:
+        explicit HeadlightsMockMessage(ICore &core) : HeadlightsMessage(core) {}
         void execute() const override {}
     };
 

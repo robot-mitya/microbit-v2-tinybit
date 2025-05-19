@@ -3,6 +3,7 @@
 #define ICOMMAND_PROCESSOR_H
 
 #include <cstring>
+#include "icontroller.h"
 // ReSharper disable once CppUnusedIncludeDirective
 #include <cstdlib>
 #include <functional>
@@ -18,7 +19,7 @@ struct CommandEntry {
     std::function<Message *()> createFunc;
 };
 
-class ICommandProcessor {
+class ICommandProcessor : public IController {
 protected:
     CommandEntry* commandTable;
     int commandCount;
@@ -38,7 +39,7 @@ public:
      * Call this before using createMessage().
      * Sorts the command table lexicographically by mnemonic.
      */
-    void init() {
+    void init() override {
         if (!initialized) {
             qsort(commandTable, commandCount, sizeof(CommandEntry), compareEntries);
             initialized = true;

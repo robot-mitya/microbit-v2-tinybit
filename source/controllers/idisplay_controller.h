@@ -2,6 +2,7 @@
 #define IDISPLAY_CONTROLLER_H
 
 #include "iframe_animation.h"
+#include "icontroller.h"
 
 namespace mimi
 {
@@ -20,10 +21,10 @@ namespace mimi
         TALK_FACE,
     } AnimationType;
 
-    class IDisplayController
+    class IDisplayController : public IController
     {
     public:
-        virtual ~IDisplayController() = default;
+        // virtual ~IDisplayController() = default;
         virtual IFrameAnimation* startAnimationAsync(AnimationType animationType) = 0;
         virtual void stopAnimation() = 0;
     };

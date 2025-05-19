@@ -23,6 +23,15 @@ namespace mimi::microbit::tinybit
         explicit HeadlightsController(MicroBit& uBit, ICore& core)
             : uBit(uBit), i2c(uBit.i2c),  core(core) {}
 
+        void init() override
+        {}
+
+        void start() override
+        {}
+
+        void stop() override
+        {}
+
         void turnOn(const uint8_t red, const uint8_t green, const uint8_t blue) override
         {
             this->red = red;

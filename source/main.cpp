@@ -36,13 +36,13 @@ static void onButtonAClickHandler(MicroBitEvent)
 static void onButtonBDownHandler(MicroBitEvent)
 {
     // uBit.serial.printf("Drive\r\n");
-    core.getMotorsController().run(30, -30);
+    core.getMotorsController().runMotors(30, -30);
 }
 
 static void onButtonBUpHandler(MicroBitEvent)
 {
     // uBit.serial.printf("Stop\r\n");
-    core.getMotorsController().stop();
+    core.getMotorsController().stopMotors();
 }
 
 int main()

@@ -10,7 +10,7 @@ namespace mimi::tests::command_processor
     {
     public:
         const int number;
-        explicit DummyMessage(const int number) : number(number) {}
+        explicit DummyMessage(ICore &core, const int number) : Message(core), number(number) {}
         int parse(const char* line, const unsigned int argsStartPos) override
         {
             (void)line;
@@ -23,33 +23,45 @@ namespace mimi::tests::command_processor
     class DummyMessage123 final : public DummyMessage
     {
     public:
-        DummyMessage123() : DummyMessage(123) {}
+        DummyMessage123(ICore& core) : DummyMessage(core, 123) {}
     };
 
     class DummyMessage456 final : public DummyMessage
     {
     public:
-        DummyMessage456() : DummyMessage(456) {}
+        DummyMessage456(ICore& core) : DummyMessage(core, 456) {}
     };
 
     class DummyMessage789 final : public DummyMessage
     {
     public:
-        DummyMessage789() : DummyMessage(789) {}
-    };
-
-    static CommandEntry myTable[] = {
-        {"789", []() -> Message* { return new DummyMessage789(); }},
-        {"456", []() -> Message* { return new DummyMessage456(); }},
-        {"123", []() -> Message* { return new DummyMessage123(); }},
+        DummyMessage789(ICore& core) : DummyMessage(core, 789) {}
     };
 
     class DummyCommandProcessor final : public ICommandProcessor
     {
+        static constexpr int COMMANDS_COUNT = 3;
+        DummyCore core;
+        CommandEntry commandEntries[COMMANDS_COUNT];
     public:
-        DummyCommandProcessor() : ICommandProcessor(myTable, sizeof(myTable) / sizeof(CommandEntry))
+        DummyCommandProcessor() : ICommandProcessor(commandEntries, COMMANDS_COUNT)
         {
+            commandEntries[0] = {
+                "789",
+                [this]() -> Message* { return new DummyMessage789(this->core); }
+            };
+            commandEntries[1] = {
+                "456",
+                [this]() -> Message* { return new DummyMessage456(this->core); }
+            };
+            commandEntries[2] = {
+                "123",
+                [this]() -> Message* { return new DummyMessage123(this->core); }
+            };
         }
+
+        void start() override {}
+        void stop() override {}
     };
 
     // ReSharper disable once CppDFAConstantFunctionResult

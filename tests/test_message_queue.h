@@ -18,6 +18,7 @@ namespace mimi::tests::message_queue
     class DummyMessage final : public Message
     {
     public:
+        explicit DummyMessage(ICore& core) : Message(core) {}
         int parse(const char* line, const unsigned int argsStartPos) override
         {
             (void)line;
@@ -29,8 +30,9 @@ namespace mimi::tests::message_queue
 
     inline int test_message_queue_basic_positive()
     {
+        DummyCore core;
         DummyLock lock;
-        DummyMessage message;
+        DummyMessage message(core);
         MessageQueue queue(lock);
 
         ASSERT_EQ(64, MessageQueue::capacity(), "Queue capacity");
@@ -55,8 +57,9 @@ namespace mimi::tests::message_queue
 
     inline int test_message_queue_enqueue_scenarios()
     {
+        DummyCore core;
         DummyLock lock;
-        DummyMessage message;
+        DummyMessage message(core);
         MessageQueue queue(lock);
 
         for (int i = 0; i < MessageQueue::capacity(); i++)
@@ -85,8 +88,9 @@ namespace mimi::tests::message_queue
 
     inline int test_message_queue_dequeue_scenarios()
     {
+        DummyCore core;
         DummyLock lock;
-        DummyMessage message;
+        DummyMessage message(core);
         MessageQueue queue(lock);
 
         for (int i = 0; i < MessageQueue::capacity(); i++)

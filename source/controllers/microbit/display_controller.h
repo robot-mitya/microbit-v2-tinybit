@@ -31,6 +31,15 @@ namespace mimi::microbit
             delete frameAnimation;
         }
 
+        void init() override
+        {}
+
+        void start() override
+        {}
+
+        void stop() override
+        {}
+
         IFrameAnimation *startAnimationAsync(const AnimationType animationType) override
         {
             if (animationType == this->animationType && frameAnimation != nullptr && frameAnimation->isRunning())

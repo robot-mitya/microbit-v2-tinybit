@@ -19,7 +19,16 @@ public:
     explicit MotorsController(MicroBit& uBit, ICore& core)
         : uBit(uBit), i2c(uBit.i2c), core(core) {}
 
-    void run(int speedLeft, int speedRight) override
+    void init() override
+    {}
+
+    void start() override
+    {}
+
+    void stop() override
+    {}
+
+    void runMotors(int speedLeft, int speedRight) override
     {
         Mode mode;
         if (speedLeft >= 0 && speedRight >= 0)
@@ -37,7 +46,7 @@ public:
         setPwmMotor(mode, static_cast<uint8_t>(speedLeft), static_cast<uint8_t>(speedRight));
     }
 
-    void stop() override {
+    void stopMotors() override {
         setPwmMotor(FORWARD, 0, 0);
     }
 
