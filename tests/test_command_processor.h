@@ -2,7 +2,7 @@
 #define TEST_COMMAND_PROCESSOR_H
 
 #include "tests.h"
-#include "../source/controllers/icommand_processor.h"
+#include "dummy_mocks.h"
 
 namespace mimi::tests::command_processor
 {
@@ -23,19 +23,19 @@ namespace mimi::tests::command_processor
     class DummyMessage123 final : public DummyMessage
     {
     public:
-        DummyMessage123(ICore& core) : DummyMessage(core, 123) {}
+        explicit DummyMessage123(ICore& core) : DummyMessage(core, 123) {}
     };
 
     class DummyMessage456 final : public DummyMessage
     {
     public:
-        DummyMessage456(ICore& core) : DummyMessage(core, 456) {}
+        explicit DummyMessage456(ICore& core) : DummyMessage(core, 456) {}
     };
 
     class DummyMessage789 final : public DummyMessage
     {
     public:
-        DummyMessage789(ICore& core) : DummyMessage(core, 789) {}
+        explicit DummyMessage789(ICore& core) : DummyMessage(core, 789) {}
     };
 
     class DummyCommandProcessor final : public ICommandProcessor

@@ -36,27 +36,27 @@ std::cout << COLOR_GREEN << description << " [OK]" << COLOR_RESET \
 namespace mimi::tests
 {
 
-class DummyCommandProcessor final : public ICommandProcessor
+class FakeCommandProcessor final : public ICommandProcessor
 {
 public:
-    DummyCommandProcessor() : ICommandProcessor(nullptr, 0) {}
+    FakeCommandProcessor() : ICommandProcessor(nullptr, 0) {}
     void start() override {}
     void stop() override {}
 };
 
-class DummyQueueController final : public IQueueController
+class FakeQueueController final : public IQueueController
 {
 public:
-    DummyQueueController() : IQueueController() {}
+    FakeQueueController() : IQueueController() {}
     void init() override {}
     void start() override {}
     void stop() override {}
 };
 
-class DummyHeadlightsController final : public IHeadlightsController
+class FakeHeadlightsController final : public IHeadlightsController
 {
 public:
-    DummyHeadlightsController() : IHeadlightsController() {}
+    FakeHeadlightsController() : IHeadlightsController() {}
     void init() override {}
     void start() override {}
     void stop() override {}
@@ -69,10 +69,10 @@ public:
     uint8_t getBlue() override { return 0; }
 };
 
-class DummyMotorsController final : public IMotorsController
+class FakeMotorsController final : public IMotorsController
 {
 public:
-    DummyMotorsController() : IMotorsController() {}
+    FakeMotorsController() : IMotorsController() {}
     void init() override {}
     void start() override {}
     void stop() override {}
@@ -80,10 +80,10 @@ public:
     void stopMotors() override {}
 };
 
-class DummyDisplayController final : public IDisplayController
+class FakeDisplayController final : public IDisplayController
 {
 public:
-    DummyDisplayController() : IDisplayController() {}
+    FakeDisplayController() : IDisplayController() {}
     void init() override {}
     void start() override {}
     void stop() override {}
@@ -91,21 +91,18 @@ public:
     void stopAnimation() override {}
 };
 
-class DummyCore final : public ICore {
-    DummyCommandProcessor dummyCommandProcessor;
-    DummyQueueController dummyQueueController;
-    DummyHeadlightsController dummyHeadlightsController;
-    DummyMotorsController dummyMotorsController;
-    DummyDisplayController dummyDisplayController;
+class FakeCore final : public ICore {
+    FakeCommandProcessor fakeCommandProcessor;
+    FakeQueueController fakeQueueController;
+    FakeHeadlightsController fakeHeadlightsController;
+    FakeMotorsController fakeMotorsController;
+    FakeDisplayController fakeDisplayController;
 public:
-    void init() override {}
-    void start() override {}
-    void stop() override {}
-    ICommandProcessor& getCommandProcessor() override { return dummyCommandProcessor; }
-    IQueueController& getQueueController() override { return dummyQueueController; }
-    IHeadlightsController& getHeadlightsController() override { return dummyHeadlightsController; }
-    IMotorsController& getMotorsController() override { return dummyMotorsController; }
-    IDisplayController& getDisplayController() override { return dummyDisplayController; }
+    ICommandProcessor& getCommandProcessor() override { return fakeCommandProcessor; }
+    IQueueController& getQueueController() override { return fakeQueueController; }
+    IHeadlightsController& getHeadlightsController() override { return fakeHeadlightsController; }
+    IMotorsController& getMotorsController() override { return fakeMotorsController; }
+    IDisplayController& getDisplayController() override { return fakeDisplayController; }
 };
 
 } // namespace mimi::tests

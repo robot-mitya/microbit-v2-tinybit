@@ -64,17 +64,20 @@ namespace mimi::microbit::tinybit
 
         void init() override
         {
+            ICore::init();
             uBit.init();
             commandProcessor.init();
         }
 
         void start() override
         {
+            ICore::start();
             queueController.start();
         }
 
         void stop() override
         {
+            ICore::stop();
             queueController.stop();
         }
 
