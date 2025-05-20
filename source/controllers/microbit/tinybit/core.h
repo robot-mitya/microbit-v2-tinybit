@@ -9,6 +9,7 @@
 #include "headlights_controller.h"
 #include "motors_controller.h"
 #include "../display_controller.h"
+#include "../usb_com_controller.h"
 
 namespace mimi::microbit::tinybit
 {
@@ -22,6 +23,7 @@ namespace mimi::microbit::tinybit
         HeadlightsController headlightsController;
         MotorsController motorsController;
         DisplayController displayController;
+        UsbComController usbComController;
     public:
         Core() : // NOLINT(*-pro-type-member-init, *-use-equals-default)
             // ReSharper disable once CppRedundantMemberInitializer
@@ -30,7 +32,8 @@ namespace mimi::microbit::tinybit
             queueController(*this, lock),
             headlightsController(uBit, *this),
             motorsController(uBit, *this),
-            displayController(uBit, *this) {}
+            displayController(uBit, *this),
+            usbComController(uBit, *this) {}
 
         MicroBit& getMicroBit()
         {
@@ -60,6 +63,11 @@ namespace mimi::microbit::tinybit
         IDisplayController& getDisplayController() override
         {
             return displayController;
+        }
+
+        IUsbComController& getUsbComController() override
+        {
+            return usbComController;
         }
 
         void init() override

@@ -6,12 +6,10 @@
 namespace mimi
 {
 
-class ICore;
-
 class IQueueController : public IController
 {
-// public:
-    // virtual ~IQueueController() = default;
+public:
+    explicit IQueueController(ICore &core) : IController(core) {}
 
     // virtual void start() = 0;
     // virtual void stop() = 0;

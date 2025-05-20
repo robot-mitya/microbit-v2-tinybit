@@ -7,33 +7,30 @@
 namespace mimi
 {
 
-    class ICore;
+class QueueController final : public IQueueController
+{
+    ILock& lock;
+    MessageQueue inputQueue;
+    MessageQueue outputQueue;
+public:
+    explicit QueueController(ICore& core, ILock& lock) // NOLINT(*-pro-type-member-init)
+        : IQueueController(core), lock(lock), inputQueue(lock), outputQueue(lock) {}
 
-    class QueueController final : public IQueueController
+    void init() override
     {
-        ICore& core;
-        ILock& lock;
-        MessageQueue inputQueue;
-        MessageQueue outputQueue;
-    public:
-        explicit QueueController(ICore& core, ILock& lock)
-            : core(core), lock(lock), inputQueue(lock), outputQueue(lock) {}
 
-        void init() override
-        {
+    }
 
-        }
+    void start() override
+    {
 
-        void start() override
-        {
+    }
 
-        }
+    void stop() override
+    {
 
-        void stop() override
-        {
-
-        }
-    };
+    }
+};
 
 }
 

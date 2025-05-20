@@ -14,14 +14,13 @@ namespace mimi::microbit::tinybit
 
         MicroBit& uBit;
         MicroBitI2C& i2c;
-        ICore& core;
 
         uint8_t red = 0;
         uint8_t green = 0;
         uint8_t blue = 0;
     public:
         explicit HeadlightsController(MicroBit& uBit, ICore& core)
-            : uBit(uBit), i2c(uBit.i2c),  core(core) {}
+            : IHeadlightsController(core), uBit(uBit), i2c(uBit.i2c) {}
 
         void init() override
         {}

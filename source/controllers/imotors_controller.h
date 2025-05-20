@@ -9,8 +9,7 @@ namespace mimi
 class IMotorsController : public IController
 {
 public:
-    // virtual ~IMotorsController() = default;
-
+    explicit IMotorsController(ICore &core) : IController(core) {}
     virtual void runMotors(int speedLeft, int speedRight) = 0;
     virtual void stopMotors() = 0;
 };

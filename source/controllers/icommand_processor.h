@@ -31,8 +31,10 @@ protected:
         return strcmp(ea->mnemonic, eb->mnemonic);
     }
 
-    ICommandProcessor(CommandEntry* table, const int count)
-        : commandTable(table), commandCount(count) {}
+    explicit ICommandProcessor(ICore &core, CommandEntry *table, const int count)
+        : IController(core), commandTable(table), commandCount(count)
+    {
+    }
 
 public:
     /**

@@ -14,10 +14,9 @@ class MotorsController final : public IMotorsController {
 
     MicroBit& uBit;
     MicroBitI2C& i2c;
-    ICore& core;
 public:
     explicit MotorsController(MicroBit& uBit, ICore& core)
-        : uBit(uBit), i2c(uBit.i2c), core(core) {}
+        : IMotorsController(core), uBit(uBit), i2c(uBit.i2c) {}
 
     void init() override
     {}

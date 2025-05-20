@@ -10,10 +10,13 @@
 namespace mimi::tests
 {
 
-class DummyCommandProcessor final : public ICommandProcessor
+class DummyCommandProcessor : public ICommandProcessor
 {
+protected:
+    DummyCommandProcessor(ICore &core, CommandEntry *table, const int count) : ICommandProcessor(core, table, count) {}
+    // void processLine(const char*) const override {}
 public:
-    DummyCommandProcessor() : ICommandProcessor(nullptr, 0) {}
+    DummyCommandProcessor(ICore& core) : ICommandProcessor(core, nullptr, 0) {}
     void start() override {}
     void stop() override {}
 };
@@ -21,7 +24,7 @@ public:
 class DummyQueueController final : public IQueueController
 {
 public:
-    DummyQueueController() : IQueueController() {}
+    explicit DummyQueueController(ICore& core) : IQueueController(core) {}
     void init() override {}
     void start() override {}
     void stop() override {}
@@ -30,7 +33,7 @@ public:
 class DummyHeadlightsController final : public IHeadlightsController
 {
 public:
-    DummyHeadlightsController() : IHeadlightsController() {}
+    explicit DummyHeadlightsController(ICore& core) : IHeadlightsController(core) {}
     void init() override {}
     void start() override {}
     void stop() override {}
@@ -46,7 +49,7 @@ public:
 class DummyMotorsController final : public IMotorsController
 {
 public:
-    DummyMotorsController() : IMotorsController() {}
+    explicit DummyMotorsController(ICore& core) : IMotorsController(core) {}
     void init() override {}
     void start() override {}
     void stop() override {}
@@ -57,12 +60,23 @@ public:
 class DummyDisplayController final : public IDisplayController
 {
 public:
-    DummyDisplayController() : IDisplayController() {}
+    explicit DummyDisplayController(ICore& core) : IDisplayController(core) {}
     void init() override {}
     void start() override {}
     void stop() override {}
     IFrameAnimation* startAnimationAsync(AnimationType) override { return nullptr; }
     void stopAnimation() override {}
+};
+
+class DummyUsbComController final : public IUsbComController
+{
+protected:
+    void processLine(const char*) const override {}
+public:
+    explicit DummyUsbComController(ICore& core) : IUsbComController(core) {}
+    void init() override {}
+    void start() override {}
+    void stop() override {}
 };
 
 class DummyCore final : public ICore {
@@ -71,12 +85,22 @@ class DummyCore final : public ICore {
     DummyHeadlightsController dummyHeadlightsController;
     DummyMotorsController dummyMotorsController;
     DummyDisplayController dummyDisplayController;
+    DummyUsbComController dummyUsbComController;
 public:
+    DummyCore() :
+        dummyCommandProcessor(*this),
+        dummyQueueController(*this),
+        dummyHeadlightsController(*this),
+        dummyMotorsController(*this),
+        dummyDisplayController(*this),
+        dummyUsbComController(*this) {}
+
     ICommandProcessor& getCommandProcessor() override { return dummyCommandProcessor; }
     IQueueController& getQueueController() override { return dummyQueueController; }
     IHeadlightsController& getHeadlightsController() override { return dummyHeadlightsController; }
     IMotorsController& getMotorsController() override { return dummyMotorsController; }
     IDisplayController& getDisplayController() override { return dummyDisplayController; }
+    IUsbComController& getUsbComController() override { return dummyUsbComController; }
 };
 
 } // namespace mimi::tests

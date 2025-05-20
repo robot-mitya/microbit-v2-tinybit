@@ -20,11 +20,10 @@ namespace mimi::microbit
     class DisplayController final : public IDisplayController
     {
         MicroBit& uBit;
-        ICore& core;
         IFrameAnimation* frameAnimation = nullptr;
         AnimationType animationType = UNDEFINED;
     public:
-        explicit DisplayController(MicroBit& uBit, ICore& core) : uBit(uBit), core(core) {}
+        explicit DisplayController(MicroBit& uBit, ICore& core) : IDisplayController(core), uBit(uBit) {}
 
         ~DisplayController() override
         {

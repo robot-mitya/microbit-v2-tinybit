@@ -39,7 +39,7 @@ namespace mimi::tests
 class FakeCommandProcessor final : public ICommandProcessor
 {
 public:
-    FakeCommandProcessor() : ICommandProcessor(nullptr, 0) {}
+    explicit FakeCommandProcessor(ICore& core) : ICommandProcessor(core, nullptr, 0) {}
     void start() override {}
     void stop() override {}
 };
@@ -47,7 +47,7 @@ public:
 class FakeQueueController final : public IQueueController
 {
 public:
-    FakeQueueController() : IQueueController() {}
+    explicit FakeQueueController(ICore& core) : IQueueController(core) {}
     void init() override {}
     void start() override {}
     void stop() override {}
@@ -56,7 +56,7 @@ public:
 class FakeHeadlightsController final : public IHeadlightsController
 {
 public:
-    FakeHeadlightsController() : IHeadlightsController() {}
+    explicit FakeHeadlightsController(ICore& core) : IHeadlightsController(core) {}
     void init() override {}
     void start() override {}
     void stop() override {}
@@ -72,7 +72,7 @@ public:
 class FakeMotorsController final : public IMotorsController
 {
 public:
-    FakeMotorsController() : IMotorsController() {}
+    explicit FakeMotorsController(ICore& core) : IMotorsController(core) {}
     void init() override {}
     void start() override {}
     void stop() override {}
@@ -83,12 +83,23 @@ public:
 class FakeDisplayController final : public IDisplayController
 {
 public:
-    FakeDisplayController() : IDisplayController() {}
+    explicit FakeDisplayController(ICore& core) : IDisplayController(core) {}
     void init() override {}
     void start() override {}
     void stop() override {}
     IFrameAnimation* startAnimationAsync(AnimationType) override { return nullptr; }
     void stopAnimation() override {}
+};
+
+class FakeUsbComController final : public IUsbComController
+{
+protected:
+    void processLine(const char *line) const override;
+public:
+    explicit FakeUsbComController(ICore& core) : IUsbComController(core) {}
+    void init() override {}
+    void start() override {}
+    void stop() override {}
 };
 
 class FakeCore final : public ICore {
@@ -97,12 +108,22 @@ class FakeCore final : public ICore {
     FakeHeadlightsController fakeHeadlightsController;
     FakeMotorsController fakeMotorsController;
     FakeDisplayController fakeDisplayController;
+    FakeUsbComController fakeUsbComController;
 public:
+    FakeCore() :
+        fakeCommandProcessor(*this),
+        fakeQueueController(*this),
+        fakeHeadlightsController(*this),
+        fakeMotorsController(*this),
+        fakeDisplayController(*this),
+        fakeUsbComController(*this) {}
+
     ICommandProcessor& getCommandProcessor() override { return fakeCommandProcessor; }
     IQueueController& getQueueController() override { return fakeQueueController; }
     IHeadlightsController& getHeadlightsController() override { return fakeHeadlightsController; }
     IMotorsController& getMotorsController() override { return fakeMotorsController; }
     IDisplayController& getDisplayController() override { return fakeDisplayController; }
+    IUsbComController& getUsbComController() override { return fakeUsbComController; }
 };
 
 } // namespace mimi::tests
