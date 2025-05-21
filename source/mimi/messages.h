@@ -1,6 +1,8 @@
 #ifndef MESSAGES_H
 #define MESSAGES_H
 
+#include "constants.h"
+
 #include <cstring>
 #include <cerrno>
 #include "string_utils.h"
@@ -8,11 +10,6 @@
 namespace mimi
 {
     class ICore;
-
-    constexpr int MESSAGE_PARSE_STATUS_OK = 0;
-    constexpr int MESSAGE_PARSE_STATUS_MISSING_ARGUMENT = -1;
-    constexpr int MESSAGE_PARSE_STATUS_WRONG_ARGUMENT = -2;
-    constexpr int MESSAGE_PARSE_STATUS_TOO_MANY_ARGUMENTS = -3;
 
     class Message
     {
@@ -23,12 +20,12 @@ namespace mimi
         {
             if (text[0] == '\0')
             {
-                status = MESSAGE_PARSE_STATUS_MISSING_ARGUMENT;
+                status = language::PARSE_STATUS_MISSING_ARGUMENT;
                 return 0;
             }
             if (isString)
             {
-                status = MESSAGE_PARSE_STATUS_WRONG_ARGUMENT;
+                status = language::PARSE_STATUS_WRONG_ARGUMENT;
                 return 0;
             }
             char *end = nullptr;
@@ -36,10 +33,10 @@ namespace mimi
             const unsigned long value = strtoul(text, &end, 10);
             if (*end == '\0' && value <= 255 && errno == 0)
             {
-                status = MESSAGE_PARSE_STATUS_OK;
+                status = language::PARSE_STATUS_OK;
                 return static_cast<uint8_t>(value);
             }
-            status = MESSAGE_PARSE_STATUS_WRONG_ARGUMENT;
+            status = language::PARSE_STATUS_WRONG_ARGUMENT;
             return 0;
         }
     public:
@@ -78,7 +75,7 @@ namespace mimi
             if (status < 0) return status;
 
             extractLexeme(argsStartPos, lineLen, line, argument, isString);
-            if (argument[0] != '\0') return MESSAGE_PARSE_STATUS_TOO_MANY_ARGUMENTS;
+            if (argument[0] != '\0') return language::PARSE_STATUS_TOO_MANY_ARGUMENTS;
 
             return 0;
         }

@@ -29,7 +29,7 @@ inline int test_hl_message_positive() {
     DummyCore dummyCore;
     HeadlightsMockMessage message(dummyCore);
     const int status = message.parse(input, pos);
-    ASSERT_EQ(MESSAGE_PARSE_STATUS_OK, status, "Parse status");
+    ASSERT_EQ(mimi::language::PARSE_STATUS_OK, status, "Parse status");
     ASSERT_EQ(10, (int)message.red, "Red");
     ASSERT_EQ(20, (int)message.green, "Green");
     ASSERT_EQ(30, (int)message.blue, "Blue");
@@ -48,7 +48,7 @@ inline int test_hl_message_missing_args_1() {
     DummyCore dummyCore;
     HeadlightsMockMessage message(dummyCore);
     const int status = message.parse(input, pos);
-    ASSERT_EQ(MESSAGE_PARSE_STATUS_MISSING_ARGUMENT, status, "Parse status");
+    ASSERT_EQ(mimi::language::PARSE_STATUS_MISSING_ARGUMENT, status, "Parse status");
 
     return 0;
 }
@@ -64,7 +64,7 @@ inline int test_hl_message_missing_args_2() {
     DummyCore dummyCore;
     HeadlightsMockMessage message(dummyCore);
     const int status = message.parse(input, pos);
-    ASSERT_EQ(MESSAGE_PARSE_STATUS_MISSING_ARGUMENT, status, "Parse status");
+    ASSERT_EQ(mimi::language::PARSE_STATUS_MISSING_ARGUMENT, status, "Parse status");
 
     return 0;
 }
@@ -80,7 +80,7 @@ inline int test_hl_message_too_many_args() {
     DummyCore dummyCore;
     HeadlightsMockMessage message(dummyCore);
     const int status = message.parse(input, pos);
-    ASSERT_EQ(MESSAGE_PARSE_STATUS_TOO_MANY_ARGUMENTS, status, "Parse status");
+    ASSERT_EQ(mimi::language::PARSE_STATUS_TOO_MANY_ARGUMENTS, status, "Parse status");
 
     return 0;
 }
@@ -96,7 +96,7 @@ inline int test_hl_message_wrong_arg_1() {
     DummyCore dummyCore;
     HeadlightsMockMessage message(dummyCore);
     const int status = message.parse(input, pos);
-    ASSERT_EQ(MESSAGE_PARSE_STATUS_WRONG_ARGUMENT, status, "Parse status");
+    ASSERT_EQ(mimi::language::PARSE_STATUS_WRONG_ARGUMENT, status, "Parse status");
 
     return 0;
 }
@@ -112,7 +112,7 @@ inline int test_hl_message_wrong_arg_2() {
     DummyCore dummyCore;
     HeadlightsMockMessage message(dummyCore);
     const int status = message.parse(input, pos);
-    ASSERT_EQ(MESSAGE_PARSE_STATUS_WRONG_ARGUMENT, status, "Parse status");
+    ASSERT_EQ(mimi::language::PARSE_STATUS_WRONG_ARGUMENT, status, "Parse status");
 
     return 0;
 }
@@ -128,7 +128,7 @@ inline int test_hl_message_wrong_arg_3() {
     DummyCore dummyCore;
     HeadlightsMockMessage message(dummyCore);
     const int status = message.parse(input, pos);
-    ASSERT_EQ(MESSAGE_PARSE_STATUS_WRONG_ARGUMENT, status, "Parse status");
+    ASSERT_EQ(mimi::language::PARSE_STATUS_WRONG_ARGUMENT, status, "Parse status");
 
     return 0;
 }
