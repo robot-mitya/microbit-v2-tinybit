@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <cstring>
-#include "../source/language/string_utils.h"
+#include "../source/mimi/string_utils.h"
 #include "tests.h"
 #include "dummy_mocks.h"
 #include "message_mocks.h"

@@ -1,19 +1,19 @@
 #ifndef COMMAND_PROCESSOR_H
 #define COMMAND_PROCESSOR_H
 
-#include "../../icommand_processor.h"
-#include "../language/microbit/tinybit/tinybit_messages.h"
+#include "../../ilanguage_controller.h"
+#include "messages.h"
 
 namespace mimi::microbit::tinybit
 {
 
-class CommandProcessor final : public ICommandProcessor
+class LanguageController final : public ILanguageController
 {
     static constexpr int COMMANDS_COUNT = 1;
     CommandEntry commandEntries[COMMANDS_COUNT];
 public:
-    explicit CommandProcessor(ICore& core)
-            : ICommandProcessor(core, commandEntries, COMMANDS_COUNT)
+    explicit LanguageController(ICore& core)
+            : ILanguageController(core, commandEntries, COMMANDS_COUNT)
     {
         commandEntries[0] = {
             "HL",

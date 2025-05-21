@@ -1,6 +1,6 @@
 #include "MicroBit.h"
-#include "controllers/microbit/tinybit/core.h"
-#include "language/interpreter.h"
+#include "mimi/microbit/tinybit/core.h"
+#include "mimi/interpreter.h"
 
 using namespace mimi;
 

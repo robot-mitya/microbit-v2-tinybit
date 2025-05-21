@@ -5,7 +5,7 @@
 #ifndef TESTS_H
 #define TESTS_H
 
-#include "../source/controllers/icore.h"
+#include "../source/mimi/icore.h"
 
 #define USE_COLORS 1
 
@@ -36,10 +36,10 @@ std::cout << COLOR_GREEN << description << " [OK]" << COLOR_RESET \
 namespace mimi::tests
 {
 
-class FakeCommandProcessor final : public ICommandProcessor
+class FakeCommandProcessor final : public ILanguageController
 {
 public:
-    explicit FakeCommandProcessor(ICore& core) : ICommandProcessor(core, nullptr, 0) {}
+    explicit FakeCommandProcessor(ICore& core) : ILanguageController(core, nullptr, 0) {}
     void start() override {}
     void stop() override {}
 };
@@ -118,7 +118,7 @@ public:
         fakeDisplayController(*this),
         fakeUsbComController(*this) {}
 
-    ICommandProcessor& getCommandProcessor() override { return fakeCommandProcessor; }
+    ILanguageController& getCommandProcessor() override { return fakeCommandProcessor; }
     IQueueController& getQueueController() override { return fakeQueueController; }
     IHeadlightsController& getHeadlightsController() override { return fakeHeadlightsController; }
     IMotorsController& getMotorsController() override { return fakeMotorsController; }

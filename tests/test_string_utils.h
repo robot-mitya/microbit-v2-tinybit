@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <cstring>
-#include "../source/language/string_utils.h"
+#include "../source/mimi/string_utils.h"
 #include "tests.h"
 
 namespace mimi::tests::string_utils

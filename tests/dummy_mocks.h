@@ -5,18 +5,18 @@
 #ifndef DUMMY_MOCKS_H
 #define DUMMY_MOCKS_H
 
-#include "../source/controllers/icore.h"
+#include "../source/mimi/icore.h"
 
 namespace mimi::tests
 {
 
-class DummyCommandProcessor : public ICommandProcessor
+class DummyCommandProcessor : public ILanguageController
 {
 protected:
-    DummyCommandProcessor(ICore &core, CommandEntry *table, const int count) : ICommandProcessor(core, table, count) {}
+    DummyCommandProcessor(ICore &core, CommandEntry *table, const int count) : ILanguageController(core, table, count) {}
     // void processLine(const char*) const override {}
 public:
-    DummyCommandProcessor(ICore& core) : ICommandProcessor(core, nullptr, 0) {}
+    DummyCommandProcessor(ICore& core) : ILanguageController(core, nullptr, 0) {}
     void start() override {}
     void stop() override {}
 };
@@ -95,7 +95,7 @@ public:
         dummyDisplayController(*this),
         dummyUsbComController(*this) {}
 
-    ICommandProcessor& getCommandProcessor() override { return dummyCommandProcessor; }
+    ILanguageController& getCommandProcessor() override { return dummyCommandProcessor; }
     IQueueController& getQueueController() override { return dummyQueueController; }
     IHeadlightsController& getHeadlightsController() override { return dummyHeadlightsController; }
     IMotorsController& getMotorsController() override { return dummyMotorsController; }

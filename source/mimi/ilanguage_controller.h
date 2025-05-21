@@ -19,7 +19,7 @@ struct CommandEntry {
     std::function<Message *()> createFunc;
 };
 
-class ICommandProcessor : public IController {
+class ILanguageController : public IController {
 protected:
     CommandEntry* commandTable;
     int commandCount;
@@ -31,7 +31,7 @@ protected:
         return strcmp(ea->mnemonic, eb->mnemonic);
     }
 
-    explicit ICommandProcessor(ICore &core, CommandEntry *table, const int count)
+    explicit ILanguageController(ICore &core, CommandEntry *table, const int count)
         : IController(core), commandTable(table), commandCount(count)
     {
     }

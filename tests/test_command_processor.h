@@ -80,7 +80,7 @@ public:
         dummyDisplayController(*this),
         dummyUsbComController(*this) {}
 
-    ICommandProcessor& getCommandProcessor() override { return dummyCommandProcessor; }
+    ILanguageController& getCommandProcessor() override { return dummyCommandProcessor; }
     IQueueController& getQueueController() override { return dummyQueueController; }
     IHeadlightsController& getHeadlightsController() override { return dummyHeadlightsController; }
     IMotorsController& getMotorsController() override { return dummyMotorsController; }

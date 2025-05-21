@@ -1,7 +1,6 @@
 #ifndef MESSAGES_H
 #define MESSAGES_H
 
-#include <cstdint>
 #include <cstring>
 #include <cerrno>
 #include "string_utils.h"

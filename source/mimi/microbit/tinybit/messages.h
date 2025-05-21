@@ -1,7 +1,7 @@
 #ifndef TINYBIT_MESSAGES_H
 #define TINYBIT_MESSAGES_H
 
-#include "../../../controllers/icore.h"
+#include "../../icore.h"
 #include "../../messages.h"
 
 namespace mimi::microbit::tinybit

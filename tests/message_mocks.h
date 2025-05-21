@@ -5,7 +5,7 @@
 #ifndef MESSAGE_MOCKS_H
 #define MESSAGE_MOCKS_H
 
-#include "../source/language/messages.h"
+#include "../source/mimi/messages.h"
 
 namespace mimi
 {

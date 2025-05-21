@@ -3,7 +3,7 @@
 #define TEST_MESSAGE_QUEUE_H
 
 #include <iostream>
-#include "../source/language/message_queue.h"
+#include "../source/mimi/message_queue.h"
 #include "tests.h"
 
 namespace mimi::tests::message_queue

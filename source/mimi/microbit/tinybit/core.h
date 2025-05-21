@@ -3,8 +3,8 @@
 
 #include "../../icore.h"
 #include "MicroBit.h"
-#include "fiber_lock.h"
-#include "command_processor.h"
+#include "../fiber_lock.h"
+#include "language_controller.h"
 #include "../../queue_controller.h"
 #include "headlights_controller.h"
 #include "motors_controller.h"
@@ -18,7 +18,7 @@ namespace mimi::microbit::tinybit
     {
         MicroBit uBit;
         FiberLock lock;
-        CommandProcessor commandProcessor;
+        LanguageController commandProcessor;
         QueueController queueController;
         HeadlightsController headlightsController;
         MotorsController motorsController;
@@ -40,7 +40,7 @@ namespace mimi::microbit::tinybit
             return uBit;
         }
 
-        ICommandProcessor& getCommandProcessor() override
+        ILanguageController& getCommandProcessor() override
         {
             return commandProcessor;
         }
