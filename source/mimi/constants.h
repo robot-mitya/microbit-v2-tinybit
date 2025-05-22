@@ -6,9 +6,10 @@ namespace mimi
     namespace language
     {
         constexpr int PARSE_STATUS_OK = 0;
-        constexpr int PARSE_STATUS_MISSING_ARGUMENT = -1;
-        constexpr int PARSE_STATUS_WRONG_ARGUMENT = -2;
-        constexpr int PARSE_STATUS_TOO_MANY_ARGUMENTS = -3;
+        constexpr int PARSE_STATUS_LINE_TOO_LONG = -1;
+        constexpr int PARSE_STATUS_MISSING_ARGUMENT = -2;
+        constexpr int PARSE_STATUS_WRONG_ARGUMENT = -3;
+        constexpr int PARSE_STATUS_TOO_MANY_ARGUMENTS = -4;
     } // namespace language
 } // namespace mimi
 

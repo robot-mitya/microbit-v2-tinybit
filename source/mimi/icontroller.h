@@ -1,6 +1,5 @@
 #ifndef ICONTROLLER_H
 #define ICONTROLLER_H
-#include "icore.h"
 
 namespace mimi
 {

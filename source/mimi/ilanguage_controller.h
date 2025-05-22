@@ -15,7 +15,6 @@ class Message;
 
 struct CommandEntry {
     const char* mnemonic;
-    // Message* (*createFunc)();
     std::function<Message *()> createFunc;
 };
 
@@ -26,8 +25,8 @@ protected:
     bool initialized = false;
 
     static int compareEntries(const void* a, const void* b) {
-        const CommandEntry* ea = static_cast<const CommandEntry*>(a);
-        const CommandEntry* eb = static_cast<const CommandEntry*>(b);
+        const auto* ea = static_cast<const CommandEntry*>(a);
+        const auto* eb = static_cast<const CommandEntry*>(b);
         return strcmp(ea->mnemonic, eb->mnemonic);
     }
 

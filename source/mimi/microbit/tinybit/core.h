@@ -5,7 +5,7 @@
 #include "MicroBit.h"
 #include "../fiber_lock.h"
 #include "language_controller.h"
-#include "../../queue_controller.h"
+#include "../../iqueue_controller.h"
 #include "headlights_controller.h"
 #include "motors_controller.h"
 #include "../display_controller.h"
@@ -18,8 +18,8 @@ namespace mimi::microbit::tinybit
     {
         MicroBit uBit;
         FiberLock lock;
-        LanguageController commandProcessor;
-        QueueController queueController;
+        LanguageController languageController;
+        IQueueController queueController;
         HeadlightsController headlightsController;
         MotorsController motorsController;
         DisplayController displayController;
@@ -28,7 +28,7 @@ namespace mimi::microbit::tinybit
         Core() : // NOLINT(*-pro-type-member-init, *-use-equals-default)
             // ReSharper disable once CppRedundantMemberInitializer
             lock(),
-            commandProcessor(*this),
+            languageController(*this),
             queueController(*this, lock),
             headlightsController(uBit, *this),
             motorsController(uBit, *this),
@@ -40,9 +40,9 @@ namespace mimi::microbit::tinybit
             return uBit;
         }
 
-        ILanguageController& getCommandProcessor() override
+        ILanguageController& getLanguageController() override
         {
-            return commandProcessor;
+            return languageController;
         }
 
         IQueueController& getQueueController() override
@@ -65,7 +65,7 @@ namespace mimi::microbit::tinybit
             return displayController;
         }
 
-        IUsbComController& getUsbComController() override
+        IComController& getUsbComController() override
         {
             return usbComController;
         }
@@ -74,7 +74,7 @@ namespace mimi::microbit::tinybit
         {
             ICore::init();
             uBit.init();
-            commandProcessor.init();
+            languageController.init();
         }
 
         void start() override

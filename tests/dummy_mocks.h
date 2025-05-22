@@ -5,26 +5,36 @@
 #ifndef DUMMY_MOCKS_H
 #define DUMMY_MOCKS_H
 
+#include "tests.h"
 #include "../source/mimi/icore.h"
 
 namespace mimi::tests
 {
 
-class DummyCommandProcessor : public ILanguageController
+class DummyLock final : public ILock
+{
+public:
+    DummyLock() : ILock() {}
+    void wait() override {}
+    void notify() override {}
+};
+
+class DummyLanguageController : public ILanguageController
 {
 protected:
-    DummyCommandProcessor(ICore &core, CommandEntry *table, const int count) : ILanguageController(core, table, count) {}
+    DummyLanguageController(ICore &core, CommandEntry *table, const int count) : ILanguageController(core, table, count) {}
     // void processLine(const char*) const override {}
 public:
-    DummyCommandProcessor(ICore& core) : ILanguageController(core, nullptr, 0) {}
+    DummyLanguageController(ICore& core) : ILanguageController(core, nullptr, 0) {}
     void start() override {}
     void stop() override {}
 };
 
 class DummyQueueController final : public IQueueController
 {
+    DummyLock lock;
 public:
-    explicit DummyQueueController(ICore& core) : IQueueController(core) {}
+    explicit DummyQueueController(ICore& core) : IQueueController(core, lock) {}
     void init() override {}
     void start() override {}
     void stop() override {}
@@ -68,19 +78,19 @@ public:
     void stopAnimation() override {}
 };
 
-class DummyUsbComController final : public IUsbComController
+class DummyUsbComController final : public IComController
 {
 protected:
-    void processLine(const char*) const override {}
+    // void processLine(const char*) const override {}
 public:
-    explicit DummyUsbComController(ICore& core) : IUsbComController(core) {}
+    explicit DummyUsbComController(ICore& core) : IComController(core) {}
     void init() override {}
     void start() override {}
     void stop() override {}
 };
 
 class DummyCore final : public ICore {
-    DummyCommandProcessor dummyCommandProcessor;
+    DummyLanguageController dummyLanguageController;
     DummyQueueController dummyQueueController;
     DummyHeadlightsController dummyHeadlightsController;
     DummyMotorsController dummyMotorsController;
@@ -88,19 +98,19 @@ class DummyCore final : public ICore {
     DummyUsbComController dummyUsbComController;
 public:
     DummyCore() :
-        dummyCommandProcessor(*this),
+        dummyLanguageController(*this),
         dummyQueueController(*this),
         dummyHeadlightsController(*this),
         dummyMotorsController(*this),
         dummyDisplayController(*this),
         dummyUsbComController(*this) {}
 
-    ILanguageController& getCommandProcessor() override { return dummyCommandProcessor; }
+    ILanguageController& getLanguageController() override { return dummyLanguageController; }
     IQueueController& getQueueController() override { return dummyQueueController; }
     IHeadlightsController& getHeadlightsController() override { return dummyHeadlightsController; }
     IMotorsController& getMotorsController() override { return dummyMotorsController; }
     IDisplayController& getDisplayController() override { return dummyDisplayController; }
-    IUsbComController& getUsbComController() override { return dummyUsbComController; }
+    IComController& getUsbComController() override { return dummyUsbComController; }
 };
 
 } // namespace mimi::tests

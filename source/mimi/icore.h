@@ -6,7 +6,7 @@
 #include "imotors_controller.h"
 #include "idisplay_controller.h"
 #include "iqueue_controller.h"
-#include "iusb_com_controller.h"
+#include "icom_controller.h"
 
 namespace mimi
 {
@@ -20,7 +20,7 @@ namespace mimi
 
         virtual void init()
         {
-            controllers[0] = &getCommandProcessor();
+            controllers[0] = &getLanguageController();
             controllers[1] = &getQueueController();
             controllers[2] = &getHeadlightsController();
             controllers[3] = &getMotorsController();
@@ -43,12 +43,12 @@ namespace mimi
                 controller->stop();
         }
 
-        virtual ILanguageController& getCommandProcessor() = 0;
+        virtual ILanguageController& getLanguageController() = 0;
         virtual IQueueController& getQueueController() = 0;
         virtual IHeadlightsController& getHeadlightsController() = 0;
         virtual IMotorsController& getMotorsController() = 0;
         virtual IDisplayController& getDisplayController() = 0;
-        virtual IUsbComController& getUsbComController() = 0;
+        virtual IComController& getUsbComController() = 0;
     };
 
 } // namespace mimi

@@ -7,11 +7,11 @@
 namespace mimi::tests::command_processor
 {
 
-class DummyMessage : public Message
+class FakeMessage : public Message
 {
 public:
     const int number;
-    explicit DummyMessage(ICore &core, const int number) : Message(core), number(number) {}
+    explicit FakeMessage(ICore &core, const int number) : Message(core), number(number) {}
     int parse(const char* line, const unsigned int argsStartPos) override
     {
         (void)line;
@@ -21,42 +21,42 @@ public:
     void execute() const override {}
 };
 
-class DummyMessage123 final : public DummyMessage
+class FakeMessage123 final : public FakeMessage
 {
 public:
-    explicit DummyMessage123(ICore& core) : DummyMessage(core, 123) {}
+    explicit FakeMessage123(ICore& core) : FakeMessage(core, 123) {}
 };
 
-class DummyMessage456 final : public DummyMessage
+class FakeMessage456 final : public FakeMessage
 {
 public:
-    explicit DummyMessage456(ICore& core) : DummyMessage(core, 456) {}
+    explicit FakeMessage456(ICore& core) : FakeMessage(core, 456) {}
 };
 
-class DummyMessage789 final : public DummyMessage
+class FakeMessage789 final : public FakeMessage
 {
 public:
-    explicit DummyMessage789(ICore& core) : DummyMessage(core, 789) {}
+    explicit FakeMessage789(ICore& core) : FakeMessage(core, 789) {}
 };
 
-class DummyCommandProcessor final : public tests::DummyCommandProcessor
+class FakeLanguageController final : public DummyLanguageController
 {
     static constexpr int COMMANDS_COUNT = 3;
     CommandEntry commandEntries[COMMANDS_COUNT];
 public:
-    explicit DummyCommandProcessor(ICore& core) : tests::DummyCommandProcessor(core, commandEntries, COMMANDS_COUNT)
+    explicit FakeLanguageController(ICore& core) : DummyLanguageController(core, commandEntries, COMMANDS_COUNT)
     {
         commandEntries[0] = {
             "789",
-            [this]() -> Message* { return new DummyMessage789(this->core); }
+            [this]() -> Message* { return new FakeMessage789(this->core); }
         };
         commandEntries[1] = {
             "456",
-            [this]() -> Message* { return new DummyMessage456(this->core); }
+            [this]() -> Message* { return new FakeMessage456(this->core); }
         };
         commandEntries[2] = {
             "123",
-            [this]() -> Message* { return new DummyMessage123(this->core); }
+            [this]() -> Message* { return new FakeMessage123(this->core); }
         };
     }
 
@@ -64,35 +64,35 @@ public:
     void stop() override {}
 };
 
-class DummyCore final : public ICore {
-    DummyCommandProcessor dummyCommandProcessor;
+class FakeCore final : public ICore {
+    FakeLanguageController fakeLanguageController;
     DummyQueueController dummyQueueController;
     DummyHeadlightsController dummyHeadlightsController;
     DummyMotorsController dummyMotorsController;
     DummyDisplayController dummyDisplayController;
     DummyUsbComController dummyUsbComController;
 public:
-    DummyCore() :
-        dummyCommandProcessor(*this),
+    FakeCore() :
+        fakeLanguageController(*this),
         dummyQueueController(*this),
         dummyHeadlightsController(*this),
         dummyMotorsController(*this),
         dummyDisplayController(*this),
         dummyUsbComController(*this) {}
 
-    ILanguageController& getCommandProcessor() override { return dummyCommandProcessor; }
+    ILanguageController& getLanguageController() override { return fakeLanguageController; }
     IQueueController& getQueueController() override { return dummyQueueController; }
     IHeadlightsController& getHeadlightsController() override { return dummyHeadlightsController; }
     IMotorsController& getMotorsController() override { return dummyMotorsController; }
     IDisplayController& getDisplayController() override { return dummyDisplayController; }
-    IUsbComController& getUsbComController() override { return dummyUsbComController; }
+    IComController& getUsbComController() override { return dummyUsbComController; }
 };
 
 // ReSharper disable once CppDFAConstantFunctionResult
 inline int test_uninitialized_command_processor()
 {
-    DummyCore core;
-    const DummyCommandProcessor processor(core);
+    FakeCore core;
+    const FakeLanguageController processor(core);
     // ReSharper disable once CppLocalVariableMayBeConst
     Message * message = processor.createMessage("123");
     ASSERT_EQ(true, message == nullptr, "createMessage(mnemonic:\"123\") returns nullptr");
@@ -105,8 +105,8 @@ inline int test_uninitialized_command_processor()
 
 inline int test_command_processor_on_nonexisting_mnemonic()
 {
-    DummyCore core;
-    DummyCommandProcessor processor(core);
+    FakeCore core;
+    FakeLanguageController processor(core);
     processor.init();
     const Message * message = processor.createMessage("abc");
     ASSERT_EQ(true, message == nullptr, "createMessage(mnemonic:\"abc\") returns nullptr");
@@ -115,20 +115,20 @@ inline int test_command_processor_on_nonexisting_mnemonic()
 
 inline int test_command_processor_positive_scenarios()
 {
-    DummyCore core;
-    DummyCommandProcessor processor(core);
+    FakeCore core;
+    FakeLanguageController processor(core);
     processor.init();
 
     Message* message = processor.createMessage("123");
-    ASSERT_EQ(123, (static_cast<DummyMessage*>(message))->number,
+    ASSERT_EQ(123, (static_cast<FakeMessage*>(message))->number,
         "createMessage(mnemonic:\"123\").number returns 123");
 
     message = processor.createMessage("456");
-    ASSERT_EQ(456, (static_cast<DummyMessage*>(message))->number,
+    ASSERT_EQ(456, (static_cast<FakeMessage*>(message))->number,
         "createMessage(mnemonic:\"456\").number returns 456");
 
     message = processor.createMessage("789");
-    ASSERT_EQ(789, (static_cast<DummyMessage*>(message))->number,
+    ASSERT_EQ(789, (static_cast<FakeMessage*>(message))->number,
         "createMessage(mnemonic:\"789\").number returns 789");
 
     return 0;

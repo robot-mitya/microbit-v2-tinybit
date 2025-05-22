@@ -4,15 +4,14 @@
 namespace mimi::microbit
 {
 
-class UsbComController : public IUsbComController
+class UsbComController : public IComController
 {
     MicroBit& uBit;
 
 public:
-    explicit UsbComController(MicroBit& uBit, ICore &core) : IUsbComController(core), uBit(uBit) {}
+    explicit UsbComController(MicroBit& uBit, ICore &core) : IComController(core), uBit(uBit) {}
 
 protected:
-    void processLine(const char *line) const override {}
     void init() override {}
     void start() override {}
     void stop() override {}
