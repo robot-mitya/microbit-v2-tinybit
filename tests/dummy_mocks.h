@@ -5,7 +5,6 @@
 #ifndef DUMMY_MOCKS_H
 #define DUMMY_MOCKS_H
 
-#include "tests.h"
 #include "../source/mimi/icore.h"
 
 namespace mimi::tests
@@ -25,7 +24,7 @@ protected:
     DummyLanguageController(ICore &core, CommandEntry *table, const int count) : ILanguageController(core, table, count) {}
     // void processLine(const char*) const override {}
 public:
-    DummyLanguageController(ICore& core) : ILanguageController(core, nullptr, 0) {}
+    explicit DummyLanguageController(ICore& core) : ILanguageController(core, nullptr, 0) {}
     void start() override {}
     void stop() override {}
 };
@@ -82,6 +81,7 @@ class DummyUsbComController final : public IComController
 {
 protected:
     // void processLine(const char*) const override {}
+    void reportStatus(int) const override {}
 public:
     explicit DummyUsbComController(ICore& core) : IComController(core) {}
     void init() override {}

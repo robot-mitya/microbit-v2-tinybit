@@ -11,7 +11,8 @@ namespace mimi
 class IComController : public IController
 {
 protected:
-    void processLine(const char *line) const;
+    int processLine(const char *line) const;
+    virtual void reportStatus(int status) const = 0;
 public:
     explicit IComController(ICore &core) : IController(core) {}
 };

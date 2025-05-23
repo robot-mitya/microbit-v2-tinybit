@@ -77,7 +77,7 @@ namespace mimi
             extractLexeme(argsStartPos, lineLen, line, argument, isString);
             if (argument[0] != '\0') return language::PARSE_STATUS_TOO_MANY_ARGUMENTS;
 
-            return 0;
+            return language::PARSE_STATUS_OK;
         }
     };
 

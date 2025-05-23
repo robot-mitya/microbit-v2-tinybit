@@ -72,21 +72,21 @@ namespace mimi::microbit::tinybit
 
         void init() override
         {
-            ICore::init();
             uBit.init();
-            languageController.init();
+            ICore::init();
+            // languageController.init();
         }
 
         void start() override
         {
             ICore::start();
-            queueController.start();
+            // queueController.start();
         }
 
         void stop() override
         {
             ICore::stop();
-            queueController.stop();
+            // queueController.stop();
         }
 
     };

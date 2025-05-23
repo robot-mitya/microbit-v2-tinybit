@@ -65,8 +65,9 @@ public:
 
 class FakeUsbComController final : public IComController
 {
-// protected:
+protected:
 //     void processLine(const char *line) const override;
+    void reportStatus(int status) const override {}
 public:
     explicit FakeUsbComController(ICore& core) : IComController(core) {}
     void init() override {}

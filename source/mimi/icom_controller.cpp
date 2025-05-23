@@ -6,15 +6,20 @@
 
 using namespace mimi;
 
-void IComController::processLine(const char *line) const
+int IComController::processLine(const char *line) const
 {
     const unsigned int len = strlen(line);
-    char mnemonic[10];
+    char mnemonic[language::MAX_MNEMONIC_LENGTH + 1];
     bool isString;
     unsigned int pos = 0;
     pos = extractLexeme(pos, len, line, mnemonic, isString);
 
     Message* message = core.getLanguageController().createMessage(mnemonic);
-    message->parse(line, pos);
-    core.getQueueController().getInputQueue().enqueue(message);
+    int status = message->parse(line, pos);
+
+    if (status == language::PARSE_STATUS_OK)
+        core.getQueueController().getInputQueue().enqueue(message);
+    reportStatus(status);
+
+    return status;
 }
