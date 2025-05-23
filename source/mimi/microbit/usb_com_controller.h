@@ -10,10 +10,11 @@ namespace mimi::microbit
 
 class UsbComController final : public IComController
 {
-    MicroBit& uBit;
     volatile bool running = false;
-
     static UsbComController* instance; // NOLINT(*-dynamic-static-initializers)
+    static void fiberRunner();
+
+    MicroBit& uBit;
 
     static constexpr int MaxLineLength = language::MAX_LINE_LENGTH;
     static constexpr int RxBufferSize = MaxLineLength;
@@ -21,15 +22,6 @@ class UsbComController final : public IComController
 
     const char* readLine(int& status);
     void reportStatus(int status) const override;
-
-    static void fiberRunner();
-
-protected:
-    // int processLine(const char *line) const override
-    // {
-    //     uBit.serial.printf("ECHO: %s\r\n",  line);
-    //     return 0;
-    // }
 
 public:
     explicit UsbComController(MicroBit& uBit, ICore &core) : IComController(core), uBit(uBit) {}

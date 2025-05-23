@@ -9,27 +9,13 @@ namespace mimi
 
 class IQueueController : public IController
 {
+protected:
     ILock& lock;
     MessageQueue inputQueue;
     MessageQueue outputQueue;
 public:
     explicit IQueueController(ICore& core, ILock& lock) // NOLINT(*-pro-type-member-init)
         : IController(core), lock(lock), inputQueue(lock), outputQueue(lock) {}
-
-    void init() override
-    {
-
-    }
-
-    void start() override
-    {
-
-    }
-
-    void stop() override
-    {
-
-    }
 
     MessageQueue& getInputQueue() { return inputQueue; }
     MessageQueue& getOutputQueue() { return outputQueue; }

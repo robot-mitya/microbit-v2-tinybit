@@ -5,9 +5,9 @@
 #include "MicroBit.h"
 #include "../fiber_lock.h"
 #include "language_controller.h"
-#include "../../iqueue_controller.h"
 #include "headlights_controller.h"
 #include "motors_controller.h"
+#include "queue_controller.h"
 #include "../display_controller.h"
 #include "../usb_com_controller.h"
 
@@ -19,7 +19,7 @@ namespace mimi::microbit::tinybit
         MicroBit uBit;
         FiberLock lock;
         LanguageController languageController;
-        IQueueController queueController;
+        QueueController queueController;
         HeadlightsController headlightsController;
         MotorsController motorsController;
         DisplayController displayController;
@@ -74,19 +74,6 @@ namespace mimi::microbit::tinybit
         {
             uBit.init();
             ICore::init();
-            // languageController.init();
-        }
-
-        void start() override
-        {
-            ICore::start();
-            // queueController.start();
-        }
-
-        void stop() override
-        {
-            ICore::stop();
-            // queueController.stop();
         }
 
     };
