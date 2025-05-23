@@ -13,7 +13,7 @@ namespace mimi
 
 class Message;
 
-struct CommandEntry {
+struct CommandEntry { // NOLINT(*-pro-type-member-init)
     const char* mnemonic;
     std::function<Message *()> createFunc;
 };

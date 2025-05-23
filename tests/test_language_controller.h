@@ -1,10 +1,10 @@
-#ifndef TEST_COMMAND_PROCESSOR_H
-#define TEST_COMMAND_PROCESSOR_H
+#ifndef TEST_LANGUAGE_CONTROLLER_H
+#define TEST_LANGUAGE_CONTROLLER_H
 
 #include "tests.h"
 #include "dummy_mocks.h"
 
-namespace mimi::tests::command_processor
+namespace mimi::tests::language_controller
 {
 
 class FakeMessage : public Message
@@ -136,4 +136,4 @@ inline int test_command_processor_positive_scenarios()
 
 } // namespace mimi
 
-#endif //TEST_COMMAND_PROCESSOR_H
+#endif //TEST_LANGUAGE_CONTROLLER_H

@@ -24,12 +24,12 @@ class UsbComController final : public IComController
 
     static void fiberRunner();
 
-// protected:
-//     int processLine(const char *line) const override
-//     {
-//         uBit.serial.printf("ECHO: %s\r\n",  line);
-//         return 0;
-//     }
+protected:
+    // int processLine(const char *line) const override
+    // {
+    //     uBit.serial.printf("ECHO: %s\r\n",  line);
+    //     return 0;
+    // }
 
 public:
     explicit UsbComController(MicroBit& uBit, ICore &core) : IComController(core), uBit(uBit) {}

@@ -22,7 +22,9 @@ public:
     }
 
     void init() override
-    {}
+    {
+        ILanguageController::init();
+    }
 
     void start() override
     {}

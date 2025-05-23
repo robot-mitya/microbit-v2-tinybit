@@ -15,11 +15,12 @@ int IComController::processLine(const char *line) const
     pos = extractLexeme(pos, len, line, mnemonic, isString);
 
     Message* message = core.getLanguageController().createMessage(mnemonic);
+    if (message == nullptr)
+        return language::PARSE_STATUS_UNKNOWN_MNEMONIC;
     int status = message->parse(line, pos);
 
     if (status == language::PARSE_STATUS_OK)
         core.getQueueController().getInputQueue().enqueue(message);
-    reportStatus(status);
 
     return status;
 }

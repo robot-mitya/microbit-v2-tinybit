@@ -41,10 +41,7 @@ void UsbComController::reportStatus(int status) const
 
 void UsbComController::fiberRunner()
 {
-
-    // instance->uBit.serial.printf("UsbComController has been started 1\r\n");
     if (!instance) return;
-    instance->uBit.serial.printf("UsbComController has been started 2\r\n");
     while (instance->running)
     {
         if (instance->uBit.serial.isReadable())
@@ -69,7 +66,6 @@ void UsbComController::init()
 
 void UsbComController::start()
 {
-    uBit.serial.printf("UsbComController has been started 0\r\n");
     if (running) return;
     running = true;
     create_fiber(fiberRunner);

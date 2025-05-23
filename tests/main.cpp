@@ -5,7 +5,7 @@
 #include "test_string_utils.h"
 #include "test_messages.h"
 #include "test_message_queue.h"
-#include "test_command_processor.h"
+#include "test_language_controller.h"
 
 using namespace mimi::tests;
 
@@ -31,9 +31,9 @@ int main() {
     result |= message_queue::test_message_queue_enqueue_scenarios();
     result |= message_queue::test_message_queue_dequeue_scenarios();
 
-    result |= command_processor::test_uninitialized_command_processor();
-    result |= command_processor::test_command_processor_on_nonexisting_mnemonic();
-    result |= command_processor::test_command_processor_positive_scenarios();
+    result |= language_controller::test_uninitialized_command_processor();
+    result |= language_controller::test_command_processor_on_nonexisting_mnemonic();
+    result |= language_controller::test_command_processor_positive_scenarios();
 
     if (result == 0) {
         std::cout << COLOR_GREEN << "\nAll tests passed!\n" << COLOR_RESET << std::endl;
