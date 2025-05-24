@@ -12,11 +12,11 @@ namespace mimi
         virtual ~ILock() = default;
     };
 
-    class Message;
+    class InputMessage;
 
     class MessageQueue {
         static constexpr int Capacity = 64;
-        Message* buffer[Capacity] = {nullptr};
+        InputMessage* buffer[Capacity] = {nullptr};
         int head = 0;
         int tail = 0;
         int count = 0;
@@ -51,7 +51,7 @@ namespace mimi
 
         static int capacity() { return Capacity; }
 
-        bool enqueue(Message* msg) {
+        bool enqueue(InputMessage* msg) {
             lock.wait();
             if (count == Capacity) {
                 lock.notify();
@@ -64,13 +64,13 @@ namespace mimi
             return true;
         }
 
-        Message* dequeue() {
+        InputMessage* dequeue() {
             lock.wait();
             if (count == 0) {
                 lock.notify();
                 return nullptr;
             }
-            Message* msg = buffer[head];
+            InputMessage* msg = buffer[head];
             buffer[head] = nullptr;
             head = (head + 1) % Capacity;
             count--;

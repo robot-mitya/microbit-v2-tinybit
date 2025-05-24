@@ -21,19 +21,19 @@ public:
         int index = 0;
         commandEntries[index++] = {
             "hl",
-            [this]() -> Message* { return new HeadlightsMessage(this->core); }
+            [this]() -> InputMessage* { return new HeadlightsMessage(this->core); }
         };
         commandEntries[index++] = {
             "drv",
-            [this]() -> Message* { return new DriveMotorsMessage(this->core); }
+            [this]() -> InputMessage* { return new DriveMotorsMessage(this->core); }
         };
         commandEntries[index++] = {
             "emo",
-            [this]() -> Message* { return new ShowAnimationMessage(this->core); }
+            [this]() -> InputMessage* { return new ShowAnimationMessage(this->core); }
         };
         commandEntries[index++] = {
             "prn",
-            [this]() -> Message* { return new PrintTextMessage(this->core); }
+            [this]() -> InputMessage* { return new PrintTextMessage(this->core); }
         };
         commandsCounter = index;
     }

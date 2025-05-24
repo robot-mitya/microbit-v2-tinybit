@@ -6,30 +6,41 @@
 #include <cstring>
 #include "string_utils.h"
 
+#include <cstdio>
+
 namespace mimi
 {
 
 class ICore;
 
-class Message
+class InputMessage
 {
 protected:
     ICore& core;
 public:
-    explicit Message(ICore& core) : core(core) {}
-    virtual ~Message() = default;
+    explicit InputMessage(ICore& core) : core(core) {}
+    virtual ~InputMessage() = default;
     virtual int parse(const char* line, unsigned int argsStartPos) = 0;
     virtual void execute() const = 0;
 };
 
-class HeadlightsMessage : public Message
+class OutputMessage
+{
+protected:
+    char text[language::MAX_LINE_LENGTH] = "\0";
+public:
+    virtual ~OutputMessage() = default;
+    const char *getText() const { return text; }
+};
+
+class HeadlightsMessage : public InputMessage
 {
 public:
     uint8_t red = 0;
     uint8_t green = 0;
     uint8_t blue = 0;
 
-    explicit HeadlightsMessage(ICore &core) : Message(core) {}
+    explicit HeadlightsMessage(ICore &core) : InputMessage(core) {}
 
     int parse(const char *line, unsigned int argsStartPos) override
     {
@@ -67,13 +78,13 @@ public:
     }
 };
 
-class DriveMotorsMessage : public Message
+class DriveMotorsMessage : public InputMessage
 {
 public:
     int speedLeft = 0;
     int speedRight = 0;
 
-    explicit DriveMotorsMessage(ICore &core) : Message(core) {}
+    explicit DriveMotorsMessage(ICore &core) : InputMessage(core) {}
 
     int parse(const char *line, unsigned int argsStartPos) override
     {
@@ -102,12 +113,12 @@ public:
     }
 };
 
-class ShowAnimationMessage : public Message
+class ShowAnimationMessage : public InputMessage
 {
 public:
     AnimationType animationType = UNDEFINED;
 
-    explicit ShowAnimationMessage(ICore &core) : Message(core) {}
+    explicit ShowAnimationMessage(ICore &core) : InputMessage(core) {}
 
     int parse(const char *line, unsigned int argsStartPos) override
     {
@@ -127,12 +138,12 @@ public:
  }
 };
 
-class PrintTextMessage : public Message
+class PrintTextMessage : public InputMessage
 {
 public:
     char text[language::MAX_ARGUMENT_LENGTH] = "\0";
 
-    explicit PrintTextMessage(ICore &core) : Message(core) {}
+    explicit PrintTextMessage(ICore &core) : InputMessage(core) {}
 
     int parse(const char *line, unsigned int argsStartPos) override
     {
@@ -143,6 +154,33 @@ public:
         if (text[0] != '\0' && !isString) return language::PARSE_STATUS_WRONG_ARGUMENT;
 
         return language::PARSE_STATUS_OK;
+    }
+};
+
+class InfoMessage final : public OutputMessage
+{
+public:
+    explicit InfoMessage(const int controllerId, const int textId) : OutputMessage()
+    {
+        snprintf(text, sizeof(text), "info %d %d", controllerId, textId);
+    }
+};
+
+class WarnMessage final : public OutputMessage
+{
+public:
+    explicit WarnMessage(const int controllerId, const int textId) : OutputMessage()
+    {
+        snprintf(text, sizeof(text), "warn %d %d", controllerId, textId);
+    }
+};
+
+class ErrorMessage final : public OutputMessage
+{
+public:
+    explicit ErrorMessage(const int controllerId, const int textId) : OutputMessage()
+    {
+        snprintf(text, sizeof(text), "err %d %d", controllerId, textId);
     }
 };
 

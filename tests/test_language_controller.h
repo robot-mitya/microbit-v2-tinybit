@@ -7,11 +7,11 @@
 namespace mimi::tests::language_controller
 {
 
-class FakeMessage : public Message
+class FakeMessage : public InputMessage
 {
 public:
     const int number;
-    explicit FakeMessage(ICore &core, const int number) : Message(core), number(number) {}
+    explicit FakeMessage(ICore &core, const int number) : InputMessage(core), number(number) {}
     int parse(const char* line, const unsigned int argsStartPos) override
     {
         (void)line;
@@ -48,15 +48,15 @@ public:
     {
         commandEntries[0] = {
             "789",
-            [this]() -> Message* { return new FakeMessage789(this->core); }
+            [this]() -> InputMessage* { return new FakeMessage789(this->core); }
         };
         commandEntries[1] = {
             "456",
-            [this]() -> Message* { return new FakeMessage456(this->core); }
+            [this]() -> InputMessage* { return new FakeMessage456(this->core); }
         };
         commandEntries[2] = {
             "123",
-            [this]() -> Message* { return new FakeMessage123(this->core); }
+            [this]() -> InputMessage* { return new FakeMessage123(this->core); }
         };
     }
 
@@ -94,7 +94,7 @@ inline int test_uninitialized_command_processor()
     FakeCore core;
     const FakeLanguageController processor(core);
     // ReSharper disable once CppLocalVariableMayBeConst
-    Message * message = processor.createMessage("123");
+    InputMessage * message = processor.createMessage("123");
     ASSERT_EQ(true, message == nullptr, "createMessage(mnemonic:\"123\") returns nullptr");
     message = processor.createMessage("567");
     ASSERT_EQ(true, message == nullptr, "createMessage(mnemonic:\"456\") returns nullptr");
@@ -108,7 +108,7 @@ inline int test_command_processor_on_nonexisting_mnemonic()
     FakeCore core;
     FakeLanguageController processor(core);
     processor.init();
-    const Message * message = processor.createMessage("abc");
+    const InputMessage * message = processor.createMessage("abc");
     ASSERT_EQ(true, message == nullptr, "createMessage(mnemonic:\"abc\") returns nullptr");
     return 0;
 }
@@ -119,7 +119,7 @@ inline int test_command_processor_positive_scenarios()
     FakeLanguageController processor(core);
     processor.init();
 
-    Message* message = processor.createMessage("123");
+    InputMessage* message = processor.createMessage("123");
     ASSERT_EQ(123, (static_cast<FakeMessage*>(message))->number,
         "createMessage(mnemonic:\"123\").number returns 123");
 

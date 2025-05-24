@@ -11,7 +11,7 @@ void QueueController::fiberRunner()
     if (!instance) return;
     while (instance->running)
     {
-        Message* inputMessage = instance->inputQueue.dequeue();
+        InputMessage* inputMessage = instance->inputQueue.dequeue();
         if (inputMessage != nullptr)
             inputMessage->execute();
 

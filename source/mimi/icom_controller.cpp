@@ -14,7 +14,7 @@ int IComController::processLine(const char *line) const
     unsigned int pos = 0;
     pos = extractLexeme(pos, len, line, mnemonic, isString);
 
-    Message* message = core.getLanguageController().createMessage(mnemonic);
+    InputMessage* message = core.getLanguageController().createMessage(mnemonic);
     if (message == nullptr)
         return language::PARSE_STATUS_UNKNOWN_MNEMONIC;
     int status = message->parse(line, pos);

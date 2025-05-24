@@ -15,10 +15,10 @@ namespace mimi::tests::message_queue
         void notify() override {}
     };
 
-    class DummyMessage final : public Message
+    class DummyMessage final : public InputMessage
     {
     public:
-        explicit DummyMessage(ICore& core) : Message(core) {}
+        explicit DummyMessage(ICore& core) : InputMessage(core) {}
         int parse(const char* line, const unsigned int argsStartPos) override
         {
             (void)line;
@@ -46,7 +46,7 @@ namespace mimi::tests::message_queue
         ASSERT_EQ(false, queue.isEmpty(), "IsEmpty for non-empty");
         ASSERT_EQ(false, queue.isFull(), "IsFull for non-empty");
 
-        const Message * dequedMessage = queue.dequeue();
+        const InputMessage * dequedMessage = queue.dequeue();
         ASSERT_EQ(true, dequedMessage != nullptr, "Dequeued message is not null");
         ASSERT_EQ(0, queue.size(), "Empty after dequed");
         ASSERT_EQ(true, queue.isEmpty(), "IsEmpty is true");
@@ -100,7 +100,7 @@ namespace mimi::tests::message_queue
 
         for (int i = 0; i < MessageQueue::capacity(); i++)
         {
-            const Message* dequeuedMessage = queue.dequeue();
+            const InputMessage* dequeuedMessage = queue.dequeue();
             if (i == 0)
             {
                 ASSERT_EQ(true, dequeuedMessage != nullptr, "Dequeued first: true");
@@ -116,7 +116,7 @@ namespace mimi::tests::message_queue
             }
         }
 
-        const Message* dequeuedMessage = queue.dequeue();
+        const InputMessage* dequeuedMessage = queue.dequeue();
         ASSERT_EQ(true, dequeuedMessage == nullptr, "Dequeued empty: nullptr");
 
         return 0;

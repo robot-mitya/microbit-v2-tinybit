@@ -11,11 +11,11 @@
 namespace mimi
 {
 
-class Message;
+class InputMessage;
 
 struct CommandEntry { // NOLINT(*-pro-type-member-init)
     const char* mnemonic;
-    std::function<Message *()> createFunc;
+    std::function<InputMessage *()> createFunc;
 };
 
 class ILanguageController : public IController {
@@ -51,7 +51,7 @@ public:
      * Performs a binary search and creates a Message object
      * based on the provided mnemonic. Returns nullptr if not found.
      */
-    Message* createMessage(const char* mnemonic) const {
+    InputMessage* createMessage(const char* mnemonic) const {
         int left = 0, right = commandCount - 1;
         while (initialized && left <= right) {
             const int mid = (left + right) / 2;
