@@ -4,26 +4,42 @@
 #include "../../ilanguage_controller.h"
 #include "messages.h"
 
+#include <stdexcept>
+
 namespace mimi::microbit::tinybit
 {
 
 class LanguageController final : public ILanguageController
 {
-    static constexpr int COMMANDS_COUNT = 1;
+    static constexpr int COMMANDS_COUNT = 2;
+    int commandsCounter;
     CommandEntry commandEntries[COMMANDS_COUNT];
 public:
     explicit LanguageController(ICore& core)
             : ILanguageController(core, commandEntries, COMMANDS_COUNT)
     {
-        commandEntries[0] = {
+        int index = 0;
+        commandEntries[index++] = {
             "HL",
             [this]() -> Message* { return new HeadlightsMessage(this->core); }
         };
+        commandEntries[index++] = {
+            "DRV",
+            [this]() -> Message* { return new DriveMotorsMessage(this->core); }
+        };
+        commandsCounter = index;
     }
 
     void init() override
     {
         ILanguageController::init();
+        // TODO DZZ Check status!
+        if (commandsCounter != COMMANDS_COUNT) // NOLINT(*-branch-clone)
+        {
+            // TODO DZZ Report status NOT-OK
+            return;
+        }
+        // TODO DZZ Report status OK
     }
 
     void start() override

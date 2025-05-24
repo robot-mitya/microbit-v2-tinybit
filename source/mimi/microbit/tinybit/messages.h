@@ -18,6 +18,17 @@ namespace mimi::microbit::tinybit
         }
     };
 
+    class DriveMotorsMessage final : public mimi::DriveMessage
+    {
+    public:
+        explicit DriveMotorsMessage(ICore &core) : mimi::DriveMessage(core) {}
+
+        void execute() const override
+        {
+            core.getMotorsController().runMotors(speedLeft, speedRight);
+        }
+    };
+
 } // namespace mimi
 
 #endif //TINYBIT_MESSAGES_H

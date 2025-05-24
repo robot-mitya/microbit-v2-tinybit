@@ -1,12 +1,10 @@
 #include "MicroBit.h"
 #include "mimi/microbit/tinybit/core.h"
-// #include "mimi/interpreter.h"
 
 using namespace mimi;
 
 microbit::tinybit::Core core;
 MicroBit& uBit = core.getMicroBit();
-// Interpreter interpreter(uBit);
 AnimationType animationType = UNDEFINED;
 
 const uint8_t headlightsColors[8][3] = {{0,0,0}, {255,0,0}, {0,255,0}, {0,0,255}, {255,255,0}, {0,255,255}, {255,0,255}, {255,255,255}};
@@ -66,8 +64,6 @@ int main()
 
     uBit.messageBus.listen(DEVICE_ID_BUTTON_B, DEVICE_BUTTON_EVT_DOWN, onButtonBDownHandler);
     uBit.messageBus.listen(DEVICE_ID_BUTTON_B, DEVICE_BUTTON_EVT_UP, onButtonBUpHandler);
-
-    // interpreter.start();
 
     release_fiber();
 }

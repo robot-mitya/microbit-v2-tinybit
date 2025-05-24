@@ -4,7 +4,6 @@
 #include "constants.h"
 
 #include <cstring>
-#include <cerrno>
 #include "string_utils.h"
 
 namespace mimi
@@ -15,30 +14,6 @@ namespace mimi
     {
     protected:
         ICore& core;
-
-        static uint8_t textToUint8(const char* text, const bool isString, int& status)
-        {
-            if (text[0] == '\0')
-            {
-                status = language::PARSE_STATUS_MISSING_ARGUMENT;
-                return 0;
-            }
-            if (isString)
-            {
-                status = language::PARSE_STATUS_WRONG_ARGUMENT;
-                return 0;
-            }
-            char *end = nullptr;
-            errno = 0;
-            const unsigned long value = strtoul(text, &end, 10);
-            if (*end == '\0' && value <= 255 && errno == 0)
-            {
-                status = language::PARSE_STATUS_OK;
-                return static_cast<uint8_t>(value);
-            }
-            status = language::PARSE_STATUS_WRONG_ARGUMENT;
-            return 0;
-        }
     public:
         explicit Message(ICore& core) : core(core) {}
         virtual ~Message() = default;
@@ -58,7 +33,7 @@ namespace mimi
         int parse(const char *line, unsigned int argsStartPos) override
         {
             const unsigned int lineLen = strlen(line);
-            char argument[80];
+            char argument[language::MAX_ARGUMENT_LENGTH];
             bool isString;
             int status;
 
@@ -72,6 +47,36 @@ namespace mimi
 
             argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
             blue = textToUint8(argument, isString, status);
+            if (status < 0) return status;
+
+            extractLexeme(argsStartPos, lineLen, line, argument, isString);
+            if (argument[0] != '\0') return language::PARSE_STATUS_TOO_MANY_ARGUMENTS;
+
+            return language::PARSE_STATUS_OK;
+        }
+    };
+
+    class DriveMessage : public Message
+    {
+    public:
+        int speedLeft = 0;
+        int speedRight = 0;
+
+        explicit DriveMessage(ICore &core) : Message(core) {}
+
+        int parse(const char *line, unsigned int argsStartPos) override
+        {
+            const unsigned int lineLen = strlen(line);
+            char argument[language::MAX_ARGUMENT_LENGTH];
+            bool isString;
+            int status;
+
+            argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
+            speedLeft = static_cast<int>(textToLong(argument, isString, -255, 255, status));
+            if (status < 0) return status;
+
+            argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
+            speedRight = static_cast<int>(textToLong(argument, isString, -255, 255, status));
             if (status < 0) return status;
 
             extractLexeme(argsStartPos, lineLen, line, argument, isString);

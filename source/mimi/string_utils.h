@@ -1,7 +1,11 @@
 #ifndef STRING_UTILS_H
 #define STRING_UTILS_H
 
+#include "constants.h"
+
 #include <cctype>
+#include <cinttypes>
+#include <cerrno>
 
 namespace mimi
 {
@@ -72,6 +76,54 @@ namespace mimi
         isString = hasLeadingQuotationMark && hasEndingQuotationMark;
 
         return pos;
+    }
+
+    inline uint8_t textToUint8(const char* text, const bool isString, int& status)
+    {
+        if (text[0] == '\0')
+        {
+            status = language::PARSE_STATUS_MISSING_ARGUMENT;
+            return 0;
+        }
+        if (isString)
+        {
+            status = language::PARSE_STATUS_WRONG_ARGUMENT;
+            return 0;
+        }
+        char *end = nullptr;
+        errno = 0;
+        const unsigned long value = strtoul(text, &end, 10);
+        if (*end == '\0' && value <= 255 && errno == 0)
+        {
+            status = language::PARSE_STATUS_OK;
+            return static_cast<uint8_t>(value);
+        }
+        status = language::PARSE_STATUS_WRONG_ARGUMENT;
+        return 0;
+    }
+
+    inline long textToLong(const char* text, const bool isString, long minValue, long maxValue, int& status)
+    {
+        if (text[0] == '\0')
+        {
+            status = language::PARSE_STATUS_MISSING_ARGUMENT;
+            return 0;
+        }
+        if (isString)
+        {
+            status = language::PARSE_STATUS_WRONG_ARGUMENT;
+            return 0;
+        }
+        char *end = nullptr;
+        errno = 0;
+        const long value = strtol(text, &end, 10);
+        if (*end == '\0' && value >= minValue && value <= maxValue && errno == 0)
+        {
+            status = language::PARSE_STATUS_OK;
+            return value;
+        }
+        status = language::PARSE_STATUS_WRONG_ARGUMENT;
+        return 0;
     }
 
 } // namespace mimi
