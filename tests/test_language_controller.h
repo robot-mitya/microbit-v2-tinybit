@@ -134,6 +134,6 @@ inline int test_command_processor_positive_scenarios()
     return 0;
 }
 
-} // namespace mimi
+} // namespace mimi::tests::language_controller
 
 #endif //TEST_LANGUAGE_CONTROLLER_H

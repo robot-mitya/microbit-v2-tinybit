@@ -3,8 +3,8 @@
 //
 
 // ReSharper disable CppUseAuto
-#ifndef TEST_MESSAGES_H
-#define TEST_MESSAGES_H
+#ifndef TEST_HEADLIGHT_MESSAGES_H
+#define TEST_HEADLIGHT_MESSAGES_H
 
 #include <iostream>
 #include <cstring>
@@ -37,7 +37,7 @@ inline int test_hl_message_positive() {
     return 0;
 }
 
-inline int test_hl_message_missing_args_1() {
+inline int test_hl_message_missing_all_args() {
     const char* input = " HL   ";
     const unsigned int len = std::strlen(input);
     char lexeme[32];
@@ -48,12 +48,15 @@ inline int test_hl_message_missing_args_1() {
     DummyCore dummyCore;
     HeadlightsMockMessage message(dummyCore);
     const int status = message.parse(input, pos);
-    ASSERT_EQ(mimi::language::PARSE_STATUS_MISSING_ARGUMENT, status, "Parse status");
+    ASSERT_EQ(mimi::language::PARSE_STATUS_OK, status, "Parse status");
+    ASSERT_EQ(0, (int)message.red, "Red");
+    ASSERT_EQ(0, (int)message.green, "Green");
+    ASSERT_EQ(0, (int)message.blue, "Blue");
 
     return 0;
 }
 
-inline int test_hl_message_missing_args_2() {
+inline int test_hl_message_missing_second_arg() {
     const char* input = " HL   10  20   ";
     const unsigned int len = std::strlen(input);
     char lexeme[32];
@@ -80,7 +83,10 @@ inline int test_hl_message_too_many_args() {
     DummyCore dummyCore;
     HeadlightsMockMessage message(dummyCore);
     const int status = message.parse(input, pos);
-    ASSERT_EQ(mimi::language::PARSE_STATUS_TOO_MANY_ARGUMENTS, status, "Parse status");
+    ASSERT_EQ(mimi::language::PARSE_STATUS_OK, status, "Parse status");
+    ASSERT_EQ(10, (int)message.red, "Red");
+    ASSERT_EQ(20, (int)message.green, "Green");
+    ASSERT_EQ(30, (int)message.blue, "Blue");
 
     return 0;
 }
@@ -133,6 +139,6 @@ inline int test_hl_message_wrong_arg_3() {
     return 0;
 }
 
-} // namespace mimi
+} // namespace mimi::tests::messages
 
-#endif // TEST_MESSAGES_H
+#endif // TEST_HEADLIGHT_MESSAGES_H

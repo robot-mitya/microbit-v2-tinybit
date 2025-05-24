@@ -122,6 +122,6 @@ namespace mimi::tests::message_queue
         return 0;
     }
 
-} // namespace mimi
+} // namespace mimi::tests::message_queue
 
 #endif //TEST_MESSAGE_QUEUE_H

@@ -39,19 +39,29 @@ public:
         int status;
 
         argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
+        if (argument[0] == '\0')
+        {
+            red = 0;
+            green = 0;
+            blue = 0;
+            return language::PARSE_STATUS_OK;
+        }
         red = textToUint8(argument, isString, status);
         if (status < 0) return status;
 
         argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
+        if (argument[0] == '\0')
+        {
+            green = red;
+            blue = red;
+            return language::PARSE_STATUS_OK;
+        }
         green = textToUint8(argument, isString, status);
         if (status < 0) return status;
 
-        argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
+        extractLexeme(argsStartPos, lineLen, line, argument, isString);
         blue = textToUint8(argument, isString, status);
         if (status < 0) return status;
-
-        extractLexeme(argsStartPos, lineLen, line, argument, isString);
-        if (argument[0] != '\0') return language::PARSE_STATUS_TOO_MANY_ARGUMENTS;
 
         return language::PARSE_STATUS_OK;
     }
@@ -73,15 +83,20 @@ public:
         int status;
 
         argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
+        if (argument[0] == '\0')
+        {
+            speedLeft = 0;
+            speedRight = 0;
+            return language::PARSE_STATUS_OK;
+        }
         speedLeft = static_cast<int>(textToLong(argument, isString, -255, 255, status));
         if (status < 0) return status;
 
-        argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
-        speedRight = static_cast<int>(textToLong(argument, isString, -255, 255, status));
-        if (status < 0) return status;
-
         extractLexeme(argsStartPos, lineLen, line, argument, isString);
-        if (argument[0] != '\0') return language::PARSE_STATUS_TOO_MANY_ARGUMENTS;
+        speedRight = argument[0] == '\0'
+            ? speedLeft
+            : static_cast<int>(textToLong(argument, isString, -255, 255, status));
+        if (status < 0) return status;
 
         return language::PARSE_STATUS_OK;
     }
@@ -99,11 +114,13 @@ public:
         const unsigned int lineLen = strlen(line);
         char argument[language::MAX_ARGUMENT_LENGTH];
         bool isString;
-        int status;
+        int status = 0;
 
         extractLexeme(argsStartPos, lineLen, line, argument, isString);
-        animationType = static_cast<AnimationType>(textToLong(
-            argument, isString, UNDEFINED, ANIMATION_TYPE_COUNT - 1, status));
+        animationType = argument[0] == '\0'
+            ? UNDEFINED
+            : static_cast<AnimationType>(textToLong(
+                argument, isString, UNDEFINED, ANIMATION_TYPE_COUNT - 1, status));
         if (status < 0) return status;
 
         return language::PARSE_STATUS_OK;
@@ -123,7 +140,7 @@ public:
         bool isString;
 
         extractLexeme(argsStartPos, lineLen, line, text, isString);
-        if (!isString) return language::PARSE_STATUS_WRONG_ARGUMENT;
+        if (text[0] != '\0' && !isString) return language::PARSE_STATUS_WRONG_ARGUMENT;
 
         return language::PARSE_STATUS_OK;
     }

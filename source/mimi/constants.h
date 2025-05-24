@@ -14,7 +14,6 @@ namespace mimi
         constexpr int PARSE_STATUS_UNKNOWN_MNEMONIC = -2;
         constexpr int PARSE_STATUS_MISSING_ARGUMENT = -3;
         constexpr int PARSE_STATUS_WRONG_ARGUMENT = -4;
-        constexpr int PARSE_STATUS_TOO_MANY_ARGUMENTS = -5;
     } // namespace language
 } // namespace mimi
 

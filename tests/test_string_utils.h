@@ -134,6 +134,6 @@ namespace mimi::tests::string_utils
         return 0;
     }
 
-} // namespace mimi
+} // namespace mimi::tests::string_utils
 
 #endif // TEST_STRING_UTILS_H

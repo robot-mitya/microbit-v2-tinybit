@@ -59,8 +59,10 @@ public:
     void init() override {}
     void start() override {}
     void stop() override {}
+    void clear() override {}
     IFrameAnimation* startAnimationAsync(AnimationType) override { return nullptr; }
     void stopAnimation() override {}
+    void print(const char*) override {}
 };
 
 class FakeUsbComController final : public IComController
