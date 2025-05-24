@@ -4,6 +4,7 @@
 
 #include "test_string_utils.h"
 #include "test_headlight_messages.h"
+#include "test_drive_motors_messages.h"
 #include "test_message_queue.h"
 #include "test_language_controller.h"
 
@@ -26,6 +27,14 @@ int main() {
     result |= messages::test_hl_message_wrong_arg_1();
     result |= messages::test_hl_message_wrong_arg_2();
     result |= messages::test_hl_message_wrong_arg_3();
+
+    result |= messages::test_drv_message_positive();
+    result |= messages::test_drv_message_missing_all_args();
+    result |= messages::test_drv_message_missing_second_arg();
+    result |= messages::test_drv_message_too_many_args();
+    result |= messages::test_drv_message_wrong_arg_1();
+    result |= messages::test_drv_message_wrong_arg_2();
+    result |= messages::test_drv_message_wrong_arg_3();
 
     result |= message_queue::test_message_queue_basic_positive();
     result |= message_queue::test_message_queue_enqueue_scenarios();

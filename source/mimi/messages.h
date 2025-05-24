@@ -67,13 +67,13 @@ public:
     }
 };
 
-class DriveMessage : public Message
+class DriveMotorsMessage : public Message
 {
 public:
     int speedLeft = 0;
     int speedRight = 0;
 
-    explicit DriveMessage(ICore &core) : Message(core) {}
+    explicit DriveMotorsMessage(ICore &core) : Message(core) {}
 
     int parse(const char *line, unsigned int argsStartPos) override
     {

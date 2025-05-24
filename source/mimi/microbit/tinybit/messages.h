@@ -18,10 +18,10 @@ namespace mimi::microbit::tinybit
         }
     };
 
-    class DriveMotorsMessage final : public DriveMessage
+    class DriveMotorsMessage final : public mimi::DriveMotorsMessage
     {
     public:
-        explicit DriveMotorsMessage(ICore &core) : mimi::DriveMessage(core) {}
+        explicit DriveMotorsMessage(ICore &core) : mimi::DriveMotorsMessage(core) {}
 
         void execute() const override
         {

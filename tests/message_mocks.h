@@ -6,8 +6,9 @@
 #define MESSAGE_MOCKS_H
 
 #include "../source/mimi/messages.h"
+#include "../source/mimi/microbit/tinybit/messages.h"
 
-namespace mimi
+namespace mimi::tests::messages
 {
 
     class HeadlightsMockMessage final : public HeadlightsMessage
@@ -17,6 +18,13 @@ namespace mimi
         void execute() const override {}
     };
 
-} // namespace mimi
+    class DriveMotorsMockMessage final : public DriveMotorsMessage
+    {
+    public:
+        explicit DriveMotorsMockMessage(ICore &core) : DriveMotorsMessage(core) {}
+        void execute() const override {}
+    };
+
+} // namespace mimi::tests::messages
 
 #endif //MESSAGE_MOCKS_H
