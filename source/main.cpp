@@ -16,8 +16,7 @@ static void onLogoTouchHandler(MicroBitEvent)
     displayController.stopAnimation();
 
     constexpr int animationFirstIndex = UNDEFINED;
-    constexpr int animationLastIndex = TALK_FACE;
-    constexpr int animationsCount = animationLastIndex - UNDEFINED + 1;
+    constexpr int animationsCount = ANIMATION_TYPE_COUNT - UNDEFINED;
     animationType = static_cast<AnimationType>((animationType - animationFirstIndex + 1) % animationsCount);
     
     displayController.startAnimationAsync(animationType);

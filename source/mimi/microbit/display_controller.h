@@ -39,6 +39,20 @@ namespace mimi::microbit
         void stop() override
         {}
 
+        void clear() override
+        {
+            stopAnimation();
+            while (frameAnimation != nullptr && frameAnimation->isRunning()) uBit.sleep(10);
+            uBit.sleep(10);
+            delete frameAnimation;
+            frameAnimation = nullptr;
+
+            uBit.display.stopAnimation();
+            uBit.sleep(10);
+
+            uBit.display.clear();
+        }
+        
         IFrameAnimation *startAnimationAsync(const AnimationType animationType) override
         {
             if (animationType == this->animationType && frameAnimation != nullptr && frameAnimation->isRunning())
@@ -46,10 +60,7 @@ namespace mimi::microbit
 
             this->animationType = animationType;
 
-            stopAnimation();
-            while (frameAnimation != nullptr && frameAnimation->isRunning()) uBit.sleep(10);
-            uBit.sleep(10);
-            delete frameAnimation;
+            clear();
 
             switch (animationType)
             {
@@ -85,7 +96,9 @@ namespace mimi::microbit
                 break;
             }
             if (frameAnimation != nullptr)
+            {
                 frameAnimation->startAsync();
+            }
             return frameAnimation;
         }
 
@@ -93,6 +106,19 @@ namespace mimi::microbit
         {
             if (frameAnimation == nullptr) return;
             frameAnimation->stop();
+        }
+
+        void print(const char *text) override
+        {
+            clear();
+            if (strlen(text) == 1)
+            {
+                uBit.display.print(text);
+            }
+            else
+            {
+                uBit.display.scrollAsync(text);
+            }
         }
     };
 

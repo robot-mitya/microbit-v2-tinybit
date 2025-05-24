@@ -18,7 +18,7 @@ namespace mimi::microbit::tinybit
         }
     };
 
-    class DriveMotorsMessage final : public mimi::DriveMessage
+    class DriveMotorsMessage final : public DriveMessage
     {
     public:
         explicit DriveMotorsMessage(ICore &core) : mimi::DriveMessage(core) {}
@@ -26,6 +26,29 @@ namespace mimi::microbit::tinybit
         void execute() const override
         {
             core.getMotorsController().runMotors(speedLeft, speedRight);
+        }
+    };
+
+    class ShowAnimationMessage final : public mimi::ShowAnimationMessage
+    {
+    public:
+        explicit ShowAnimationMessage(ICore &core) : mimi::ShowAnimationMessage(core) {}
+
+        void execute() const override
+        {
+            core.getDisplayController().startAnimationAsync(animationType);
+        }
+    };
+
+    class PrintTextMessage final : public mimi::PrintTextMessage
+    {
+    public:
+        explicit PrintTextMessage(ICore &core) : mimi::PrintTextMessage(core) {}
+
+        void execute() const override
+        {
+            core.getDisplayController().stopAnimation();
+            core.getDisplayController().print(text);
         }
     };
 

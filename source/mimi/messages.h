@@ -8,83 +8,126 @@
 
 namespace mimi
 {
-    class ICore;
 
-    class Message
+class ICore;
+
+class Message
+{
+protected:
+    ICore& core;
+public:
+    explicit Message(ICore& core) : core(core) {}
+    virtual ~Message() = default;
+    virtual int parse(const char* line, unsigned int argsStartPos) = 0;
+    virtual void execute() const = 0;
+};
+
+class HeadlightsMessage : public Message
+{
+public:
+    uint8_t red = 0;
+    uint8_t green = 0;
+    uint8_t blue = 0;
+
+    explicit HeadlightsMessage(ICore &core) : Message(core) {}
+
+    int parse(const char *line, unsigned int argsStartPos) override
     {
-    protected:
-        ICore& core;
-    public:
-        explicit Message(ICore& core) : core(core) {}
-        virtual ~Message() = default;
-        virtual int parse(const char* line, unsigned int argsStartPos) = 0;
-        virtual void execute() const = 0;
-    };
+        const unsigned int lineLen = strlen(line);
+        char argument[language::MAX_ARGUMENT_LENGTH];
+        bool isString;
+        int status;
 
-    class HeadlightsMessage : public Message
+        argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
+        red = textToUint8(argument, isString, status);
+        if (status < 0) return status;
+
+        argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
+        green = textToUint8(argument, isString, status);
+        if (status < 0) return status;
+
+        argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
+        blue = textToUint8(argument, isString, status);
+        if (status < 0) return status;
+
+        extractLexeme(argsStartPos, lineLen, line, argument, isString);
+        if (argument[0] != '\0') return language::PARSE_STATUS_TOO_MANY_ARGUMENTS;
+
+        return language::PARSE_STATUS_OK;
+    }
+};
+
+class DriveMessage : public Message
+{
+public:
+    int speedLeft = 0;
+    int speedRight = 0;
+
+    explicit DriveMessage(ICore &core) : Message(core) {}
+
+    int parse(const char *line, unsigned int argsStartPos) override
     {
-    public:
-        uint8_t red = 0;
-        uint8_t green = 0;
-        uint8_t blue = 0;
+        const unsigned int lineLen = strlen(line);
+        char argument[language::MAX_ARGUMENT_LENGTH];
+        bool isString;
+        int status;
 
-        explicit HeadlightsMessage(ICore &core) : Message(core) {}
+        argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
+        speedLeft = static_cast<int>(textToLong(argument, isString, -255, 255, status));
+        if (status < 0) return status;
 
-        int parse(const char *line, unsigned int argsStartPos) override
-        {
-            const unsigned int lineLen = strlen(line);
-            char argument[language::MAX_ARGUMENT_LENGTH];
-            bool isString;
-            int status;
+        argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
+        speedRight = static_cast<int>(textToLong(argument, isString, -255, 255, status));
+        if (status < 0) return status;
 
-            argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
-            red = textToUint8(argument, isString, status);
-            if (status < 0) return status;
+        extractLexeme(argsStartPos, lineLen, line, argument, isString);
+        if (argument[0] != '\0') return language::PARSE_STATUS_TOO_MANY_ARGUMENTS;
 
-            argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
-            green = textToUint8(argument, isString, status);
-            if (status < 0) return status;
+        return language::PARSE_STATUS_OK;
+    }
+};
 
-            argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
-            blue = textToUint8(argument, isString, status);
-            if (status < 0) return status;
+class ShowAnimationMessage : public Message
+{
+public:
+    AnimationType animationType = UNDEFINED;
 
-            extractLexeme(argsStartPos, lineLen, line, argument, isString);
-            if (argument[0] != '\0') return language::PARSE_STATUS_TOO_MANY_ARGUMENTS;
+    explicit ShowAnimationMessage(ICore &core) : Message(core) {}
 
-            return language::PARSE_STATUS_OK;
-        }
-    };
-
-    class DriveMessage : public Message
+    int parse(const char *line, unsigned int argsStartPos) override
     {
-    public:
-        int speedLeft = 0;
-        int speedRight = 0;
+        const unsigned int lineLen = strlen(line);
+        char argument[language::MAX_ARGUMENT_LENGTH];
+        bool isString;
+        int status;
 
-        explicit DriveMessage(ICore &core) : Message(core) {}
+        extractLexeme(argsStartPos, lineLen, line, argument, isString);
+        animationType = static_cast<AnimationType>(textToLong(
+            argument, isString, UNDEFINED, ANIMATION_TYPE_COUNT - 1, status));
+        if (status < 0) return status;
 
-        int parse(const char *line, unsigned int argsStartPos) override
-        {
-            const unsigned int lineLen = strlen(line);
-            char argument[language::MAX_ARGUMENT_LENGTH];
-            bool isString;
-            int status;
+        return language::PARSE_STATUS_OK;
+ }
+};
 
-            argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
-            speedLeft = static_cast<int>(textToLong(argument, isString, -255, 255, status));
-            if (status < 0) return status;
+class PrintTextMessage : public Message
+{
+public:
+    char text[language::MAX_ARGUMENT_LENGTH] = "\0";
 
-            argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
-            speedRight = static_cast<int>(textToLong(argument, isString, -255, 255, status));
-            if (status < 0) return status;
+    explicit PrintTextMessage(ICore &core) : Message(core) {}
 
-            extractLexeme(argsStartPos, lineLen, line, argument, isString);
-            if (argument[0] != '\0') return language::PARSE_STATUS_TOO_MANY_ARGUMENTS;
+    int parse(const char *line, unsigned int argsStartPos) override
+    {
+        const unsigned int lineLen = strlen(line);
+        bool isString;
 
-            return language::PARSE_STATUS_OK;
-        }
-    };
+        extractLexeme(argsStartPos, lineLen, line, text, isString);
+        if (!isString) return language::PARSE_STATUS_WRONG_ARGUMENT;
+
+        return language::PARSE_STATUS_OK;
+    }
+};
 
 } // namespace mimi
 

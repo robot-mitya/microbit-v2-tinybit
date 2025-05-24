@@ -11,7 +11,7 @@ namespace mimi::microbit::tinybit
 
 class LanguageController final : public ILanguageController
 {
-    static constexpr int COMMANDS_COUNT = 2;
+    static constexpr int COMMANDS_COUNT = 4;
     int commandsCounter;
     CommandEntry commandEntries[COMMANDS_COUNT];
 public:
@@ -20,12 +20,20 @@ public:
     {
         int index = 0;
         commandEntries[index++] = {
-            "HL",
+            "hl",
             [this]() -> Message* { return new HeadlightsMessage(this->core); }
         };
         commandEntries[index++] = {
-            "DRV",
+            "drv",
             [this]() -> Message* { return new DriveMotorsMessage(this->core); }
+        };
+        commandEntries[index++] = {
+            "emo",
+            [this]() -> Message* { return new ShowAnimationMessage(this->core); }
+        };
+        commandEntries[index++] = {
+            "prn",
+            [this]() -> Message* { return new PrintTextMessage(this->core); }
         };
         commandsCounter = index;
     }
