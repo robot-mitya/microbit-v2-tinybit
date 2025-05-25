@@ -26,6 +26,10 @@ namespace mimi::tests::message_queue
             return 0;
         }
         void execute() const override {}
+
+        Message* clone() const override {
+            return new DummyMessage(*this);
+        }
     };
 
     inline int test_message_queue_basic_positive()
@@ -33,9 +37,9 @@ namespace mimi::tests::message_queue
         DummyCore core;
         DummyLock lock;
         DummyMessage message(core);
-        MessageQueue queue(lock);
+        MessageQueue<InputMessage> queue(lock);
 
-        ASSERT_EQ(64, MessageQueue::capacity(), "Queue capacity");
+        ASSERT_EQ(64, MessageQueue<InputMessage>::capacity(), "Queue capacity");
         ASSERT_EQ(0, queue.size(), "Size of empty");
         ASSERT_EQ(true, queue.isEmpty(), "IsEmpty for empty");
         ASSERT_EQ(false, queue.isFull(), "IsFull for empty");
@@ -60,9 +64,9 @@ namespace mimi::tests::message_queue
         DummyCore core;
         DummyLock lock;
         DummyMessage message(core);
-        MessageQueue queue(lock);
+        MessageQueue<InputMessage> queue(lock);
 
-        for (int i = 0; i < MessageQueue::capacity(); i++)
+        for (int i = 0; i < MessageQueue<InputMessage>::capacity(); i++)
         {
             const int enqueueResult = queue.enqueue(&message);
             if (i == 0)
@@ -71,10 +75,10 @@ namespace mimi::tests::message_queue
                 ASSERT_EQ(1, queue.size(), "Enqueued first: size == 1");
                 ASSERT_EQ(false, queue.isEmpty(), "Enqueued first: non-empty");
                 ASSERT_EQ(false, queue.isFull(), "Enqueued first: not-filled");
-            } else if (i == MessageQueue::capacity() - 1)
+            } else if (i == MessageQueue<InputMessage>::capacity() - 1)
             {
                 ASSERT_EQ(true, enqueueResult, "Enqueued last: true");
-                ASSERT_EQ(MessageQueue::capacity(), queue.size(), "Enqueued last: size == Capacity");
+                ASSERT_EQ(MessageQueue<InputMessage>::capacity(), queue.size(), "Enqueued last: size == Capacity");
                 ASSERT_EQ(false, queue.isEmpty(), "Enqueued last: non-empty");
                 ASSERT_EQ(true, queue.isFull(), "Enqueued last: filled");
             }
@@ -91,23 +95,23 @@ namespace mimi::tests::message_queue
         DummyCore core;
         DummyLock lock;
         DummyMessage message(core);
-        MessageQueue queue(lock);
+        MessageQueue<InputMessage> queue(lock);
 
-        for (int i = 0; i < MessageQueue::capacity(); i++)
+        for (int i = 0; i < MessageQueue<InputMessage>::capacity(); i++)
         {
             queue.enqueue(&message);
         }
 
-        for (int i = 0; i < MessageQueue::capacity(); i++)
+        for (int i = 0; i < MessageQueue<InputMessage>::capacity(); i++)
         {
             const InputMessage* dequeuedMessage = queue.dequeue();
             if (i == 0)
             {
                 ASSERT_EQ(true, dequeuedMessage != nullptr, "Dequeued first: true");
-                ASSERT_EQ(MessageQueue::capacity() - 1, queue.size(), "Dequeued first: size == capacity-1");
+                ASSERT_EQ(MessageQueue<InputMessage>::capacity() - 1, queue.size(), "Dequeued first: size == capacity-1");
                 ASSERT_EQ(false, queue.isEmpty(), "Dequeued first: non-empty");
                 ASSERT_EQ(false, queue.isFull(), "Dequeued first: not-filled");
-            } else if (i == MessageQueue::capacity() - 1)
+            } else if (i == MessageQueue<InputMessage>::capacity() - 1)
             {
                 ASSERT_EQ(true, dequeuedMessage != nullptr, "Dequeued last: true");
                 ASSERT_EQ(0, queue.size(), "Dequeued last: size == 0");

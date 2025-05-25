@@ -6,6 +6,12 @@
 #define DUMMY_MOCKS_H
 
 #include "../source/mimi/icore.h"
+#include "../source/mimi/ilanguage_controller.h"
+#include "../source/mimi/iqueue_controller.h"
+#include "../source/mimi/iheadlights_controller.h"
+#include "../source/mimi/imotors_controller.h"
+#include "../source/mimi/idisplay_controller.h"
+#include "../source/mimi/icom_controller.h"
 
 namespace mimi::tests
 {

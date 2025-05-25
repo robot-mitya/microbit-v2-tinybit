@@ -5,6 +5,9 @@
 #include <cstring>
 #include "icontroller.h"
 // ReSharper disable once CppUnusedIncludeDirective
+#include "messages.h"
+#include "string_utils.h"
+
 #include <cstdlib>
 #include <functional>
 
@@ -48,23 +51,12 @@ public:
     }
 
     /**
-     * Performs a binary search and creates a Message object
-     * based on the provided mnemonic. Returns nullptr if not found.
+     * 1. Extracts mnemonic.
+     * 2. Performs a binary search and creates a Message object
+     *    based on the provided mnemonic. Returns nullptr if not found.
+     * 3. Parses the message and returns it.
      */
-    InputMessage* createMessage(const char* mnemonic) const {
-        int left = 0, right = commandCount - 1;
-        while (initialized && left <= right) {
-            const int mid = (left + right) / 2;
-            const int cmp = strcmp(mnemonic, commandTable[mid].mnemonic);
-            if (cmp == 0)
-                return commandTable[mid].createFunc();
-            if (cmp < 0)
-                right = mid - 1;
-            else
-                left = mid + 1;
-        }
-        return nullptr;
-    }
+    InputMessage* createMessage(const char* line, int& status) const;
 };
 
 } // namespace mimi

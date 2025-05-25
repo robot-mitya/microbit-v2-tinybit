@@ -16,6 +16,10 @@ namespace mimi::microbit::tinybit
         {
             core.getHeadlightsController().turnOn(red, green, blue);
         }
+
+        Message* clone() const override {
+            return new HeadlightsMessage(*this);
+        }
     };
 
     class DriveMotorsMessage final : public mimi::DriveMotorsMessage
@@ -26,6 +30,10 @@ namespace mimi::microbit::tinybit
         void execute() const override
         {
             core.getMotorsController().runMotors(speedLeft, speedRight);
+        }
+
+        Message* clone() const override {
+            return new DriveMotorsMessage(*this);
         }
     };
 
@@ -38,6 +46,10 @@ namespace mimi::microbit::tinybit
         {
             core.getDisplayController().startAnimationAsync(animationType);
         }
+
+        Message* clone() const override {
+            return new ShowAnimationMessage(*this);
+        }
     };
 
     class PrintTextMessage final : public mimi::PrintTextMessage
@@ -49,6 +61,10 @@ namespace mimi::microbit::tinybit
         {
             core.getDisplayController().stopAnimation();
             core.getDisplayController().print(text);
+        }
+
+        Message* clone() const override {
+            return new PrintTextMessage(*this);
         }
     };
 

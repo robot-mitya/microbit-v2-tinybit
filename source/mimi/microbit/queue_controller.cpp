@@ -1,21 +1,36 @@
 #include "queue_controller.h"
 #include "CodalFiber.h"
-#include "../messages.h""
+#include "Tests.h"
+#include "../messages.h"
+#include "../constants.h"
 
 using namespace mimi::microbit;
 
 QueueController *QueueController::instance = nullptr;
+
+static char outputBuffer[mimi::language::MAX_LINE_LENGTH + 1];
 
 void QueueController::fiberRunner()
 {
     if (!instance) return;
     while (instance->running)
     {
-        InputMessage* inputMessage = instance->inputQueue.dequeue();
+        const InputMessage* inputMessage = instance->inputQueue.dequeue();
         if (inputMessage != nullptr)
+        {
             inputMessage->execute();
+            delete inputMessage;
+        }
 
-        codal::fiber_sleep(1);
+        // const OutputMessage* outputMessage = instance->outputQueue.dequeue();
+        // if (outputMessage != nullptr)
+        // {
+        //     outputMessage->generate(outputBuffer, mimi::language::MAX_LINE_LENGTH);
+        //     instance->core.getUsbComController().
+        //     delete outputMessage;
+        // }
+
+        fiber_sleep(1);
     }
 }
 
@@ -29,7 +44,7 @@ void QueueController::start()
 {
     if (running) return;
     running = true;
-    codal::create_fiber(fiberRunner);
+    create_fiber(fiberRunner);
 }
 
 void QueueController::stop()

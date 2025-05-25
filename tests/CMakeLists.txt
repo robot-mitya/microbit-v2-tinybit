@@ -4,7 +4,10 @@ project(mimi_tests)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_executable(tests main.cpp)
+add_executable(tests
+    main.cpp
+    ../source/mimi/ilanguage_controller.cpp
+)
 
 target_include_directories(tests PRIVATE ../source)
 

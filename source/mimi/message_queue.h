@@ -4,80 +4,99 @@
 namespace mimi
 {
 
-    class ILock
+class ILock
+{
+public:
+    virtual void wait() = 0;
+    virtual void notify() = 0;
+    virtual ~ILock() = default;
+};
+
+class Message;
+
+template<typename T>
+class MessageQueue
+{
+    static constexpr int Capacity = 64;
+    T* buffer[Capacity] = {nullptr};
+    int head = 0;
+    int tail = 0;
+    int count = 0;
+    ILock& lock;
+
+public:
+    static_assert(std::is_base_of<Message, T>::value, "T must inherit from Message");
+
+    explicit MessageQueue(ILock& lockRef) : lock(lockRef) {}
+
+    bool isEmpty() const
     {
-    public:
-        virtual void wait() = 0;
-        virtual void notify() = 0;
-        virtual ~ILock() = default;
-    };
+        lock.wait();
+        const bool result = count == 0;
+        lock.notify();
+        return result;
+    }
 
-    class InputMessage;
+    bool isFull() const
+    {
+        lock.wait();
+        const bool result = count == Capacity;
+        lock.notify();
+        return result;
+    }
 
-    class MessageQueue {
-        static constexpr int Capacity = 64;
-        InputMessage* buffer[Capacity] = {nullptr};
-        int head = 0;
-        int tail = 0;
-        int count = 0;
-        ILock& lock;
+    int size() const
+    {
+        lock.wait();
+        const int result = count;
+        lock.notify();
+        return result;
+    }
 
-    public:
-        explicit MessageQueue(ILock& lockRef) : lock(lockRef) {}
+    static int capacity() { return Capacity; }
 
-        bool isEmpty() const
+    bool enqueue(T* msg)
+    {
+        lock.wait();
+        if (count == Capacity) {
+            lock.notify();
+            return false;
+        }
+        buffer[tail] = static_cast<T*>(msg->clone());
+        tail = (tail + 1) % Capacity;
+        count++;
+        lock.notify();
+        return true;
+    }
+
+    T* dequeue()
+    {
+        lock.wait();
+        if (count == 0)
         {
-            lock.wait();
-            const bool result = count == 0;
             lock.notify();
-            return result;
+            return nullptr;
         }
+        T* msg = buffer[head];
+        buffer[head] = nullptr;
+        head = (head + 1) % Capacity;
+        count--;
+        lock.notify();
+        return msg;
+    }
 
-        bool isFull() const
-        {
-            lock.wait();
-            const bool result = count == Capacity;
-            lock.notify();
-            return result;
+    void clear()
+    {
+        lock.wait();
+        for (T* & i : buffer) {
+            i = nullptr;
         }
-
-        int size() const
-        {
-            lock.wait();
-            const int result = count;
-            lock.notify();
-            return result;
-        }
-
-        static int capacity() { return Capacity; }
-
-        bool enqueue(InputMessage* msg) {
-            lock.wait();
-            if (count == Capacity) {
-                lock.notify();
-                return false;
-            }
-            buffer[tail] = msg;
-            tail = (tail + 1) % Capacity;
-            count++;
-            lock.notify();
-            return true;
-        }
-
-        InputMessage* dequeue() {
-            lock.wait();
-            if (count == 0) {
-                lock.notify();
-                return nullptr;
-            }
-            InputMessage* msg = buffer[head];
-            buffer[head] = nullptr;
-            head = (head + 1) % Capacity;
-            count--;
-            lock.notify();
-            return msg;
-        }
-    };
+        head = 0;
+        tail = 0;
+        count = 0;
+        lock.notify();
+    }
+};
 
 } // namespace mimi
 

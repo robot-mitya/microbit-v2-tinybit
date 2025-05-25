@@ -5,6 +5,14 @@ namespace mimi
 {
     namespace language
     {
+        constexpr int CONTROLLER_ID_LANGUAGE   = 1010;
+        constexpr int CONTROLLER_ID_QUEUE      = 1020;
+        constexpr int CONTROLLER_ID_HEADLIGHTS = 1030;
+        constexpr int CONTROLLER_ID_MOTORS     = 1040;
+        constexpr int CONTROLLER_ID_DISPLAY    = 1050;
+        constexpr int CONTROLLER_ID_USB_COM    = 1060;
+        constexpr int CONTROLLER_ID_BLUETOOTH  = 1070;
+
         constexpr int MAX_LINE_LENGTH = 80;
         constexpr int MAX_MNEMONIC_LENGTH = 80;
         constexpr int MAX_ARGUMENT_LENGTH = 80;

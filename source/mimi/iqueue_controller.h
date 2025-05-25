@@ -11,14 +11,14 @@ class IQueueController : public IController
 {
 protected:
     ILock& lock;
-    MessageQueue inputQueue;
-    MessageQueue outputQueue;
+    MessageQueue<InputMessage> inputQueue;
+    MessageQueue<OutputMessage> outputQueue;
 public:
     explicit IQueueController(ICore& core, ILock& lock) // NOLINT(*-pro-type-member-init)
         : IController(core), lock(lock), inputQueue(lock), outputQueue(lock) {}
 
-    MessageQueue& getInputQueue() { return inputQueue; }
-    MessageQueue& getOutputQueue() { return outputQueue; }
+    MessageQueue<InputMessage>& getInputQueue() { return inputQueue; }
+    MessageQueue<OutputMessage>& getOutputQueue() { return outputQueue; }
 };
 
 } // namespace mimi

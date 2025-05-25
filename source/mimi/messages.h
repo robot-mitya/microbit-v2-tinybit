@@ -2,6 +2,7 @@
 #define MESSAGES_H
 
 #include "constants.h"
+#include "idisplay_controller.h"
 
 #include <cstring>
 #include "string_utils.h"
@@ -13,24 +14,27 @@ namespace mimi
 
 class ICore;
 
-class InputMessage
+class Message
+{
+public:
+    virtual ~Message() = default;
+    virtual Message* clone() const = 0;
+};
+
+class InputMessage : public Message
 {
 protected:
     ICore& core;
 public:
     explicit InputMessage(ICore& core) : core(core) {}
-    virtual ~InputMessage() = default;
     virtual int parse(const char* line, unsigned int argsStartPos) = 0;
     virtual void execute() const = 0;
 };
 
-class OutputMessage
+class OutputMessage : public Message
 {
-protected:
-    char text[language::MAX_LINE_LENGTH] = "\0";
 public:
-    virtual ~OutputMessage() = default;
-    const char *getText() const { return text; }
+    virtual void generate(char* buffer, unsigned long bufferSize) const = 0;
 };
 
 class HeadlightsMessage : public InputMessage
@@ -76,6 +80,12 @@ public:
 
         return language::PARSE_STATUS_OK;
     }
+
+    void execute() const override {}
+
+    Message* clone() const override {
+        return new HeadlightsMessage(*this);
+    }
 };
 
 class DriveMotorsMessage : public InputMessage
@@ -111,6 +121,12 @@ public:
 
         return language::PARSE_STATUS_OK;
     }
+
+    void execute() const override {}
+
+    Message* clone() const override {
+        return new DriveMotorsMessage(*this);
+    }
 };
 
 class ShowAnimationMessage : public InputMessage
@@ -120,7 +136,7 @@ public:
 
     explicit ShowAnimationMessage(ICore &core) : InputMessage(core) {}
 
-    int parse(const char *line, unsigned int argsStartPos) override
+    int parse(const char *line, const unsigned int argsStartPos) override
     {
         const unsigned int lineLen = strlen(line);
         char argument[language::MAX_ARGUMENT_LENGTH];
@@ -135,7 +151,13 @@ public:
         if (status < 0) return status;
 
         return language::PARSE_STATUS_OK;
- }
+    }
+
+    void execute() const override {}
+
+    Message* clone() const override {
+        return new ShowAnimationMessage(*this);
+    }
 };
 
 class PrintTextMessage : public InputMessage
@@ -145,7 +167,7 @@ public:
 
     explicit PrintTextMessage(ICore &core) : InputMessage(core) {}
 
-    int parse(const char *line, unsigned int argsStartPos) override
+    int parse(const char *line, const unsigned int argsStartPos) override
     {
         const unsigned int lineLen = strlen(line);
         bool isString;
@@ -155,33 +177,61 @@ public:
 
         return language::PARSE_STATUS_OK;
     }
-};
 
-class InfoMessage final : public OutputMessage
-{
-public:
-    explicit InfoMessage(const int controllerId, const int textId) : OutputMessage()
-    {
-        snprintf(text, sizeof(text), "info %d %d", controllerId, textId);
+    void execute() const override {}
+
+    Message* clone() const override {
+        return new PrintTextMessage(*this);
     }
 };
 
-class WarnMessage final : public OutputMessage
+class StatusMessage : public OutputMessage
 {
+    char* name;
+    const int controllerId;
+    const int textId;
+protected:
+    explicit StatusMessage(const char* name, const int controllerId, const int textId)
+        : OutputMessage(), name(strclone(name)), controllerId(controllerId), textId(textId) {}
+
+    StatusMessage(const StatusMessage& other)
+    : name(strclone(other.name)), controllerId(other.controllerId), textId(other.textId) {}
+
+    ~StatusMessage() override {
+        free(name);
+    }
+
 public:
-    explicit WarnMessage(const int controllerId, const int textId) : OutputMessage()
+    void generate(char *buffer, const unsigned long bufferSize) const override
     {
-        snprintf(text, sizeof(text), "warn %d %d", controllerId, textId);
+        snprintf(buffer, bufferSize, "%s %d %d", name, controllerId, textId);
+    }
+
+    Message* clone() const override
+    {
+        return new StatusMessage(*this);
     }
 };
 
-class ErrorMessage final : public OutputMessage
+class InfoMessage final : public StatusMessage
 {
 public:
-    explicit ErrorMessage(const int controllerId, const int textId) : OutputMessage()
-    {
-        snprintf(text, sizeof(text), "err %d %d", controllerId, textId);
-    }
+    explicit InfoMessage(const int controllerId, const int textId)
+        : StatusMessage("info", controllerId, textId) {}
+};
+
+class WarnMessage final : public StatusMessage
+{
+public:
+    explicit WarnMessage(const int controllerId, const int textId)
+        : StatusMessage("warn", controllerId, textId) {}
+};
+
+class ErrorMessage final : public StatusMessage
+{
+public:
+    explicit ErrorMessage(const int controllerId, const int textId)
+        : StatusMessage("err", controllerId, textId) {}
 };
 
 } // namespace mimi
