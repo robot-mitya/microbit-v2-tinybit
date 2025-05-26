@@ -51,7 +51,10 @@ void UsbComController::init()
 {
     instance = this;
     uBit.serial.setRxBufferSize(RxBufferSize);
-    uBit.serial.printf("UsbComController has been initialized\r\n");
+
+    InfoMessage infoMessage(language::CONTROLLER_ID_USB_COM, language::CONTROLLER_INIT_STATUS_OK);
+    infoMessage.generate(outputBuffer, language::MAX_LINE_LENGTH);
+    core.getQueueController().getOutputQueue().enqueue(&infoMessage);
 }
 
 

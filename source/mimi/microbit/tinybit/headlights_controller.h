@@ -23,7 +23,11 @@ namespace mimi::microbit::tinybit
             : IHeadlightsController(core), uBit(uBit), i2c(uBit.i2c) {}
 
         void init() override
-        {}
+        {
+            InfoMessage infoMessage(language::CONTROLLER_ID_HEADLIGHTS, language::CONTROLLER_INIT_STATUS_OK);
+            infoMessage.generate(outputBuffer, language::MAX_LINE_LENGTH);
+            core.getQueueController().getOutputQueue().enqueue(&infoMessage);
+        }
 
         void start() override
         {}

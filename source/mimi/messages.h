@@ -163,7 +163,7 @@ public:
 class PrintTextMessage : public InputMessage
 {
 public:
-    char text[language::MAX_ARGUMENT_LENGTH] = "\0";
+    char text[language::MAX_ARGUMENT_LENGTH + 1] = "\0";
 
     explicit PrintTextMessage(ICore &core) : InputMessage(core) {}
 

@@ -41,13 +41,16 @@ public:
     void init() override
     {
         ILanguageController::init();
-        // TODO DZZ Check status!
         if (commandsCounter != COMMANDS_COUNT) // NOLINT(*-branch-clone)
         {
-            // TODO DZZ Report status NOT-OK
+            ErrorMessage errorMessage(language::CONTROLLER_ID_LANGUAGE, language::CONTROLLER_INIT_STATUS_WRONG_COMMAND_COUNT);
+            errorMessage.generate(outputBuffer, language::MAX_LINE_LENGTH);
+            core.getQueueController().getOutputQueue().enqueue(&errorMessage);
             return;
         }
-        // TODO DZZ Report status OK
+        InfoMessage infoMessage(language::CONTROLLER_ID_LANGUAGE, language::CONTROLLER_INIT_STATUS_OK);
+        infoMessage.generate(outputBuffer, language::MAX_LINE_LENGTH);
+        core.getQueueController().getOutputQueue().enqueue(&infoMessage);
     }
 
     void start() override

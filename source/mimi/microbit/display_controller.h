@@ -31,7 +31,11 @@ namespace mimi::microbit
         }
 
         void init() override
-        {}
+        {
+            InfoMessage infoMessage(language::CONTROLLER_ID_DISPLAY, language::CONTROLLER_INIT_STATUS_OK);
+            infoMessage.generate(outputBuffer, language::MAX_LINE_LENGTH);
+            core.getQueueController().getOutputQueue().enqueue(&infoMessage);
+        }
 
         void start() override
         {}

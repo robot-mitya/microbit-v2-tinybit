@@ -13,6 +13,9 @@ namespace mimi
         constexpr int CONTROLLER_ID_USB_COM    = 1060;
         constexpr int CONTROLLER_ID_BLUETOOTH  = 1070;
 
+        constexpr int CONTROLLER_INIT_STATUS_OK = 0;
+        constexpr int CONTROLLER_INIT_STATUS_WRONG_COMMAND_COUNT = -1;
+
         constexpr int MAX_LINE_LENGTH = 80;
         constexpr int MAX_MNEMONIC_LENGTH = 80;
         constexpr int MAX_ARGUMENT_LENGTH = 80;

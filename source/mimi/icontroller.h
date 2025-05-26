@@ -1,6 +1,8 @@
 #ifndef ICONTROLLER_H
 #define ICONTROLLER_H
 
+#include "constants.h"
+
 namespace mimi
 {
 
@@ -10,6 +12,7 @@ class IController
 {
 protected:
     ICore& core;
+    char outputBuffer[language::MAX_LINE_LENGTH + 1] = "\0";
 public:
     explicit IController(ICore &core) : core(core) {}
     virtual ~IController() = default;
