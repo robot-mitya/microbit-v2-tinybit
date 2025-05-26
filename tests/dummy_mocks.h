@@ -87,14 +87,12 @@ public:
 
 class DummyUsbComController final : public IComController
 {
-protected:
-    // void processLine(const char*) const override {}
-    void reportStatus(int) const override {}
 public:
     explicit DummyUsbComController(ICore& core) : IComController(core) {}
     void init() override {}
     void start() override {}
     void stop() override {}
+    void sendLine(const char*) override {}
 };
 
 class DummyCore final : public ICore {

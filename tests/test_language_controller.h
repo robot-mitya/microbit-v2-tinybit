@@ -1,6 +1,7 @@
 #ifndef TEST_LANGUAGE_CONTROLLER_H
 #define TEST_LANGUAGE_CONTROLLER_H
 
+#include <ostream>
 #include "tests.h"
 #include "../source/mimi/ilanguage_controller.h"
 #include "../source/mimi/messages.h"

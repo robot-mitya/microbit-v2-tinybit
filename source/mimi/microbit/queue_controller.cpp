@@ -22,13 +22,13 @@ void QueueController::fiberRunner()
             delete inputMessage;
         }
 
-        // const OutputMessage* outputMessage = instance->outputQueue.dequeue();
-        // if (outputMessage != nullptr)
-        // {
-        //     outputMessage->generate(outputBuffer, mimi::language::MAX_LINE_LENGTH);
-        //     instance->core.getUsbComController().
-        //     delete outputMessage;
-        // }
+        const OutputMessage* outputMessage = instance->outputQueue.dequeue();
+        if (outputMessage != nullptr)
+        {
+            outputMessage->generate(outputBuffer, mimi::language::MAX_LINE_LENGTH);
+            instance->core.getUsbComController().sendLine(outputBuffer);
+            delete outputMessage;
+        }
 
         fiber_sleep(1);
     }

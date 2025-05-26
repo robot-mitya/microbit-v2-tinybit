@@ -204,7 +204,7 @@ protected:
 public:
     void generate(char *buffer, const unsigned long bufferSize) const override
     {
-        snprintf(buffer, bufferSize, "%s %d %d", name, controllerId, textId);
+        snprintf(buffer, bufferSize, "%s %d %d\r\n", name, controllerId, textId);
     }
 
     Message* clone() const override

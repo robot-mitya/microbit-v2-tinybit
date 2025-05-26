@@ -21,13 +21,13 @@ class UsbComController final : public IComController
     char lineBuffer[MaxLineLength + 1] = {};
 
     const char* readLine(int& status);
-    void reportStatus(int status) const override;
 
 public:
     explicit UsbComController(MicroBit& uBit, ICore &core) : IComController(core), uBit(uBit) {}
     void init() override;
     void start() override;
     void stop() override;
+    void sendLine(const char *line) override;
 };
 
 } // namespace mimi::microbit

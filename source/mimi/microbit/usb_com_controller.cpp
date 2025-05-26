@@ -31,14 +31,6 @@ const char *UsbComController::readLine(int& status)
     return lineBuffer;
 }
 
-void UsbComController::reportStatus(int status) const
-{
-    //TODO DZZ Generate error message and enqueue it to the output queue!
-    // if (status != language::PARSE_STATUS_OK)
-    uBit.serial.printf("Status: %d\r\n", status);
-}
-
-
 void UsbComController::fiberRunner()
 {
     if (!instance) return;
@@ -50,7 +42,6 @@ void UsbComController::fiberRunner()
             const char *line = instance->readLine(status);
             if (status == language::PARSE_STATUS_OK && strlen(line) > 0)
                 status = instance->processLine(line);
-            instance->reportStatus(status);
         }
         fiber_sleep(1);
     }
@@ -75,4 +66,9 @@ void UsbComController::start()
 void UsbComController::stop()
 {
     running = false;
+}
+
+void UsbComController::sendLine(const char *line)
+{
+    uBit.serial.printf(line);
 }
