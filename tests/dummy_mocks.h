@@ -92,7 +92,19 @@ public:
     void init() override {}
     void start() override {}
     void stop() override {}
+    void sendLine(const char *) override {}
+    int getControllerId() override { return language::CONTROLLER_ID_USB_COM; }
+};
+
+class DummyBtComController final : public IComController
+{
+public:
+    explicit DummyBtComController(ICore& core) : IComController(core) {}
+    void init() override {}
+    void start() override {}
+    void stop() override {}
     void sendLine(const char*) override {}
+    int getControllerId() override { return language::CONTROLLER_ID_BLUETOOTH; }
 };
 
 class DummyCore final : public ICore {
@@ -102,6 +114,7 @@ class DummyCore final : public ICore {
     DummyMotorsController dummyMotorsController;
     DummyDisplayController dummyDisplayController;
     DummyUsbComController dummyUsbComController;
+    DummyBtComController dummyBtComController;
 protected:
     void sendStatus(const char*, int, int) override {}
 public:
@@ -111,14 +124,16 @@ public:
         dummyHeadlightsController(*this),
         dummyMotorsController(*this),
         dummyDisplayController(*this),
-        dummyUsbComController(*this) {}
+        dummyUsbComController(*this),
+        dummyBtComController(*this) {}
 
     ILanguageController& getLanguageController() override { return dummyLanguageController; }
     IQueueController& getQueueController() override { return dummyQueueController; }
     IHeadlightsController& getHeadlightsController() override { return dummyHeadlightsController; }
     IMotorsController& getMotorsController() override { return dummyMotorsController; }
     IDisplayController& getDisplayController() override { return dummyDisplayController; }
-    IComController& getUsbComController() override { return dummyUsbComController; }
+    IComController &getUsbComController() override { return dummyUsbComController; }
+    IComController &getBtComController() override { return dummyBtComController; }
 };
 
 } // namespace mimi::tests

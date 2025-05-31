@@ -4,6 +4,7 @@
 #include "icore.h"
 #include "MicroBit.h"
 #include "../../imotors_controller.h"
+#include "../../constants.h"
 
 namespace mimi::microbit::tinybit
 {
@@ -20,17 +21,17 @@ public:
 
     void init() override
     {
-        core.sendInfo(language::CONTROLLER_ID_MOTORS, language::CONTROLLER_INIT_STATUS_OK);
+        core.sendInfo(getControllerId(), language::CONTROLLER_INIT_STATUS_OK);
     }
 
     void start() override
     {
-        core.sendInfo(language::CONTROLLER_ID_MOTORS, language::CONTROLLER_START_STATUS_OK);
+        core.sendInfo(getControllerId(), language::CONTROLLER_START_STATUS_OK);
     }
 
     void stop() override
     {
-        core.sendInfo(language::CONTROLLER_ID_MOTORS, language::CONTROLLER_STOP_STATUS_OK);
+        core.sendInfo(getControllerId(), language::CONTROLLER_STOP_STATUS_OK);
     }
 
     void runMotors(int speedLeft, int speedRight) override

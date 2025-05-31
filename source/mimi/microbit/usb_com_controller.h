@@ -24,6 +24,8 @@ class UsbComController final : public IComController
 
 public:
     explicit UsbComController(MicroBit& uBit, ICore &core) : IComController(core), uBit(uBit) {}
+    int getControllerId() override { return language::CONTROLLER_ID_USB_COM; }
+
     void init() override;
     void start() override;
     void stop() override;

@@ -3,6 +3,7 @@
 
 #include "../../ilanguage_controller.h"
 #include "messages.h"
+#include "../../constants.h"
 
 #include <stdexcept>
 
@@ -43,20 +44,20 @@ public:
         ILanguageController::init();
         if (commandsCounter != COMMANDS_COUNT) // NOLINT(*-branch-clone)
         {
-            core.sendError(language::CONTROLLER_ID_LANGUAGE, language::LANGUAGE_CONTROLLER_INIT_STATUS_WRONG_COMMAND_COUNT);
+            core.sendError(getControllerId(), language::LANGUAGE_CONTROLLER_INIT_STATUS_WRONG_COMMAND_COUNT);
             return;
         }
-        core.sendInfo(language::CONTROLLER_ID_LANGUAGE, language::CONTROLLER_INIT_STATUS_OK);
+        core.sendInfo(getControllerId(), language::CONTROLLER_INIT_STATUS_OK);
     }
 
     void start() override
     {
-        core.sendInfo(language::CONTROLLER_ID_LANGUAGE, language::CONTROLLER_START_STATUS_OK);
+        core.sendInfo(getControllerId(), language::CONTROLLER_START_STATUS_OK);
     }
 
     void stop() override
     {
-        core.sendInfo(language::CONTROLLER_ID_LANGUAGE, language::CONTROLLER_STOP_STATUS_OK);
+        core.sendInfo(getControllerId(), language::CONTROLLER_STOP_STATUS_OK);
     }
 };
 

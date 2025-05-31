@@ -1,7 +1,6 @@
 #include "usb_com_controller.h"
 
 #include <cstring>
-#include "../constants.h"
 
 using namespace mimi::microbit;
 
@@ -52,7 +51,7 @@ void UsbComController::init()
     instance = this;
     uBit.serial.setRxBufferSize(RxBufferSize);
 
-    core.sendInfo(language::CONTROLLER_ID_USB_COM, language::CONTROLLER_INIT_STATUS_OK);
+    core.sendInfo(getControllerId(), language::CONTROLLER_INIT_STATUS_OK);
 }
 
 
@@ -61,14 +60,13 @@ void UsbComController::start()
     if (running) return;
     running = true;
     create_fiber(fiberRunner);
-    uBit.serial.printf("UsbComController has been started\r\n");
-    core.sendInfo(language::CONTROLLER_ID_USB_COM, language::CONTROLLER_START_STATUS_OK);
+    core.sendInfo(getControllerId(), language::CONTROLLER_START_STATUS_OK);
 }
 
 void UsbComController::stop()
 {
     running = false;
-    core.sendInfo(language::CONTROLLER_ID_USB_COM, language::CONTROLLER_STOP_STATUS_OK);
+    core.sendInfo(getControllerId(), language::CONTROLLER_STOP_STATUS_OK);
 }
 
 void UsbComController::sendLine(const char *line)

@@ -16,6 +16,7 @@ protected:
 public:
     explicit IController(ICore &core) : core(core) {}
     virtual ~IController() = default;
+    virtual int getControllerId() = 0;
     virtual void init() = 0;
     virtual void start() = 0;
     virtual void stop() = 0;

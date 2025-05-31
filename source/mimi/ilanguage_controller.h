@@ -7,6 +7,7 @@
 // ReSharper disable once CppUnusedIncludeDirective
 #include "messages.h"
 #include "string_utils.h"
+#include "constants.h"
 
 #include <cstdlib>
 #include <functional>
@@ -39,6 +40,8 @@ protected:
     }
 
 public:
+    int getControllerId() override { return language::CONTROLLER_ID_LANGUAGE; }
+
     /**
      * Call this before using createMessage().
      * Sorts the command table lexicographically by mnemonic.

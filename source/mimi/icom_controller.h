@@ -3,6 +3,7 @@
 
 #include "icontroller.h"
 #include "ilanguage_controller.h"
+#include "constants.h"
 
 namespace mimi
 {
@@ -10,6 +11,10 @@ namespace mimi
 class IComController : public IController
 {
 protected:
+    static constexpr int MaxLineLength = language::MAX_LINE_LENGTH;
+    static constexpr int RxBufferSize = MaxLineLength;
+    char lineBuffer[MaxLineLength + 1] = {};
+
     int processLine(const char *line) const;
 public:
     explicit IComController(ICore &core) : IController(core) {}

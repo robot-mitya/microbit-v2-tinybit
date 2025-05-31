@@ -3,6 +3,7 @@
 
 #include "iframe_animation.h"
 #include "icontroller.h"
+#include "constants.h"
 
 namespace mimi
 {
@@ -27,6 +28,8 @@ class IDisplayController : public IController
 {
 public:
     explicit IDisplayController(ICore &core) : IController(core) {}
+
+    int getControllerId() override { return language::CONTROLLER_ID_DISPLAY; }
 
     virtual void clear() = 0;
     virtual IFrameAnimation* startAnimationAsync(AnimationType animationType) = 0;

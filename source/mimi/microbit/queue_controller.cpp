@@ -23,7 +23,7 @@ void QueueController::fiberRunner()
         if (outputMessage != nullptr)
         {
             outputMessage->generate(instance->outputBuffer, language::MAX_LINE_LENGTH);
-            instance->core.getUsbComController().sendLine(instance->outputBuffer);
+            instance->core.getCurrentComController().sendLine(instance->outputBuffer);
             delete outputMessage;
         }
 
@@ -34,7 +34,7 @@ void QueueController::fiberRunner()
 void QueueController::init()
 {
     instance = this;
-    core.sendInfo(language::CONTROLLER_ID_QUEUE, language::CONTROLLER_INIT_STATUS_OK);
+    core.sendInfo(getControllerId(), language::CONTROLLER_INIT_STATUS_OK);
 }
 
 
@@ -43,11 +43,11 @@ void QueueController::start()
     if (running) return;
     running = true;
     codal::create_fiber(fiberRunner);
-    core.sendInfo(language::CONTROLLER_ID_QUEUE, language::CONTROLLER_START_STATUS_OK);
+    core.sendInfo(getControllerId(), language::CONTROLLER_START_STATUS_OK);
 }
 
 void QueueController::stop()
 {
     running = false;
-    core.sendInfo(language::CONTROLLER_ID_QUEUE, language::CONTROLLER_STOP_STATUS_OK);
+    core.sendInfo(getControllerId(), language::CONTROLLER_STOP_STATUS_OK);
 }

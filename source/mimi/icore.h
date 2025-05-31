@@ -11,10 +11,17 @@
 namespace mimi
 {
 
+    enum ComChannel {
+        USB = 0,
+        BLUETOOTH = 1
+    };
+
     class ICore
     {
-        static constexpr int CONTROLLERS_COUNT = 6;
-        IController* controllers[CONTROLLERS_COUNT] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+        static constexpr int CONTROLLERS_COUNT = 7;
+        IController* controllers[CONTROLLERS_COUNT] =
+            {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+        ComChannel comChannel = USB;
     protected:
         virtual void sendStatus(const char* messageName, int controllerId, int statusId) = 0;
     public:
@@ -28,16 +35,13 @@ namespace mimi
             controllers[3] = &getMotorsController();
             controllers[4] = &getDisplayController();
             controllers[5] = &getUsbComController();
+            controllers[6] = &getBtComController();
 
             for (IController* controller : controllers)
                 controller->init();
         }
 
-        virtual void start()
-        {
-            for (IController* controller : controllers)
-                controller->start();
-        }
+        virtual void start();
 
         virtual void stop()
         {
@@ -66,6 +70,12 @@ namespace mimi
         virtual IMotorsController& getMotorsController() = 0;
         virtual IDisplayController& getDisplayController() = 0;
         virtual IComController& getUsbComController() = 0;
+        virtual IComController& getBtComController() = 0;
+
+        IComController& getCurrentComController()
+        {
+            return comChannel == BLUETOOTH ? getBtComController() : getUsbComController();
+        }
     };
 
 } // namespace mimi

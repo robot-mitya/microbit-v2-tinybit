@@ -5,8 +5,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(tests
-    main.cpp
-    ../source/mimi/ilanguage_controller.cpp
+        main.cpp
+        ../source/mimi/icom_controller.cpp
+        ../source/mimi/ilanguage_controller.cpp
+        ../source/mimi/icore.cpp
 )
 
 target_include_directories(tests PRIVATE ../source)

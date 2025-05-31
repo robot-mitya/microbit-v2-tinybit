@@ -10,6 +10,7 @@
 #include "../queue_controller.h"
 #include "../display_controller.h"
 #include "../usb_com_controller.h"
+#include "../bt_com_controller.h"
 
 namespace mimi::microbit::tinybit
 {
@@ -24,6 +25,7 @@ namespace mimi::microbit::tinybit
         MotorsController motorsController;
         DisplayController displayController;
         UsbComController usbComController;
+        BtComController btComController;
     protected:
         void sendStatus(const char* messageName, int controllerId, int statusId) override;
     public:
@@ -35,7 +37,8 @@ namespace mimi::microbit::tinybit
             headlightsController(uBit, *this),
             motorsController(uBit, *this),
             displayController(uBit, *this),
-            usbComController(uBit, *this) {}
+            usbComController(uBit, *this),
+            btComController(uBit, *this) {}
 
         MicroBit& getMicroBit()
         {
@@ -70,6 +73,11 @@ namespace mimi::microbit::tinybit
         IComController& getUsbComController() override
         {
             return usbComController;
+        }
+
+        IComController& getBtComController() override
+        {
+            return btComController;
         }
 
         void init() override

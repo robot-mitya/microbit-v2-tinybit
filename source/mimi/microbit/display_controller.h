@@ -3,6 +3,7 @@
 
 #include "icore.h"
 #include "MicroBit.h"
+#include "../constants.h"
 #include "../idisplay_controller.h"
 #include "animations/yes_animation.h"
 #include "animations/no_animation.h"
@@ -32,17 +33,17 @@ namespace mimi::microbit
 
         void init() override
         {
-            core.sendInfo(language::CONTROLLER_ID_DISPLAY, language::CONTROLLER_INIT_STATUS_OK);
+            core.sendInfo(getControllerId(), language::CONTROLLER_INIT_STATUS_OK);
         }
 
         void start() override
         {
-            core.sendInfo(language::CONTROLLER_ID_DISPLAY, language::CONTROLLER_START_STATUS_OK);
+            core.sendInfo(getControllerId(), language::CONTROLLER_START_STATUS_OK);
         }
 
         void stop() override
         {
-            core.sendInfo(language::CONTROLLER_ID_DISPLAY, language::CONTROLLER_STOP_STATUS_OK);
+            core.sendInfo(getControllerId(), language::CONTROLLER_STOP_STATUS_OK);
         }
 
         void clear() override
