@@ -2,12 +2,12 @@
 #define CORE_H
 
 #include "../../icore.h"
-#include "MicroBit.h"
+#include "../../../codal-microbit-v2/model/MicroBit.h"
 #include "../fiber_lock.h"
 #include "language_controller.h"
 #include "headlights_controller.h"
 #include "motors_controller.h"
-#include "queue_controller.h"
+#include "../queue_controller.h"
 #include "../display_controller.h"
 #include "../usb_com_controller.h"
 
@@ -24,6 +24,8 @@ namespace mimi::microbit::tinybit
         MotorsController motorsController;
         DisplayController displayController;
         UsbComController usbComController;
+    protected:
+        void sendStatus(const char* messageName, int controllerId, int statusId) override;
     public:
         Core() : // NOLINT(*-pro-type-member-init, *-use-equals-default)
             // ReSharper disable once CppRedundantMemberInitializer

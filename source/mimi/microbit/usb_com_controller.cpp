@@ -52,9 +52,7 @@ void UsbComController::init()
     instance = this;
     uBit.serial.setRxBufferSize(RxBufferSize);
 
-    InfoMessage infoMessage(language::CONTROLLER_ID_USB_COM, language::CONTROLLER_INIT_STATUS_OK);
-    infoMessage.generate(outputBuffer, language::MAX_LINE_LENGTH);
-    core.getQueueController().getOutputQueue().enqueue(&infoMessage);
+    core.sendInfo(language::CONTROLLER_ID_USB_COM, language::CONTROLLER_INIT_STATUS_OK);
 }
 
 
@@ -64,11 +62,13 @@ void UsbComController::start()
     running = true;
     create_fiber(fiberRunner);
     uBit.serial.printf("UsbComController has been started\r\n");
+    core.sendInfo(language::CONTROLLER_ID_USB_COM, language::CONTROLLER_START_STATUS_OK);
 }
 
 void UsbComController::stop()
 {
     running = false;
+    core.sendInfo(language::CONTROLLER_ID_USB_COM, language::CONTROLLER_STOP_STATUS_OK);
 }
 
 void UsbComController::sendLine(const char *line)

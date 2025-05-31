@@ -1,7 +1,6 @@
 #include "icom_controller.h"
 #include "icore.h"
 #include "ilanguage_controller.h"
-#include "string_utils.h"
 #include "messages.h"
 
 using namespace mimi;
@@ -17,8 +16,7 @@ int IComController::processLine(const char *line) const
     }
     else
     {
-        ErrorMessage errorMessage(language::CONTROLLER_ID_LANGUAGE, status);
-        core.getQueueController().getOutputQueue().enqueue(&errorMessage);
+        core.sendError(language::CONTROLLER_ID_LANGUAGE, status);
     }
 
     return status;

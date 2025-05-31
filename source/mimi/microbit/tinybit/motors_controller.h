@@ -20,16 +20,18 @@ public:
 
     void init() override
     {
-        InfoMessage infoMessage(language::CONTROLLER_ID_MOTORS, language::CONTROLLER_INIT_STATUS_OK);
-        infoMessage.generate(outputBuffer, language::MAX_LINE_LENGTH);
-        core.getQueueController().getOutputQueue().enqueue(&infoMessage);
+        core.sendInfo(language::CONTROLLER_ID_MOTORS, language::CONTROLLER_INIT_STATUS_OK);
     }
 
     void start() override
-    {}
+    {
+        core.sendInfo(language::CONTROLLER_ID_MOTORS, language::CONTROLLER_START_STATUS_OK);
+    }
 
     void stop() override
-    {}
+    {
+        core.sendInfo(language::CONTROLLER_ID_MOTORS, language::CONTROLLER_STOP_STATUS_OK);
+    }
 
     void runMotors(int speedLeft, int speedRight) override
     {

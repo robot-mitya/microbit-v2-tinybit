@@ -34,9 +34,7 @@ void QueueController::fiberRunner()
 void QueueController::init()
 {
     instance = this;
-    InfoMessage infoMessage(language::CONTROLLER_ID_QUEUE, language::CONTROLLER_INIT_STATUS_OK);
-    infoMessage.generate(outputBuffer, language::MAX_LINE_LENGTH);
-    core.getQueueController().getOutputQueue().enqueue(&infoMessage);
+    core.sendInfo(language::CONTROLLER_ID_QUEUE, language::CONTROLLER_INIT_STATUS_OK);
 }
 
 
@@ -45,9 +43,11 @@ void QueueController::start()
     if (running) return;
     running = true;
     codal::create_fiber(fiberRunner);
+    core.sendInfo(language::CONTROLLER_ID_QUEUE, language::CONTROLLER_START_STATUS_OK);
 }
 
 void QueueController::stop()
 {
     running = false;
+    core.sendInfo(language::CONTROLLER_ID_QUEUE, language::CONTROLLER_STOP_STATUS_OK);
 }

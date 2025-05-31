@@ -15,6 +15,8 @@ namespace mimi
     {
         static constexpr int CONTROLLERS_COUNT = 6;
         IController* controllers[CONTROLLERS_COUNT] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+    protected:
+        virtual void sendStatus(const char* messageName, int controllerId, int statusId) = 0;
     public:
         virtual ~ICore() = default;
 
@@ -41,6 +43,21 @@ namespace mimi
         {
             for (IController* controller : controllers)
                 controller->stop();
+        }
+
+        void sendInfo(int controllerId, int statusId)
+        {
+            sendStatus("info", controllerId, statusId);
+        }
+
+        void sendWarn(int controllerId, int statusId)
+        {
+            sendStatus("warn", controllerId, statusId);
+        }
+
+        void sendError(int controllerId, int statusId)
+        {
+            sendStatus("err", controllerId, statusId);
         }
 
         virtual ILanguageController& getLanguageController() = 0;

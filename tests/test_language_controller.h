@@ -1,11 +1,11 @@
 #ifndef TEST_LANGUAGE_CONTROLLER_H
 #define TEST_LANGUAGE_CONTROLLER_H
 
-#include <ostream>
 #include "tests.h"
 #include "../source/mimi/ilanguage_controller.h"
 #include "../source/mimi/messages.h"
 #include "dummy_mocks.h"
+#include <iostream>
 
 namespace mimi::tests::language_controller
 {
@@ -78,6 +78,8 @@ class FakeCore final : public ICore {
     DummyMotorsController dummyMotorsController;
     DummyDisplayController dummyDisplayController;
     DummyUsbComController dummyUsbComController;
+protected:
+    void sendStatus(const char*, int, int) override {}
 public:
     FakeCore() :
         fakeLanguageController(*this),

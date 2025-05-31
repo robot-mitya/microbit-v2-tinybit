@@ -43,21 +43,21 @@ public:
         ILanguageController::init();
         if (commandsCounter != COMMANDS_COUNT) // NOLINT(*-branch-clone)
         {
-            ErrorMessage errorMessage(language::CONTROLLER_ID_LANGUAGE, language::CONTROLLER_INIT_STATUS_WRONG_COMMAND_COUNT);
-            errorMessage.generate(outputBuffer, language::MAX_LINE_LENGTH);
-            core.getQueueController().getOutputQueue().enqueue(&errorMessage);
+            core.sendError(language::CONTROLLER_ID_LANGUAGE, language::LANGUAGE_CONTROLLER_INIT_STATUS_WRONG_COMMAND_COUNT);
             return;
         }
-        InfoMessage infoMessage(language::CONTROLLER_ID_LANGUAGE, language::CONTROLLER_INIT_STATUS_OK);
-        infoMessage.generate(outputBuffer, language::MAX_LINE_LENGTH);
-        core.getQueueController().getOutputQueue().enqueue(&infoMessage);
+        core.sendInfo(language::CONTROLLER_ID_LANGUAGE, language::CONTROLLER_INIT_STATUS_OK);
     }
 
     void start() override
-    {}
+    {
+        core.sendInfo(language::CONTROLLER_ID_LANGUAGE, language::CONTROLLER_START_STATUS_OK);
+    }
 
     void stop() override
-    {}
+    {
+        core.sendInfo(language::CONTROLLER_ID_LANGUAGE, language::CONTROLLER_STOP_STATUS_OK);
+    }
 };
 
 } // namespace mimi::microbit::tinybit

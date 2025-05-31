@@ -102,6 +102,8 @@ class DummyCore final : public ICore {
     DummyMotorsController dummyMotorsController;
     DummyDisplayController dummyDisplayController;
     DummyUsbComController dummyUsbComController;
+protected:
+    void sendStatus(const char*, int, int) override {}
 public:
     DummyCore() :
         dummyLanguageController(*this),

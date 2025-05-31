@@ -190,7 +190,7 @@ class StatusMessage : public OutputMessage
     char* name;
     const int controllerId;
     const int textId;
-protected:
+public:
     explicit StatusMessage(const char* name, const int controllerId, const int textId)
         : OutputMessage(), name(strclone(name)), controllerId(controllerId), textId(textId) {}
 
@@ -201,7 +201,6 @@ protected:
         free(name);
     }
 
-public:
     void generate(char *buffer, const unsigned long bufferSize) const override
     {
         snprintf(buffer, bufferSize, "%s %d %d\r\n", name, controllerId, textId);
@@ -211,27 +210,6 @@ public:
     {
         return new StatusMessage(*this);
     }
-};
-
-class InfoMessage final : public StatusMessage
-{
-public:
-    explicit InfoMessage(const int controllerId, const int textId)
-        : StatusMessage("info", controllerId, textId) {}
-};
-
-class WarnMessage final : public StatusMessage
-{
-public:
-    explicit WarnMessage(const int controllerId, const int textId)
-        : StatusMessage("warn", controllerId, textId) {}
-};
-
-class ErrorMessage final : public StatusMessage
-{
-public:
-    explicit ErrorMessage(const int controllerId, const int textId)
-        : StatusMessage("err", controllerId, textId) {}
 };
 
 } // namespace mimi

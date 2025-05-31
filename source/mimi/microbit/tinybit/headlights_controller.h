@@ -24,16 +24,18 @@ namespace mimi::microbit::tinybit
 
         void init() override
         {
-            InfoMessage infoMessage(language::CONTROLLER_ID_HEADLIGHTS, language::CONTROLLER_INIT_STATUS_OK);
-            infoMessage.generate(outputBuffer, language::MAX_LINE_LENGTH);
-            core.getQueueController().getOutputQueue().enqueue(&infoMessage);
+            core.sendInfo(language::CONTROLLER_ID_HEADLIGHTS, language::CONTROLLER_INIT_STATUS_OK);
         }
 
         void start() override
-        {}
+        {
+            core.sendInfo(language::CONTROLLER_ID_HEADLIGHTS, language::CONTROLLER_START_STATUS_OK);
+        }
 
         void stop() override
-        {}
+        {
+            core.sendInfo(language::CONTROLLER_ID_HEADLIGHTS, language::CONTROLLER_STOP_STATUS_OK);
+        }
 
         void turnOn(const uint8_t red, const uint8_t green, const uint8_t blue) override
         {
