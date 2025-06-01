@@ -27,7 +27,21 @@ $ picocom -b 115200 --echo /dev/ttyACM0
 1. Чтобы передавать текстовые команды между micro:bit и ПК через Bluetooth,
 используется Nordic UART Service (NUS) поверх BLE.
 Этот сервис не отображается как обычный `/dev/ttyUSB*` и требует
-предварительного подключения с помощью утилиты ble-serial.
+предварительного подключения с помощью утилиты `ble-serial`.
+
+Установка `ble-serial`:
+
+```bash
+$ pip install ble-serial
+```
+
+Удобно устанавливать в виртуальном окружении:
+
+```bash
+$ cd <...>
+$ python3 -m venv venv
+$ source venv/bin/activate
+```
 
 ```bash
 $ ble-serial \
@@ -58,7 +72,7 @@ $ picocom --echo /tmp/ttyBLE
 ```
 
 `--echo`&nbsp;— позволяет видеть свой ввод.\
-`/tmp/ttyBLE`&nbsp;— путь к виртуальному порту, предоставленному ble-serial.
+`/tmp/ttyBLE`&nbsp;— путь к виртуальному порту, предоставленному `ble-serial`.
 
 ## BLE flags
 1. `"DEVICE_BLE": 1`\
