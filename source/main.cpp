@@ -52,12 +52,12 @@ int main()
 
     // uBit.serial.send("Started\r\n");
 
-    uBit.display.print("3");
-    uBit.sleep(500);
-    uBit.display.print("2");
-    uBit.sleep(500);
-    uBit.display.print("1");
-    uBit.sleep(500);
+    // uBit.display.print("3");
+    // uBit.sleep(500);
+    // uBit.display.print("2");
+    // uBit.sleep(500);
+    // uBit.display.print("1");
+    // uBit.sleep(500);
     core.getDisplayController().startAnimationAsync(SPINNER);
 
     uBit.messageBus.listen(MICROBIT_ID_LOGO, MICROBIT_BUTTON_EVT_CLICK, onLogoTouchHandler);

@@ -15,6 +15,7 @@ class BtComController final : public IComController
     static void fiberRunner();
 
     MicroBit& uBit;
+    MicroBitUARTService* uart = nullptr;
 
     const char* readLine(int& status);
 

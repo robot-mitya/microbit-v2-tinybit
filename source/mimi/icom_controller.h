@@ -13,6 +13,7 @@ class IComController : public IController
 protected:
     static constexpr int MaxLineLength = language::MAX_LINE_LENGTH;
     static constexpr int RxBufferSize = MaxLineLength;
+    static constexpr int TxBufferSize = MaxLineLength;
     char lineBuffer[MaxLineLength + 1] = {};
 
     int processLine(const char *line) const;
