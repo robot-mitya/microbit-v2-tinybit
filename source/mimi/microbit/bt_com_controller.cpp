@@ -51,6 +51,10 @@ void BtComController::init()
     instance = this;
     uBit.serial.setRxBufferSize(RxBufferSize);
 
+    uBit.serial.printf("DEBUG [BtComController] => MICROBIT_BLE_ENABLED=%d\r\n", MICROBIT_BLE_ENABLED);
+    uBit.serial.printf("DEBUG [BtComController] => MICROBIT_BLE_PAIRING_MODE=%d\r\n", MICROBIT_BLE_PAIRING_MODE);
+    uBit.serial.printf("DEBUG [BtComController] => MICROBIT_BLE_NORDIC_STYLE_UART=%d\r\n", MICROBIT_BLE_NORDIC_STYLE_UART);
+
     core.sendInfo(getControllerId(), language::CONTROLLER_INIT_STATUS_OK);
 }
 

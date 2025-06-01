@@ -1,3 +1,6 @@
+// ReSharper disable once CppUnusedIncludeDirective
+#include "mimi/microbit/device_info_provider.h"
+
 #include "MicroBit.h"
 #include "mimi/microbit/tinybit/core.h"
 

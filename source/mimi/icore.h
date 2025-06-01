@@ -21,7 +21,7 @@ namespace mimi
         static constexpr int CONTROLLERS_COUNT = 7;
         IController* controllers[CONTROLLERS_COUNT] =
             {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
-        ComChannel comChannel = USB;
+        ComChannel comChannel = BLUETOOTH;
     protected:
         virtual void sendStatus(const char* messageName, int controllerId, int statusId) = 0;
     public:
