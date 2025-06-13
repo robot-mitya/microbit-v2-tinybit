@@ -19,6 +19,7 @@ int main() {
     result |= string_utils::test_broken_quoted_argument();
     result |= string_utils::test_escaped_quote_inside_string();
     result |= string_utils::test_one_escaped_quote_inside_string();
+    result |= string_utils::test_many_arguments();
 
     result |= messages::test_hl_message_positive();
     result |= messages::test_hl_message_missing_all_args();
@@ -27,6 +28,7 @@ int main() {
     result |= messages::test_hl_message_wrong_arg_1();
     result |= messages::test_hl_message_wrong_arg_2();
     result |= messages::test_hl_message_wrong_arg_3();
+    result |= messages::test_hl_many_arguments();
 
     result |= messages::test_drv_message_positive();
     result |= messages::test_drv_message_missing_all_args();

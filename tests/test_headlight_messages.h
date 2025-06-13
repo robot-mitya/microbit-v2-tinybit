@@ -139,6 +139,25 @@ inline int test_hl_message_wrong_arg_3() {
     return 0;
 }
 
+inline int test_hl_many_arguments() {
+    const char* input = "hl 1 2 3 4 5 6 7 8 9 10";
+    const unsigned int len = std::strlen(input);
+    char lexeme[32];
+    bool isString;
+
+    const unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
+    ASSERT_EQ(std::string("hl"), std::string(lexeme), "Extract hl mnemonic");
+    DummyCore dummyCore;
+    HeadlightsMockMessage message(dummyCore);
+    const int status = message.parse(input, pos);
+    ASSERT_EQ(mimi::language::PARSE_STATUS_OK, status, "Parse status");
+    ASSERT_EQ(1, (int)message.red, "Red");
+    ASSERT_EQ(2, (int)message.green, "Green");
+    ASSERT_EQ(3, (int)message.blue, "Blue");
+
+    return 0;
+}
+
 } // namespace mimi::tests::messages
 
 #endif // TEST_HEADLIGHT_MESSAGES_H

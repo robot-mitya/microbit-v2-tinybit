@@ -134,6 +134,65 @@ namespace mimi::tests::string_utils
         return 0;
     }
 
+    inline int test_many_arguments() {
+        const char* input = R"(MSG 1 2 3 4 5 6 7 8 9)";
+        const unsigned int len = std::strlen(input);
+        char lexeme[64];
+        bool isString;
+
+        unsigned int pos = extractLexeme(0, len, input, lexeme, isString);
+        ASSERT_EQ(std::string("MSG"), std::string(lexeme), "Mnemonic MSG");
+
+        pos = extractLexeme(pos, len, input, lexeme, isString);
+        std::string arg = "1";
+        ASSERT_EQ(std::string(arg), std::string(lexeme), "Extract arg" + arg);
+        ASSERT_EQ(false, isString, "String is a number");
+
+        pos = extractLexeme(pos, len, input, lexeme, isString);
+        arg = "2";
+        ASSERT_EQ(std::string(arg), std::string(lexeme), "Extract arg" + arg);
+        ASSERT_EQ(false, isString, "String is a number");
+
+        pos = extractLexeme(pos, len, input, lexeme, isString);
+        arg = "3";
+        ASSERT_EQ(std::string(arg), std::string(lexeme), "Extract arg" + arg);
+        ASSERT_EQ(false, isString, "String is a number");
+
+        pos = extractLexeme(pos, len, input, lexeme, isString);
+        arg = "4";
+        ASSERT_EQ(std::string(arg), std::string(lexeme), "Extract arg" + arg);
+        ASSERT_EQ(false, isString, "String is a number");
+
+        pos = extractLexeme(pos, len, input, lexeme, isString);
+        arg = "5";
+        ASSERT_EQ(std::string(arg), std::string(lexeme), "Extract arg" + arg);
+        ASSERT_EQ(false, isString, "String is a number");
+
+        pos = extractLexeme(pos, len, input, lexeme, isString);
+        arg = "6";
+        ASSERT_EQ(std::string(arg), std::string(lexeme), "Extract arg" + arg);
+        ASSERT_EQ(false, isString, "String is a number");
+
+        pos = extractLexeme(pos, len, input, lexeme, isString);
+        arg = "7";
+        ASSERT_EQ(std::string(arg), std::string(lexeme), "Extract arg" + arg);
+        ASSERT_EQ(false, isString, "String is a number");
+
+        pos = extractLexeme(pos, len, input, lexeme, isString);
+        arg = "8";
+        ASSERT_EQ(std::string(arg), std::string(lexeme), "Extract arg" + arg);
+        ASSERT_EQ(false, isString, "String is a number");
+
+        pos = extractLexeme(pos, len, input, lexeme, isString);
+        arg = "9";
+        ASSERT_EQ(std::string(arg), std::string(lexeme), "Extract arg" + arg);
+        ASSERT_EQ(false, isString, "String is a number");
+
+        ASSERT_EQ(len, pos, "Position at the end");
+
+        return 0;
+    }
+
 } // namespace mimi::tests::string_utils
 
 #endif // TEST_STRING_UTILS_H
