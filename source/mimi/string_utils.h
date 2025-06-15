@@ -1,12 +1,13 @@
 #ifndef STRING_UTILS_H
 #define STRING_UTILS_H
 
+#include "ErrorNo.h"
 #include "constants.h"
 
 #include <cctype>
-#include <cinttypes>
 #include <cerrno>
-#include <cstdlib>
+#include <limits>
+#include <type_traits>
 
 namespace mimi
 {
@@ -15,7 +16,7 @@ inline char* strclone(const char* src)
 {
     if (!src) return nullptr;
     const size_t len = strlen(src);
-    auto copy = static_cast<char*>(malloc(len + 1));
+    const auto copy = static_cast<char*>(malloc(len + 1));
     if (copy) strcpy(copy, src);
     return copy;
 }
@@ -88,52 +89,99 @@ inline unsigned int extractLexeme(
     return pos;
 }
 
-inline uint8_t textToUint8(const char* text, const bool isString, int& status)
+template<typename T>
+typename std::enable_if<
+    std::is_integral<T>::value &&
+    (sizeof(T) == 1 || sizeof(T) == 2 || sizeof(T) == 4 || sizeof(T) == 8),
+    T
+>::type
+textToLimitedInt(const char* text, const bool isString, T minValue, T maxValue, int& status)
 {
     if (text[0] == '\0')
     {
         status = language::PARSE_STATUS_MISSING_ARGUMENT;
         return 0;
     }
+
     if (isString)
     {
         status = language::PARSE_STATUS_WRONG_ARGUMENT;
         return 0;
     }
-    char *end = nullptr;
+
+    char* end = nullptr;
     errno = 0;
-    const unsigned long value = strtoul(text, &end, 10);
-    if (*end == '\0' && value <= 255 && errno == 0)
+
+    using ParseType = typename std::conditional<
+        std::is_signed<T>::value,
+        long long,
+        unsigned long long
+    >::type;
+
+    ParseType value = std::is_signed<T>::value
+        ? static_cast<ParseType>(strtoll(text, &end, 10))
+        : static_cast<ParseType>(strtoull(text, &end, 10));
+
+    if (*end == '\0' && errno == 0 &&
+        static_cast<ParseType>(minValue) <= value &&
+        value <= static_cast<ParseType>(maxValue))
     {
         status = language::PARSE_STATUS_OK;
-        return static_cast<uint8_t>(value);
+        return static_cast<T>(value);
     }
+
     status = language::PARSE_STATUS_WRONG_ARGUMENT;
     return 0;
 }
 
-inline long textToLong(const char* text, const bool isString, long minValue, long maxValue, int& status)
+template<typename T>
+typename std::enable_if<
+    std::is_unsigned<T>::value &&
+    (sizeof(T) == 1 || sizeof(T) == 2 || sizeof(T) == 4 || sizeof(T) == 8),
+    T
+>::type
+textToUint(const char* text, const bool isString, int& status)
 {
-    if (text[0] == '\0')
-    {
-        status = language::PARSE_STATUS_MISSING_ARGUMENT;
-        return 0;
+    return textToLimitedInt<T>(text, isString, 0, std::numeric_limits<T>::max(), status);
+}
+
+template <typename T>
+typename std::enable_if<std::is_unsigned<T>::value &&
+                            (sizeof(T) == 1 || sizeof(T) == 2 || sizeof(T) == 4 || sizeof(T) == 8),
+                        T>::type
+textToInt(const char *text, const bool isString, int &status)
+{
+    return textToLimitedInt<T>(text, isString, std::numeric_limits<T>::min(),
+                               std::numeric_limits<T>::max(), status);
+}
+
+inline int utoa64(uint64_t value, char* buffer)
+{
+    if (!buffer)
+        return DEVICE_INVALID_PARAMETER;
+
+    char tmp[21];  // max 20 digits + '\0'
+    int i = 0;
+
+    // Handle zero explicitly
+    if (value == 0) {
+        buffer[0] = '0';
+        buffer[1] = '\0';
+        return DEVICE_OK;
     }
-    if (isString)
-    {
-        status = language::PARSE_STATUS_WRONG_ARGUMENT;
-        return 0;
+
+    // Convert digits in reverse order
+    while (value > 0 && i < 20) {
+        tmp[i++] = '0' + value % 10;
+        value /= 10;
     }
-    char *end = nullptr;
-    errno = 0;
-    const long value = strtol(text, &end, 10);
-    if (*end == '\0' && value >= minValue && value <= maxValue && errno == 0)
-    {
-        status = language::PARSE_STATUS_OK;
-        return value;
-    }
-    status = language::PARSE_STATUS_WRONG_ARGUMENT;
-    return 0;
+
+    // Reverse the result into buffer
+    for (int j = 0; j < i; ++j)
+        buffer[j] = tmp[i - j - 1];
+
+    buffer[i] = '\0';
+    return DEVICE_OK;
 }
 
 } // namespace mimi

@@ -12,7 +12,7 @@ namespace mimi::microbit::tinybit
 
 class LanguageController final : public ILanguageController
 {
-    static constexpr int COMMANDS_COUNT = 4;
+    static constexpr int COMMANDS_COUNT = 5;
     int commandsCounter;
     CommandEntry commandEntries[COMMANDS_COUNT];
 public:
@@ -20,6 +20,10 @@ public:
             : ILanguageController(core, commandEntries, COMMANDS_COUNT)
     {
         int index = 0;
+        commandEntries[index++] = {
+            "ping",
+            [this]() -> InputMessage* { return new mimi::PingMessage(this->core); }
+        };
         commandEntries[index++] = {
             "hl",
             [this]() -> InputMessage* { return new HeadlightsMessage(this->core); }

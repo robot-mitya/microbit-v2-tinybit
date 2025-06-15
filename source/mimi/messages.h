@@ -1,10 +1,12 @@
 #ifndef MESSAGES_H
 #define MESSAGES_H
 
+#include "CodalCompat.h"
 #include "constants.h"
 #include "idisplay_controller.h"
 
 #include <cstring>
+#include <cinttypes>
 #include "string_utils.h"
 
 #include <cstdio>
@@ -37,6 +39,16 @@ public:
     virtual void generate(char* buffer, unsigned long bufferSize) const = 0;
 };
 
+class PingMessage final : public InputMessage
+{
+public:
+    uint64_t time = 0;
+    explicit PingMessage(ICore& core) : InputMessage(core) {}
+    int parse(const char* line, unsigned int argsStartPos) override;
+    void execute() const override;
+    Message* clone() const override;
+};
+
 class HeadlightsMessage : public InputMessage
 {
 public:
@@ -61,7 +73,7 @@ public:
             blue = 0;
             return language::PARSE_STATUS_OK;
         }
-        red = textToUint8(argument, isString, status);
+        red = textToUint<uint8_t>(argument, isString, status);
         if (status < 0) return status;
 
         argsStartPos = extractLexeme(argsStartPos, lineLen, line, argument, isString);
@@ -71,11 +83,11 @@ public:
             blue = red;
             return language::PARSE_STATUS_OK;
         }
-        green = textToUint8(argument, isString, status);
+        green = textToUint<uint8_t>(argument, isString, status);
         if (status < 0) return status;
 
         extractLexeme(argsStartPos, lineLen, line, argument, isString);
-        blue = textToUint8(argument, isString, status);
+        blue = textToUint<uint8_t>(argument, isString, status);
         if (status < 0) return status;
 
         return language::PARSE_STATUS_OK;
@@ -110,13 +122,13 @@ public:
             speedRight = 0;
             return language::PARSE_STATUS_OK;
         }
-        speedLeft = static_cast<int>(textToLong(argument, isString, -255, 255, status));
+        speedLeft = static_cast<int>(textToLimitedInt<int16_t>(argument, isString, -255, 255, status));
         if (status < 0) return status;
 
         extractLexeme(argsStartPos, lineLen, line, argument, isString);
         speedRight = argument[0] == '\0'
             ? speedLeft
-            : static_cast<int>(textToLong(argument, isString, -255, 255, status));
+            : static_cast<int>(textToLimitedInt<int16_t>(argument, isString, -255, 255, status));
         if (status < 0) return status;
 
         return language::PARSE_STATUS_OK;
@@ -146,7 +158,7 @@ public:
         extractLexeme(argsStartPos, lineLen, line, argument, isString);
         animationType = argument[0] == '\0'
             ? UNDEFINED
-            : static_cast<AnimationType>(textToLong(
+            : static_cast<AnimationType>(textToLimitedInt<uint8_t>(
                 argument, isString, UNDEFINED, ANIMATION_TYPE_COUNT - 1, status));
         if (status < 0) return status;
 
@@ -185,7 +197,29 @@ public:
     }
 };
 
-class StatusMessage : public OutputMessage
+class PongMessage final : public OutputMessage
+{
+    const uint64_t time;
+public:
+    explicit PongMessage(const uint64_t time) : OutputMessage(), time(time) {}
+
+    PongMessage(const PongMessage& other)
+        : time(other.time) {}
+
+    void generate(char *buffer, const unsigned long bufferSize) const override
+    {
+        char numBuf[21]; // 20 digits + \0
+        utoa64(time, numBuf);
+        snprintf(buffer, bufferSize, "pong %s\r\n", numBuf);
+    }
+
+    Message* clone() const override
+    {
+        return new PongMessage(*this);
+    }
+};
+
+class StatusMessage final : public OutputMessage
 {
     char* name;
     const int controllerId;
