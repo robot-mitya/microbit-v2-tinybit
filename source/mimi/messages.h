@@ -39,14 +39,10 @@ public:
     virtual void generate(char* buffer, unsigned long bufferSize) const = 0;
 };
 
-class PingMessage final : public InputMessage
+class PingMessage : public InputMessage
 {
 public:
-    uint64_t time = 0;
-    explicit PingMessage(ICore& core) : InputMessage(core) {}
-    int parse(const char* line, unsigned int argsStartPos) override;
-    void execute() const override;
-    Message* clone() const override;
+    explicit PingMessage(ICore &core) : InputMessage(core) {}
 };
 
 class HeadlightsMessage : public InputMessage

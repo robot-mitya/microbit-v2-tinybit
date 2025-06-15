@@ -7,66 +7,76 @@
 namespace mimi::microbit::tinybit
 {
 
-    class HeadlightsMessage final : public mimi::HeadlightsMessage
+class PingMessage final : public mimi::PingMessage
+{
+public:
+    uint64_t time = 0;
+    explicit PingMessage(ICore& core) : mimi::PingMessage(core) {}
+    int parse(const char* line, unsigned int argsStartPos) override;
+    void execute() const override;
+    Message* clone() const override;
+};
+
+class HeadlightsMessage final : public mimi::HeadlightsMessage
+{
+public:
+    explicit HeadlightsMessage(ICore &core) : mimi::HeadlightsMessage(core) {}
+
+    void execute() const override
     {
-    public:
-        explicit HeadlightsMessage(ICore &core) : mimi::HeadlightsMessage(core) {}
+        core.getHeadlightsController().turnOn(red, green, blue);
+    }
 
-        void execute() const override
-        {
-            core.getHeadlightsController().turnOn(red, green, blue);
-        }
+    Message* clone() const override {
+        return new HeadlightsMessage(*this);
+    }
+};
 
-        Message* clone() const override {
-            return new HeadlightsMessage(*this);
-        }
-    };
+class DriveMotorsMessage final : public mimi::DriveMotorsMessage
+{
+public:
+    explicit DriveMotorsMessage(ICore &core) : mimi::DriveMotorsMessage(core) {}
 
-    class DriveMotorsMessage final : public mimi::DriveMotorsMessage
+    void execute() const override
     {
-    public:
-        explicit DriveMotorsMessage(ICore &core) : mimi::DriveMotorsMessage(core) {}
+        core.getMotorsController().runMotors(speedLeft, speedRight);
+    }
 
-        void execute() const override
-        {
-            core.getMotorsController().runMotors(speedLeft, speedRight);
-        }
+    Message* clone() const override {
+        return new DriveMotorsMessage(*this);
+    }
+};
 
-        Message* clone() const override {
-            return new DriveMotorsMessage(*this);
-        }
-    };
+class ShowAnimationMessage final : public mimi::ShowAnimationMessage
+{
+public:
+    explicit ShowAnimationMessage(ICore &core) : mimi::ShowAnimationMessage(core) {}
 
-    class ShowAnimationMessage final : public mimi::ShowAnimationMessage
+    void execute() const override
     {
-    public:
-        explicit ShowAnimationMessage(ICore &core) : mimi::ShowAnimationMessage(core) {}
+        core.getDisplayController().startAnimationAsync(animationType);
+    }
 
-        void execute() const override
-        {
-            core.getDisplayController().startAnimationAsync(animationType);
-        }
+    Message* clone() const override {
+        return new ShowAnimationMessage(*this);
+    }
+};
 
-        Message* clone() const override {
-            return new ShowAnimationMessage(*this);
-        }
-    };
+class PrintTextMessage final : public mimi::PrintTextMessage
+{
+public:
+    explicit PrintTextMessage(ICore &core) : mimi::PrintTextMessage(core) {}
 
-    class PrintTextMessage final : public mimi::PrintTextMessage
+    void execute() const override
     {
-    public:
-        explicit PrintTextMessage(ICore &core) : mimi::PrintTextMessage(core) {}
+        core.getDisplayController().stopAnimation();
+        core.getDisplayController().print(text);
+    }
 
-        void execute() const override
-        {
-            core.getDisplayController().stopAnimation();
-            core.getDisplayController().print(text);
-        }
-
-        Message* clone() const override {
-            return new PrintTextMessage(*this);
-        }
-    };
+    Message* clone() const override {
+        return new PrintTextMessage(*this);
+    }
+};
 
 } // namespace mimi
 

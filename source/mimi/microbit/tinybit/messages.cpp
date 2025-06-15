@@ -1,6 +1,6 @@
 #include "messages.h"
 
-using namespace mimi;
+using namespace mimi::microbit::tinybit;
 
 int PingMessage::parse(const char* line, const unsigned int argsStartPos)
 {
@@ -22,7 +22,7 @@ void PingMessage::execute() const
     core.getQueueController().getOutputQueue().enqueue(&pongMessage);
 }
 
-Message* PingMessage::clone() const
+mimi::Message* PingMessage::clone() const
 {
     return new PingMessage(*this);
 }

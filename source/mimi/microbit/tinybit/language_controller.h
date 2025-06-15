@@ -22,7 +22,7 @@ public:
         int index = 0;
         commandEntries[index++] = {
             "ping",
-            [this]() -> InputMessage* { return new mimi::PingMessage(this->core); }
+            [this]() -> InputMessage* { return new PingMessage(this->core); }
         };
         commandEntries[index++] = {
             "hl",
