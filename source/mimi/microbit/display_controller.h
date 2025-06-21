@@ -23,7 +23,7 @@ namespace mimi::microbit
     {
         MicroBit& uBit;
         IFrameAnimation* frameAnimation = nullptr;
-        AnimationType animationType = UNDEFINED;
+        AnimationType animationType = AnimationType::UNDEFINED;
     public:
         explicit DisplayController(MicroBit& uBit, ICore& core) : IDisplayController(core), uBit(uBit) {}
 
@@ -72,34 +72,34 @@ namespace mimi::microbit
 
             switch (animationType)
             {
-            case BLE:
+            case AnimationType::BLE:
                 frameAnimation = reinterpret_cast<IFrameAnimation *>(new BleAnimation(uBit));
                 break;
-            case YES:
+            case AnimationType::YES:
                 frameAnimation = reinterpret_cast<IFrameAnimation *>(new YesAnimation(uBit));
                 break;
-            case NO:
+            case AnimationType::NO:
                 frameAnimation = reinterpret_cast<IFrameAnimation *>(new NoAnimation(uBit));
                 break;
-            case HEART:
+            case AnimationType::HEART:
                 frameAnimation = reinterpret_cast<IFrameAnimation *>(new HeartAnimation(uBit));
                 break;
-            case SPINNER:
+            case AnimationType::SPINNER:
                 frameAnimation = reinterpret_cast<IFrameAnimation *>(new SpinnerAnimation(uBit));
                 break;
-            case NORMAL_FACE:
+            case AnimationType::NORMAL_FACE:
                 frameAnimation = reinterpret_cast<IFrameAnimation *>(new NormalFaceAnimation(uBit));
                 break;
-            case SMILE_FACE:
+            case AnimationType::SMILE_FACE:
                 frameAnimation = reinterpret_cast<IFrameAnimation *>(new SmileFaceAnimation(uBit));
                 break;
-            case SAD_FACE:
+            case AnimationType::SAD_FACE:
                 frameAnimation = reinterpret_cast<IFrameAnimation *>(new SadFaceAnimation(uBit));
                 break;
-            case ANGRY_FACE:
+            case AnimationType::ANGRY_FACE:
                 frameAnimation = reinterpret_cast<IFrameAnimation *>(new AngryFaceAnimation(uBit));
                 break;
-            case TALK_FACE:
+            case AnimationType::TALK_FACE:
                 frameAnimation = reinterpret_cast<IFrameAnimation *>(new TalkFaceAnimation(uBit));
                 break;
             default:

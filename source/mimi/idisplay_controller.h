@@ -8,7 +8,7 @@
 namespace mimi
 {
 
-typedef enum
+enum class AnimationType
 {
     UNDEFINED = 0,
     BLE,
@@ -23,7 +23,7 @@ typedef enum
     TALK_FACE,
 
     ANIMATION_TYPE_COUNT
-} AnimationType;
+};
 
 class IDisplayController : public IController
 {

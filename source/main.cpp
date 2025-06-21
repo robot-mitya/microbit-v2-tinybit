@@ -8,7 +8,7 @@ using namespace mimi;
 
 microbit::tinybit::Core core;
 MicroBit& uBit = core.getMicroBit();
-AnimationType animationType = UNDEFINED;
+auto animationType = AnimationType::UNDEFINED;
 
 const uint8_t headlightsColors[8][3] = {{0,0,0}, {255,0,0}, {0,255,0}, {0,0,255}, {255,255,0}, {0,255,255}, {255,0,255}, {255,255,255}};
 int headlightsColorIndex = 0;
@@ -18,9 +18,10 @@ static void onLogoTouchHandler(MicroBitEvent)
     IDisplayController& displayController = core.getDisplayController();
     displayController.stopAnimation();
 
-    constexpr int animationFirstIndex = UNDEFINED;
-    constexpr int animationsCount = ANIMATION_TYPE_COUNT - UNDEFINED;
-    animationType = static_cast<AnimationType>((animationType - animationFirstIndex + 1) % animationsCount);
+    constexpr int animationFirstIndex = static_cast<int>(AnimationType::UNDEFINED);
+    constexpr int animationsCount = static_cast<int>(AnimationType::ANIMATION_TYPE_COUNT) -
+        static_cast<int>(AnimationType::UNDEFINED);
+    animationType = static_cast<AnimationType>((static_cast<int>(animationType) - animationFirstIndex + 1) % animationsCount);
     
     displayController.startAnimationAsync(animationType);
 }
@@ -47,14 +48,14 @@ int main()
 {
     core.init();
     core.setComChannel(ICore::ComChannel::BLUETOOTH);
-    core.setSignalCallback([](int controllerId, int signal)
+    core.setSignalCallback([](const int controllerId, const int signal)
     {
         if (controllerId == language::CONTROLLER_ID_BLUETOOTH)
         {
             if (signal == language::SIGNAL_BLUETOOTH_CONNECTED)
-                core.getDisplayController().startAnimationAsync(YES);
+                core.getDisplayController().startAnimationAsync(AnimationType::YES);
             else if (signal == language::SIGNAL_BLUETOOTH_DISCONNECTED)
-                core.getDisplayController().startAnimationAsync(BLE);
+                core.getDisplayController().startAnimationAsync(AnimationType::BLE);
         }
     });
     core.start();
@@ -67,7 +68,7 @@ int main()
     // uBit.sleep(500);
     // uBit.display.print("1");
     // uBit.sleep(500);
-    core.getDisplayController().startAnimationAsync(BLE);
+    core.getDisplayController().startAnimationAsync(AnimationType::BLE);
 
     uBit.messageBus.listen(MICROBIT_ID_LOGO, MICROBIT_BUTTON_EVT_CLICK, onLogoTouchHandler);
 

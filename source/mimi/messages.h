@@ -141,7 +141,7 @@ public:
 class ShowAnimationMessage : public InputMessage
 {
 public:
-    AnimationType animationType = UNDEFINED;
+    AnimationType animationType = AnimationType::UNDEFINED;
 
     explicit ShowAnimationMessage(ICore &core) : InputMessage(core) {}
 
@@ -154,9 +154,13 @@ public:
 
         extractLexeme(argsStartPos, lineLen, line, argument, isString);
         animationType = argument[0] == '\0'
-            ? UNDEFINED
+            ? AnimationType::UNDEFINED
             : static_cast<AnimationType>(textToLimitedInt<uint8_t>(
-                argument, isString, UNDEFINED, ANIMATION_TYPE_COUNT - 1, status));
+                argument,
+                isString,
+                static_cast<uint8_t>(AnimationType::UNDEFINED),
+                static_cast<uint8_t>(AnimationType::ANIMATION_TYPE_COUNT) - 1,
+                status));
         if (status < 0) return status;
 
         return language::PARSE_STATUS_OK;
