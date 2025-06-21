@@ -35,14 +35,12 @@ static void onButtonAClickHandler(MicroBitEvent)
 
 static void onButtonBDownHandler(MicroBitEvent)
 {
-    // uBit.serial.printf("Drive\r\n");
-    core.getMotorsController().runMotors(30, -30);
+    // core.getMotorsController().runMotors(30, -30);
 }
 
 static void onButtonBUpHandler(MicroBitEvent)
 {
-    // uBit.serial.printf("Stop\r\n");
-    core.getMotorsController().stopMotors();
+    // core.getMotorsController().stopMotors();
 }
 
 int main()
@@ -58,7 +56,7 @@ int main()
     // uBit.sleep(500);
     // uBit.display.print("1");
     // uBit.sleep(500);
-    core.getDisplayController().startAnimationAsync(SPINNER);
+    core.getDisplayController().startAnimationAsync(BLE);
 
     uBit.messageBus.listen(MICROBIT_ID_LOGO, MICROBIT_BUTTON_EVT_CLICK, onLogoTouchHandler);
 

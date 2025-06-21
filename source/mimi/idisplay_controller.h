@@ -11,6 +11,7 @@ namespace mimi
 typedef enum
 {
     UNDEFINED = 0,
+    BLE,
     YES,
     NO,
     HEART,
