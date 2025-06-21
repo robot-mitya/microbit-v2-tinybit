@@ -47,6 +47,16 @@ int main()
 {
     core.init();
     core.setComChannel(ICore::ComChannel::BLUETOOTH);
+    core.setSignalCallback([](int controllerId, int signal)
+    {
+        if (controllerId == language::CONTROLLER_ID_BLUETOOTH)
+        {
+            if (signal == language::SIGNAL_BLUETOOTH_CONNECTED)
+                core.getDisplayController().startAnimationAsync(YES);
+            else if (signal == language::SIGNAL_BLUETOOTH_DISCONNECTED)
+                core.getDisplayController().startAnimationAsync(BLE);
+        }
+    });
     core.start();
 
     // uBit.serial.send("Started\r\n");

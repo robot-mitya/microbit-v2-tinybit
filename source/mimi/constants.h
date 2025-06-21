@@ -27,6 +27,9 @@ namespace mimi
         constexpr int PARSE_STATUS_UNKNOWN_MNEMONIC = -2;
         constexpr int PARSE_STATUS_MISSING_ARGUMENT = -3;
         constexpr int PARSE_STATUS_WRONG_ARGUMENT = -4;
+
+        constexpr int SIGNAL_BLUETOOTH_CONNECTED = 1;
+        constexpr int SIGNAL_BLUETOOTH_DISCONNECTED = 2;
     } // namespace language
 } // namespace mimi
 

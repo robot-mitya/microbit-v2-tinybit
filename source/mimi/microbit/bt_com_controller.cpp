@@ -34,7 +34,21 @@ void BtComController::fiberRunner()
 {
     while (instance != nullptr && instance->uart != nullptr && instance->running)
     {
-        if (instance->uart->isReadable())
+        const bool connected = instance->uBit.ble->getConnected();
+        if (connected != instance->connected_)
+        {
+            instance->connected_ = connected;
+            if (instance->core.getSignalCallback())
+            {
+                instance->core.getSignalCallback()(
+                    language::CONTROLLER_ID_BLUETOOTH,
+                    connected ? language::SIGNAL_BLUETOOTH_CONNECTED : language::SIGNAL_BLUETOOTH_DISCONNECTED
+                );
+            }
+        }
+
+
+        if (instance->connected_ && instance->uart->isReadable())
         {
             int status;
             const char *line = instance->readLine(status);

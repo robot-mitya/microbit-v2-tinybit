@@ -11,6 +11,7 @@ namespace mimi::microbit
 class BtComController final : public IComController
 {
     volatile bool running = false;
+    volatile bool connected_ = false;
     static BtComController* instance; // NOLINT(*-dynamic-static-initializers)
     static void fiberRunner();
 

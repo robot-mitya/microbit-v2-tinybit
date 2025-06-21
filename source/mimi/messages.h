@@ -1,7 +1,6 @@
 #ifndef MESSAGES_H
 #define MESSAGES_H
 
-#include "CodalCompat.h"
 #include "constants.h"
 #include "idisplay_controller.h"
 
@@ -227,9 +226,7 @@ public:
     StatusMessage(const StatusMessage& other)
     : name(strclone(other.name)), controllerId(other.controllerId), textId(other.textId) {}
 
-    ~StatusMessage() override {
-        free(name);
-    }
+    ~StatusMessage() override;
 
     void generate(char *buffer, const unsigned long bufferSize) const override
     {

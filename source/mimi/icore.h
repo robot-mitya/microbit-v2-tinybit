@@ -1,6 +1,8 @@
 #ifndef ICORE_H
 #define ICORE_H
 
+#include <functional>
+
 #include "ilanguage_controller.h"
 #include "iheadlights_controller.h"
 #include "imotors_controller.h"
@@ -15,11 +17,13 @@ class ICore
 {
 public:
     enum class ComChannel { USB, BLUETOOTH };
+    using SignalCallback = std::function<void(int controllerId, int signal)>;
 private:
     static constexpr int CONTROLLERS_COUNT = 7;
     IController* controllers_[CONTROLLERS_COUNT] =
         {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
     ComChannel comChannel_ = ComChannel::BLUETOOTH;
+    SignalCallback signalCallback_ = nullptr;
 protected:
     virtual void sendStatus(const char* messageName, int controllerId, int statusId) = 0;
 public:
@@ -27,6 +31,9 @@ public:
 
     ComChannel getComChannel() const { return comChannel_; }
     void setComChannel(const ComChannel comChannel) { comChannel_ = comChannel; }
+
+    SignalCallback getSignalCallback() const { return signalCallback_; }
+    void setSignalCallback(const SignalCallback &signalCallback) { signalCallback_ = std::move(signalCallback); }
 
     virtual void init()
     {

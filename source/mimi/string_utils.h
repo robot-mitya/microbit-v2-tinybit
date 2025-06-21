@@ -158,7 +158,7 @@ textToInt(const char *text, const bool isString, int &status)
 inline int utoa64(uint64_t value, char* buffer)
 {
     if (!buffer)
-        return DEVICE_INVALID_PARAMETER;
+        return EINVAL;
 
     char tmp[21];  // max 20 digits + '\0'
     int i = 0;
@@ -167,7 +167,7 @@ inline int utoa64(uint64_t value, char* buffer)
     if (value == 0) {
         buffer[0] = '0';
         buffer[1] = '\0';
-        return DEVICE_OK;
+        return 0;
     }
 
     // Convert digits in reverse order
@@ -181,7 +181,7 @@ inline int utoa64(uint64_t value, char* buffer)
         buffer[j] = tmp[i - j - 1];
 
     buffer[i] = '\0';
-    return DEVICE_OK;
+    return 0;
 }
 
 } // namespace mimi
