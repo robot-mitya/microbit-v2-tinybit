@@ -46,6 +46,7 @@ static void onButtonBUpHandler(MicroBitEvent)
 int main()
 {
     core.init();
+    core.setComChannel(ICore::ComChannel::BLUETOOTH);
     core.start();
 
     // uBit.serial.send("Started\r\n");

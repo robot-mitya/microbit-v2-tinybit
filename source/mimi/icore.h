@@ -11,72 +11,73 @@
 namespace mimi
 {
 
-    enum ComChannel {
-        USB = 0,
-        BLUETOOTH = 1
-    };
+class ICore
+{
+public:
+    enum class ComChannel { USB, BLUETOOTH };
+private:
+    static constexpr int CONTROLLERS_COUNT = 7;
+    IController* controllers_[CONTROLLERS_COUNT] =
+        {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+    ComChannel comChannel_ = ComChannel::BLUETOOTH;
+protected:
+    virtual void sendStatus(const char* messageName, int controllerId, int statusId) = 0;
+public:
+    virtual ~ICore() = default;
 
-    class ICore
+    ComChannel getComChannel() const { return comChannel_; }
+    void setComChannel(const ComChannel comChannel) { comChannel_ = comChannel; }
+
+    virtual void init()
     {
-        static constexpr int CONTROLLERS_COUNT = 7;
-        IController* controllers[CONTROLLERS_COUNT] =
-            {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
-        ComChannel comChannel = BLUETOOTH;
-    protected:
-        virtual void sendStatus(const char* messageName, int controllerId, int statusId) = 0;
-    public:
-        virtual ~ICore() = default;
+        controllers_[0] = &getLanguageController();
+        controllers_[1] = &getQueueController();
+        controllers_[2] = &getHeadlightsController();
+        controllers_[3] = &getMotorsController();
+        controllers_[4] = &getDisplayController();
+        controllers_[5] = &getUsbComController();
+        controllers_[6] = &getBtComController();
 
-        virtual void init()
-        {
-            controllers[0] = &getLanguageController();
-            controllers[1] = &getQueueController();
-            controllers[2] = &getHeadlightsController();
-            controllers[3] = &getMotorsController();
-            controllers[4] = &getDisplayController();
-            controllers[5] = &getUsbComController();
-            controllers[6] = &getBtComController();
+        for (IController* controller : controllers_)
+            controller->init();
+    }
 
-            for (IController* controller : controllers)
-                controller->init();
-        }
+    virtual void start();
 
-        virtual void start();
+    virtual void stop()
+    {
+        for (IController* controller : controllers_)
+            controller->stop();
+    }
 
-        virtual void stop()
-        {
-            for (IController* controller : controllers)
-                controller->stop();
-        }
+    void sendInfo(const int controllerId, const int statusId)
+    {
+        sendStatus("info", controllerId, statusId);
+    }
 
-        void sendInfo(int controllerId, int statusId)
-        {
-            sendStatus("info", controllerId, statusId);
-        }
+    void sendWarn(const int controllerId, const int statusId)
+    {
+        sendStatus("warn", controllerId, statusId);
+    }
 
-        void sendWarn(int controllerId, int statusId)
-        {
-            sendStatus("warn", controllerId, statusId);
-        }
+    void sendError(const int controllerId, const int statusId)
+    {
+        sendStatus("err", controllerId, statusId);
+    }
 
-        void sendError(int controllerId, int statusId)
-        {
-            sendStatus("err", controllerId, statusId);
-        }
+    virtual ILanguageController& getLanguageController() = 0;
+    virtual IQueueController& getQueueController() = 0;
+    virtual IHeadlightsController& getHeadlightsController() = 0;
+    virtual IMotorsController& getMotorsController() = 0;
+    virtual IDisplayController& getDisplayController() = 0;
+    virtual IComController& getUsbComController() = 0;
+    virtual IComController& getBtComController() = 0;
 
-        virtual ILanguageController& getLanguageController() = 0;
-        virtual IQueueController& getQueueController() = 0;
-        virtual IHeadlightsController& getHeadlightsController() = 0;
-        virtual IMotorsController& getMotorsController() = 0;
-        virtual IDisplayController& getDisplayController() = 0;
-        virtual IComController& getUsbComController() = 0;
-        virtual IComController& getBtComController() = 0;
-
-        IComController& getCurrentComController()
-        {
-            return comChannel == BLUETOOTH ? getBtComController() : getUsbComController();
-        }
-    };
+    IComController& getCurrentComController()
+    {
+        return comChannel_ == ComChannel::BLUETOOTH ? getBtComController() : getUsbComController();
+    }
+};
 
 } // namespace mimi
 
