@@ -1,25 +1,17 @@
 #ifndef STRING_UTILS_H
 #define STRING_UTILS_H
 
-#include "ErrorNo.h"
 #include "constants.h"
 
 #include <cctype>
 #include <cerrno>
+#include <cstdint>
+#include <cstdlib>
 #include <limits>
 #include <type_traits>
 
 namespace mimi
 {
-
-inline char* strclone(const char* src)
-{
-    if (!src) return nullptr;
-    const size_t len = strlen(src);
-    const auto copy = static_cast<char*>(malloc(len + 1));
-    if (copy) strcpy(copy, src);
-    return copy;
-}
 
 /**
  * Extracts the next whitespace-delimited word from buffer starting at startPos.

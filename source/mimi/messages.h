@@ -6,6 +6,8 @@
 
 #include <cstring>
 #include <cinttypes>
+// #include "string_utils.h"
+
 #include "string_utils.h"
 
 #include <cstdio>
@@ -220,11 +222,9 @@ class StatusMessage final : public OutputMessage
     const int controllerId;
     const int textId;
 public:
-    explicit StatusMessage(const char* name, const int controllerId, const int textId)
-        : OutputMessage(), name(strclone(name)), controllerId(controllerId), textId(textId) {}
+    explicit StatusMessage(const char* name, int controllerId, int textId);
 
-    StatusMessage(const StatusMessage& other)
-    : name(strclone(other.name)), controllerId(other.controllerId), textId(other.textId) {}
+    StatusMessage(const StatusMessage& other);
 
     ~StatusMessage() override;
 
