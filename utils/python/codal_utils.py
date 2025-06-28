@@ -11,6 +11,30 @@ def system(cmd):
     if os.system(cmd) != 0:
       sys.exit(1)
 
+# warning_filter = ''
+warning_filter = r'''2>&1 | awk '
+/^[^:]+:[0-9]+:[0-9]+: warning:/ {
+    # Печатаем предыдущий блок, если был и его не надо пропускать
+    if (!skip && block != "") print block
+
+    # Проверяем путь
+    skip = ($0 ~ /libraries\//) ? 1 : 0
+
+    # Начинаем новый блок
+    block = $0 "\n"
+    next
+}
+
+{
+    block = block $0 "\n"
+}
+
+END {
+    # Печатаем последний блок, если не надо пропускать
+    if (!skip && block != "") print block
+}
+' '''
+
 def build(clean, verbose = False, parallelism = 10):
     # Use Ninja on Windows, or if available in any other OS
     use_ninja = shutil.which("ninja") is not None or platform.system() == "Windows"
@@ -24,9 +48,9 @@ def build(clean, verbose = False, parallelism = 10):
 
         # build
         if verbose:
-            system("ninja -j {} --verbose".format(parallelism))
+            system("ninja -j {} --verbose {}".format(parallelism, warning_filter))
         else:
-            system("ninja -j {}".format(parallelism))
+            system("ninja -j {} {}".format(parallelism, warning_filter))
     else:
         # configure
         system("cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -G \"Unix Makefiles\"")
@@ -36,9 +60,9 @@ def build(clean, verbose = False, parallelism = 10):
 
         # build
         if verbose:
-            system("make -j {} VERBOSE=1".format(parallelism))
+            system("make -j {} VERBOSE=1 {}".format(parallelism, warning_filter))
         else:
-            system("make -j {}".format(parallelism))
+            system("make -j {} {}".format(parallelism, warning_filter))
 
 def read_json(fn):
     json_file = ""
@@ -124,7 +148,7 @@ def get_next_version(options):
     if options.version:
         return options.version
     log = os.popen('git log -n 100').read().strip()
-    m = re.search('Snapshot v(\d+)\.(\d+)\.(\d+)(-([\w\-]+).(\d+))?', log)
+    m = re.search(r'Snapshot v(\d+)\.(\d+)\.(\d+)(-([\w\-]+).(\d+))?', log)
     if m is None:
         print("Cannot determine next version from git log")
         exit(1)
