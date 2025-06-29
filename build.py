@@ -47,6 +47,7 @@ parser.add_option('-d', '--dev', dest='dev', action="store_true", help='enable d
 parser.add_option('-g', '--generate-docs', dest='generate_docs', action="store_true", help='generate documentation for the current target', default=False)
 parser.add_option('-j', '--parallelism', dest='parallelism', action="store", help='Set the number of parallel threads to build with, if supported', default=10)
 parser.add_option('-n', '--lines', dest='detail_lines', action="store", help="Sets the number of detail lines to output (only relevant to --status)", default=3 )
+parser.add_option('--hide-codal-warns', dest='hide_codal_warns', action="store_true", help='Hide warnings coming from codal and libraries/', default=False)
 
 (options, args) = parser.parse_args()
 
@@ -141,7 +142,7 @@ if not options.test_platform:
         generate_docs()
         exit(0)
 
-    build(options.clean, verbose=options.verbose, parallelism=options.parallelism)
+    build(options.clean, hide_codal_warns=options.hide_codal_warns, verbose=options.verbose, parallelism=options.parallelism)
     exit(0)
 
 for json_obj in test_json:
@@ -168,4 +169,4 @@ for json_obj in test_json:
     with open("../codal.json", 'w') as codal_json:
         json.dump(config, codal_json, indent=4)
 
-    build(True, True, options.parallelism)
+    build(True, options.hide_codal_warns, True, options.parallelism)

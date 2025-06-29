@@ -12,32 +12,55 @@ def system(cmd):
       sys.exit(1)
 
 # warning_filter = ''
-warning_filter = r'''2>&1 | awk '
-/^[^:]+:[0-9]+:[0-9]+: warning:/ {
-    # Печатаем предыдущий блок, если был и его не надо пропускать
-    if (!skip && block != "") print block
+# warning_filter = r'''2>&1 | awk '
+# /^[^:]+:[0-9]+:[0-9]+: warning:/ {
+#     # Печатаем предыдущий блок, если был и его не надо пропускать
+#     if (!skip && block != "") print block
+#
+#     # Проверяем путь
+#     skip = ($0 ~ /libraries\//) ? 1 : 0
+#
+#     # Начинаем новый блок
+#     block = $0 "\n"
+#     next
+# }
+#
+# {
+#     block = block $0 "\n"
+# }
+#
+# END {
+#     # Печатаем последний блок, если не надо пропускать
+#     if (!skip && block != "") print block
+# }
+# ' '''
 
-    # Проверяем путь
-    skip = ($0 ~ /libraries\//) ? 1 : 0
-
-    # Начинаем новый блок
-    block = $0 "\n"
-    next
-}
-
-{
-    block = block $0 "\n"
-}
-
-END {
-    # Печатаем последний блок, если не надо пропускать
-    if (!skip && block != "") print block
-}
-' '''
-
-def build(clean, verbose = False, parallelism = 10):
+def build(clean, hide_codal_warns = False, verbose = False, parallelism = 10):
     # Use Ninja on Windows, or if available in any other OS
     use_ninja = shutil.which("ninja") is not None or platform.system() == "Windows"
+
+    warning_filter = r'''2>&1 | awk '
+    /^[^:]+:[0-9]+:[0-9]+: warning:/ {
+        # Печатаем предыдущий блок, если был и его не надо пропускать
+        if (!skip && block != "") print block
+    
+        # Проверяем путь
+        skip = ($0 ~ /libraries\//) ? 1 : 0
+    
+        # Начинаем новый блок
+        block = $0 "\n"
+        next
+    }
+    
+    {
+        block = block $0 "\n"
+    }
+    
+    END {
+        # Печатаем последний блок, если не надо пропускать
+        if (!skip && block != "") print block
+    }
+    ' ''' if hide_codal_warns else ''
 
     if use_ninja:
         # configure
