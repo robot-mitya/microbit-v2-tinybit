@@ -70,15 +70,16 @@ void BtComController::start()
 {
     if (running) return;
     running = true;
-    uart = new MicroBitUARTService(*uBit.ble, RxBufferSize, TxBufferSize);
+    if (uart == nullptr)
+    {
+        uart = new MicroBitUARTService(*uBit.ble, RxBufferSize, TxBufferSize);
+    }
     create_fiber(fiberRunner);
     core.sendInfo(getControllerId(), language::CONTROLLER_START_STATUS_OK);
 }
 
 void BtComController::stop()
 {
-    delete uart;
-    uart = nullptr;
     running = false;
     core.sendInfo(getControllerId(), language::CONTROLLER_STOP_STATUS_OK);
 }
