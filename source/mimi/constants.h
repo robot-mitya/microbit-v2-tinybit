@@ -12,6 +12,7 @@ namespace mimi
         constexpr int CONTROLLER_ID_DISPLAY    = 1050;
         constexpr int CONTROLLER_ID_USB_COM    = 1060;
         constexpr int CONTROLLER_ID_BLUETOOTH  = 1070;
+        constexpr int CONTROLLER_ID_ULTRASONIC = 1080;
 
         constexpr int CONTROLLER_INIT_STATUS_OK = 0;
         constexpr int LANGUAGE_CONTROLLER_INIT_STATUS_WRONG_COMMAND_COUNT = -1;
@@ -31,6 +32,12 @@ namespace mimi
         constexpr int SIGNAL_BLUETOOTH_CONNECTED = 1;
         constexpr int SIGNAL_BLUETOOTH_DISCONNECTED = 2;
     } // namespace language
+
+    namespace controller
+    {
+        constexpr int OPERATION_STATUS_OK = 0;
+        constexpr int SENSOR_TIMEOUT = -1;
+    } // namespace controller
 } // namespace mimi
 
 #endif //STATUS_CODES_H

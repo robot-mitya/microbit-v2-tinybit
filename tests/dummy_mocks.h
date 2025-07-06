@@ -107,6 +107,16 @@ public:
     int getControllerId() override { return language::CONTROLLER_ID_BLUETOOTH; }
 };
 
+class DummyUltrasonicController final : public IUltrasonicController
+{
+public:
+    explicit DummyUltrasonicController(ICore& core) : IUltrasonicController(core) {}
+    void init() override {}
+    void start() override {}
+    void stop() override {}
+    int getControllerId() override { return language::CONTROLLER_ID_ULTRASONIC; }
+};
+
 class DummyCore final : public ICore {
     DummyLanguageController dummyLanguageController;
     DummyQueueController dummyQueueController;
@@ -115,6 +125,7 @@ class DummyCore final : public ICore {
     DummyDisplayController dummyDisplayController;
     DummyUsbComController dummyUsbComController;
     DummyBtComController dummyBtComController;
+    DummyUltrasonicController dummyUltrasonicController;
 protected:
     void sendStatus(const char*, int, int) override {}
 public:
@@ -125,7 +136,8 @@ public:
         dummyMotorsController(*this),
         dummyDisplayController(*this),
         dummyUsbComController(*this),
-        dummyBtComController(*this) {}
+        dummyBtComController(*this),
+        dummyUltrasonicController(*this) {}
 
     ILanguageController& getLanguageController() override { return dummyLanguageController; }
     IQueueController& getQueueController() override { return dummyQueueController; }
@@ -134,6 +146,7 @@ public:
     IDisplayController& getDisplayController() override { return dummyDisplayController; }
     IComController &getUsbComController() override { return dummyUsbComController; }
     IComController &getBtComController() override { return dummyBtComController; }
+    IUltrasonicController &getUltrasonicController() override { return dummyUltrasonicController; }
 };
 
 } // namespace mimi::tests

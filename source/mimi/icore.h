@@ -9,6 +9,7 @@
 #include "idisplay_controller.h"
 #include "iqueue_controller.h"
 #include "icom_controller.h"
+#include "iultrasonic_controller.h"
 
 namespace mimi
 {
@@ -19,7 +20,7 @@ public:
     enum class ComChannel { USB, BLUETOOTH };
     using SignalCallback = std::function<void(int controllerId, int signal)>;
 private:
-    static constexpr int CONTROLLERS_COUNT = 7;
+    static constexpr int CONTROLLERS_COUNT = 8;
     IController* controllers_[CONTROLLERS_COUNT] =
         {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
     ComChannel comChannel_ = ComChannel::BLUETOOTH;
@@ -44,6 +45,7 @@ public:
         controllers_[4] = &getDisplayController();
         controllers_[5] = &getUsbComController();
         controllers_[6] = &getBtComController();
+        controllers_[7] = &getUltrasonicController();
 
         for (IController* controller : controllers_)
             controller->init();
@@ -79,6 +81,7 @@ public:
     virtual IDisplayController& getDisplayController() = 0;
     virtual IComController& getUsbComController() = 0;
     virtual IComController& getBtComController() = 0;
+    virtual IUltrasonicController& getUltrasonicController() = 0;
 
     IComController& getCurrentComController()
     {

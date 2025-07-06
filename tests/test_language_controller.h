@@ -79,6 +79,7 @@ class FakeCore final : public ICore {
     DummyDisplayController dummyDisplayController;
     DummyUsbComController dummyUsbComController;
     DummyBtComController dummyBtComController;
+    DummyUltrasonicController dummyUltrasonicController;
 protected:
     void sendStatus(const char*, int, int) override {}
 public:
@@ -89,7 +90,8 @@ public:
         dummyMotorsController(*this),
         dummyDisplayController(*this),
         dummyUsbComController(*this),
-        dummyBtComController(*this) {}
+        dummyBtComController(*this),
+        dummyUltrasonicController(*this) {}
 
     ILanguageController& getLanguageController() override { return fakeLanguageController; }
     IQueueController& getQueueController() override { return dummyQueueController; }
@@ -98,6 +100,7 @@ public:
     IDisplayController& getDisplayController() override { return dummyDisplayController; }
     IComController &getUsbComController() override { return dummyUsbComController; }
     IComController &getBtComController() override { return dummyBtComController; }
+    IUltrasonicController &getUltrasonicController() override { return dummyUltrasonicController; }
 };
 
 // ReSharper disable once CppDFAConstantFunctionResult

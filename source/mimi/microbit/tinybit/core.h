@@ -7,6 +7,7 @@
 #include "language_controller.h"
 #include "headlights_controller.h"
 #include "motors_controller.h"
+#include "ultrasonic_controller.h"
 #include "../queue_controller.h"
 #include "../display_controller.h"
 #include "../usb_com_controller.h"
@@ -26,6 +27,7 @@ namespace mimi::microbit::tinybit
         DisplayController displayController;
         UsbComController usbComController;
         BtComController btComController;
+        UltrasonicController ultrasonicController;
     protected:
         void sendStatus(const char* messageName, int controllerId, int statusId) override;
     public:
@@ -38,7 +40,8 @@ namespace mimi::microbit::tinybit
             motorsController(uBit, *this),
             displayController(uBit, *this),
             usbComController(uBit, *this),
-            btComController(uBit, *this) {}
+            btComController(uBit, *this),
+            ultrasonicController(uBit, *this) {}
 
         MicroBit& getMicroBit()
         {
@@ -78,6 +81,11 @@ namespace mimi::microbit::tinybit
         IComController& getBtComController() override
         {
             return btComController;
+        }
+
+        IUltrasonicController& getUltrasonicController() override
+        {
+            return ultrasonicController;
         }
 
         void init() override

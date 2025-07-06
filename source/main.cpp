@@ -46,8 +46,9 @@ static void onButtonBUpHandler(MicroBitEvent)
 
 int main()
 {
+    constexpr auto comChannel = ICore::ComChannel::USB;
     core.init();
-    core.setComChannel(ICore::ComChannel::BLUETOOTH);
+    core.setComChannel(comChannel);
     core.setSignalCallback([](const int controllerId, const int signal)
     {
         if (controllerId == language::CONTROLLER_ID_BLUETOOTH)
@@ -60,15 +61,11 @@ int main()
     });
     core.start();
 
-    // uBit.serial.send("Started\r\n");
-
-    // uBit.display.print("3");
-    // uBit.sleep(500);
-    // uBit.display.print("2");
-    // uBit.sleep(500);
-    // uBit.display.print("1");
-    // uBit.sleep(500);
-    core.getDisplayController().startAnimationAsync(AnimationType::BLE);
+    // ReSharper disable once CppDFAConstantConditions
+    // ReSharper disable once CppDFAUnreachableCode
+    core.getDisplayController().startAnimationAsync(comChannel == ICore::ComChannel::USB
+        ? AnimationType::SPINNER
+        : AnimationType::BLE);
 
     uBit.messageBus.listen(MICROBIT_ID_LOGO, MICROBIT_BUTTON_EVT_CLICK, onLogoTouchHandler);
 
