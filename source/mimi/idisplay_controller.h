@@ -11,6 +11,7 @@ namespace mimi
 enum class AnimationType
 {
     UNDEFINED = 0,
+    USB,
     BLE,
     YES,
     NO,

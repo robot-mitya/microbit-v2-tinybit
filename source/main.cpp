@@ -64,7 +64,7 @@ int main()
     // ReSharper disable once CppDFAConstantConditions
     // ReSharper disable once CppDFAUnreachableCode
     core.getDisplayController().startAnimationAsync(comChannel == ICore::ComChannel::USB
-        ? AnimationType::SPINNER
+        ? AnimationType::USB
         : AnimationType::BLE);
 
     uBit.messageBus.listen(MICROBIT_ID_LOGO, MICROBIT_BUTTON_EVT_CLICK, onLogoTouchHandler);

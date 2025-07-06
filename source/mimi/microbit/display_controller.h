@@ -5,6 +5,7 @@
 #include "MicroBit.h"
 #include "../constants.h"
 #include "../idisplay_controller.h"
+#include "animations/usb_animation.h"
 #include "animations/ble_animation.h"
 #include "animations/yes_animation.h"
 #include "animations/no_animation.h"
@@ -72,6 +73,9 @@ namespace mimi::microbit
 
             switch (animationType)
             {
+            case AnimationType::USB:
+                frameAnimation = reinterpret_cast<IFrameAnimation *>(new UsbAnimation(uBit));
+                break;
             case AnimationType::BLE:
                 frameAnimation = reinterpret_cast<IFrameAnimation *>(new BleAnimation(uBit));
                 break;
