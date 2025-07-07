@@ -12,7 +12,7 @@ namespace mimi::microbit::tinybit
 
 class LanguageController final : public ILanguageController
 {
-    static constexpr int COMMANDS_COUNT = 5;
+    static constexpr int COMMANDS_COUNT = 6;
     int commandsCounter;
     CommandEntry commandEntries[COMMANDS_COUNT];
 public:
@@ -31,6 +31,10 @@ public:
         commandEntries[index++] = {
             "drv",
             [this]() -> InputMessage* { return new DriveMotorsMessage(this->core); }
+        };
+        commandEntries[index++] = {
+            "dist?",
+            [this]() -> InputMessage* { return new DistanceRequestMessage(this->core); }
         };
         commandEntries[index++] = {
             "emo",

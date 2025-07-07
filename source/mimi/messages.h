@@ -138,6 +138,39 @@ public:
     }
 };
 
+class DistanceRequestMessage : public InputMessage
+{
+public:
+    uint32_t periodMillis = 0;
+
+    explicit DistanceRequestMessage(ICore &core) : InputMessage(core) {}
+
+    int parse(const char *line, unsigned int argsStartPos) override
+    {
+        const unsigned int lineLen = strlen(line);
+        char argument[language::MAX_ARGUMENT_LENGTH];
+        bool isString;
+        int status;
+
+        extractLexeme(argsStartPos, lineLen, line, argument, isString);
+        if (argument[0] == '\0')
+        {
+            periodMillis = 0;
+            return language::PARSE_STATUS_OK;
+        }
+        periodMillis = textToUint<uint32_t>(argument, isString, status);
+        if (status < 0) return status;
+
+        return language::PARSE_STATUS_OK;
+    }
+
+    void execute() const override {}
+
+    Message* clone() const override {
+        return new DistanceRequestMessage(*this);
+    }
+};
+
 class ShowAnimationMessage : public InputMessage
 {
 public:

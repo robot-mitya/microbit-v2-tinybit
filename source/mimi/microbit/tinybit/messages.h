@@ -47,6 +47,22 @@ public:
     }
 };
 
+class DistanceRequestMessage final : public mimi::DistanceRequestMessage
+{
+public:
+    explicit DistanceRequestMessage(ICore &core) : mimi::DistanceRequestMessage(core) {}
+
+    void execute() const override
+    {
+        core.getUltrasonicController().startMeasuring(periodMillis);
+    }
+
+    Message* clone() const override
+    {
+        return new DistanceRequestMessage(*this);
+    }
+};
+
 class ShowAnimationMessage final : public mimi::ShowAnimationMessage
 {
 public:

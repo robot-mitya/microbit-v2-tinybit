@@ -15,13 +15,8 @@ public:
 
     int getControllerId() override { return language::CONTROLLER_ID_ULTRASONIC; }
 
-    // virtual void turnOn(uint8_t red, uint8_t green, uint8_t blue) = 0;
-    // virtual void turnOff() = 0;
-    //
-    // virtual bool isTurnedOn() = 0;
-    // virtual uint8_t getRed() = 0;
-    // virtual uint8_t getGreen() = 0;
-    // virtual uint8_t getBlue() = 0;
+    virtual void startMeasuring(uint32_t periodMillis) = 0; // (zero for single measurement)
+    virtual void stopMeasuring() = 0;
 };
 
 } // namespace mimi

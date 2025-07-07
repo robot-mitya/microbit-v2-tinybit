@@ -10,20 +10,26 @@ namespace mimi::microbit::tinybit
 {
 
 class UltrasonicController final : public IUltrasonicController {
-    volatile bool running = false;
-    static UltrasonicController* instance; // NOLINT(*-dynamic-static-initializers)
+    volatile bool running_ = false;
+    static UltrasonicController* instance_; // NOLINT(*-dynamic-static-initializers)
     static void fiberRunner();
 
-    MicroBit& uBit;
+    MicroBit& uBit_;
 
-    UltrasonicSensor* sensor = nullptr;
+    UltrasonicSensor* sensor_ = nullptr;
+    bool measuring_ = false;
+    uint64_t measurementPeriodMillis_ = 0;
+    uint64_t lastMeasurementMillis_ = 0;
 public:
     explicit UltrasonicController(MicroBit& uBit, ICore& core)
-        : IUltrasonicController(core), uBit(uBit) {}
+        : IUltrasonicController(core), uBit_(uBit) {}
 
     void init() override;
     void start() override;
     void stop() override;
+
+    void startMeasuring(uint32_t periodMillis) override; // (zero for single measurement)
+    void stopMeasuring() override;
 };
 
 } // namespace mimi::microbit::tinybit

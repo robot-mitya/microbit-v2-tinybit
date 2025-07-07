@@ -25,6 +25,13 @@ namespace mimi::tests::messages
         void execute() const override {}
     };
 
+    class DistanceRequestMockMessage final : public DistanceRequestMessage
+    {
+    public:
+        explicit DistanceRequestMockMessage(ICore &core) : DistanceRequestMessage(core) {}
+        void execute() const override {}
+    };
+
 } // namespace mimi::tests::messages
 
 #endif //MESSAGE_MOCKS_H
