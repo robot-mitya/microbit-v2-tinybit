@@ -16,8 +16,20 @@ StatusMessage::StatusMessage(const char* name, const int controllerId, const int
     : OutputMessage(), name(strclone(name)), controllerId(controllerId), textId(textId) {}
 
 StatusMessage::StatusMessage(const StatusMessage& other)
-: name(strclone(other.name)), controllerId(other.controllerId), textId(other.textId) {}
+    : name(strclone(other.name)), controllerId(other.controllerId), textId(other.textId) {}
 
-StatusMessage::~StatusMessage() {
+StatusMessage::~StatusMessage()
+{
+    free(name);
+}
+
+DistanceResponseMessage::DistanceResponseMessage(const uint32_t distanceInMillimeters)
+    : OutputMessage(), name(strclone("dist")), distanceInMillimeters(distanceInMillimeters) {}
+
+DistanceResponseMessage::DistanceResponseMessage(const DistanceResponseMessage &other)
+    : name(strclone(other.name)), distanceInMillimeters(other.distanceInMillimeters) {}
+
+ DistanceResponseMessage::~DistanceResponseMessage()
+{
     free(name);
 }

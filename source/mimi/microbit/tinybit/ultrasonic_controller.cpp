@@ -23,7 +23,16 @@ void UltrasonicController::fiberRunner()
 
                 uint32_t distanceInMm = 0;
                 const int status = instance_->sensor_->measureAsync(distanceInMm);
-                instance_->uBit_.serial.printf("status: %d, distance: %d mm   \r", status, distanceInMm);
+                // instance_->uBit_.serial.printf("status: %d, distance: %d mm\r\n", status, distanceInMm);
+                if (status == controller::OPERATION_STATUS_OK)
+                {
+                    DistanceResponseMessage distanceResponseMessage(distanceInMm);
+                    instance_->core.getQueueController().getOutputQueue().enqueue(&distanceResponseMessage);
+                }
+                else
+                {
+                    instance_->core.sendError(language::CONTROLLER_ID_ULTRASONIC, status);
+                }
             }
         }
         fiber_sleep(10);

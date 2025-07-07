@@ -145,7 +145,7 @@ public:
 
     explicit DistanceRequestMessage(ICore &core) : InputMessage(core) {}
 
-    int parse(const char *line, unsigned int argsStartPos) override
+    int parse(const char *line, const unsigned int argsStartPos) override
     {
         const unsigned int lineLen = strlen(line);
         char argument[language::MAX_ARGUMENT_LENGTH];
@@ -273,6 +273,28 @@ public:
     Message* clone() const override
     {
         return new StatusMessage(*this);
+    }
+};
+
+class DistanceResponseMessage final : public OutputMessage
+{
+    char* name;
+    const uint32_t distanceInMillimeters;
+public:
+    explicit DistanceResponseMessage(uint32_t distanceInMillimeters);
+
+    DistanceResponseMessage(const DistanceResponseMessage& other);
+
+    ~DistanceResponseMessage() override;
+
+    void generate(char *buffer, const unsigned long bufferSize) const override
+    {
+        snprintf(buffer, bufferSize, "%s %ld\r\n", name, distanceInMillimeters);
+    }
+
+    Message* clone() const override
+    {
+        return new DistanceResponseMessage(*this);
     }
 };
 
